@@ -1,4 +1,4 @@
-package no.bioforsk.no.vips.i18n;
+package no.bioforsk.vips.i18n;
 
 import java.util.HashMap;
 import java.util.Locale;

@@ -2,6 +2,7 @@ package no.bioforsk.vips.model;
 
 import no.bioforsk.vips.entity.Result;
 import java.util.List;
+import no.bioforsk.vips.entity.ModelConfiguration;
 
 /**
  * All models must implement this interface
@@ -44,4 +45,10 @@ public interface Model {
      * @return a thorough manual for this model, in the specified language (English as fallback)
      */
     public String getModelUsage(String language);
+    
+    /**
+     * Set the configuration object (with all its possible parameters(
+     * @param config 
+     */
+    public void setConfiguration(ModelConfiguration config);
 }

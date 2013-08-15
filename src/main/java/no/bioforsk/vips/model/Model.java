@@ -47,6 +47,12 @@ public interface Model {
     public String getModelUsage(String language);
     
     /**
+     * 
+     * @return A sample configuration in JSON format
+     */
+    public String getSampleConfig();
+    
+    /**
      * Set the configuration object (with all its possible parameters(
      * @param config 
      */

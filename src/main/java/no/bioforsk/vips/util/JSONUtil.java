@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package no.bioforsk.vips.util;
 
 import java.io.IOException;
@@ -11,6 +6,7 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
+ * Simple utility class for JSON, building on top of Jackson
  * @copyright 2013 <a href="http://www.bioforsk.no/">Bioforsk</a>
  * @author Tor-Einar Skog <tor-einar.skog@bioforsk.no>
  */

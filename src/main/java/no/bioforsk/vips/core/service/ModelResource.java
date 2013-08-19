@@ -52,6 +52,18 @@ public interface ModelResource {
     @Produces("text/plain;charset=UTF-8")
     public Response printModelList(@PathParam("language") String language);
     
+    @GET
+    @Path("models/{modelId}/description")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelDescription(@PathParam("modelId") String modelId);
+
+    
+    @GET
+    @Path("models/{modelId}/description/{language}")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelDescription(@PathParam("modelId") String modelId,@PathParam("language") String language);
+
+    
     /**
      * Prints the usage instructions from the requested model
      * @param modelId
@@ -106,4 +118,6 @@ public interface ModelResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response runModel(@PathParam("modelId") String modelId, ModelConfiguration config);
+    
+    
 }

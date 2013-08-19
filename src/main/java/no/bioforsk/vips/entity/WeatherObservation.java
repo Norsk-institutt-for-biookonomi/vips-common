@@ -8,15 +8,15 @@ import java.util.Date;
  * @copyright 2013 <a href="http://www.bioforsk.no/">Bioforsk</a>
  * @author  Tor-Einar Skog <tor-einar.skog@bioforsk.no>
  */
-public class Observation implements Comparable{
+public class WeatherObservation implements Comparable{
    
     private String elementMeasurementTypeId;
     private Integer logIntervalId;
     private Date timeMeasured;
     private double value;
    
-    /** Creates a new instance of Observation */
-    public Observation() {
+    /** Creates a new instance of WeatherObservation */
+    public WeatherObservation() {
     }
         
     public void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
@@ -36,7 +36,7 @@ public class Observation implements Comparable{
      * Compares by time measured in ascending order
      */
     public int compareTo(Object o) {
-        Observation other = (Observation) o;
+        WeatherObservation other = (WeatherObservation) o;
         return this.compareTo(other);
         
     }
@@ -46,7 +46,7 @@ public class Observation implements Comparable{
      * @param other the observation to compare to
      * @return
      */
-    public int compareTo(Observation other)
+    public int compareTo(WeatherObservation other)
     {
     	if(this.getTimeMeasured() == null && other.getTimeMeasured() == null)
             return 0;

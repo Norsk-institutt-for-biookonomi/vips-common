@@ -14,7 +14,7 @@ public interface Model {
     /** Default language is English */
     public static String DEFAULT_LANGUAGE = "en";
     
-    public List<Result> getResult();
+    public List<Result> getResult() throws ModelExcecutionException;
     
     /**
      * 
@@ -69,5 +69,5 @@ public interface Model {
      * Set the configuration object (with all its possible parameters(
      * @param config 
      */
-    public void setConfiguration(ModelConfiguration config);
+    public void setConfiguration(ModelConfiguration config) throws ConfigValidationException;
 }

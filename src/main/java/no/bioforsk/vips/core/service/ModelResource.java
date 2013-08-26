@@ -10,8 +10,10 @@ import javax.ws.rs.core.Response;
 import no.bioforsk.vips.entity.ModelConfiguration;
 
 /**
- *
- * @author treinar
+ * Interface for the ModelResource. Implemented by ModelResourceImpl
+ * in VIPSCore and also as client in VIPSCoreManager
+ * @copyright 2013 <a href="http://www.bioforsk.no/">Bioforsk</a>
+ * @author Tor-Einar Skog <tor-einar.skog@bioforsk.no>
  */
 @Path("") 
 public interface ModelResource {

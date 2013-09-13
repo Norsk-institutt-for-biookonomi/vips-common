@@ -227,7 +227,7 @@ public class DateMap {
                 for(Iterator i = valueSet.keySet().iterator();i.hasNext();)
                 {
                     String key = (String) i.next();
-                    result.append(key + "=" + valueSet.get(key).toString() + ",");
+                    result.append(key).append("=").append(valueSet.get(key).toString()).append(",");
                 }
                 return result.toString();
             }
@@ -247,8 +247,15 @@ public class DateMap {
     public Date getFirstDateWithValues()
     {
         ArrayList<Date> dates = new ArrayList(this.matrix.keySet());
-        Collections.sort(dates);
-        return dates.get(0);
+        if(dates.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            Collections.sort(dates);
+            return dates.get(0);
+        }
     }
 
     @Override

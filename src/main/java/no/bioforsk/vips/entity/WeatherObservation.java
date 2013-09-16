@@ -9,6 +9,10 @@ import java.util.Date;
  * @author  Tor-Einar Skog <tor-einar.skog@bioforsk.no>
  */
 public class WeatherObservation implements Comparable{
+    
+    public final static Integer LOG_INTERVAL_ID_1H = 1;
+    public final static Integer LOG_INTERVAL_ID_1D = 2;
+
    
     private String elementMeasurementTypeId;
     private Integer logIntervalId;

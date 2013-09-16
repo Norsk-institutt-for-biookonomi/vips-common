@@ -1,4 +1,4 @@
-package no.bioforsk.vips.core.service;
+package no.bioforsk.vips.coremanager.service;
 
 import java.util.Map;
 import javax.ws.rs.Consumes;
@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 /**
- * Interface for the ModelResource. Implemented by ManagerResourceImpl
+ * Interface for the ManagerResource. Implemented by ManagerResourceImpl
  * in VIPSCoreManager and also as client in VIPSBatch
  * @copyright 2013 <a href="http://www.bioforsk.no/">Bioforsk</a>
  * @author Tor-Einar Skog <tor-einar.skog@bioforsk.no>

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,8 +46,7 @@ public class DateMap {
         {
             return (Double) this.getParamValueForDate(getJavaUtilDate(date), paramName);
         }
-        catch(NullPointerException npe) {return null;}
-        catch(ClassCastException cce) {return null;}
+        catch(NullPointerException | ClassCastException npe) {return null;}
     }
 
     /**
@@ -72,8 +72,7 @@ public class DateMap {
         {
             return (Float) this.getParamValueForDate(getJavaUtilDate(date), paramName);
         }
-        catch(NullPointerException npe) {return null;}
-        catch(ClassCastException cce) {return null;}
+        catch(NullPointerException | ClassCastException npe) {return null;}
     }
 
     /**
@@ -99,8 +98,7 @@ public class DateMap {
         {
             return (Integer) this.getParamValueForDate(getJavaUtilDate(date), paramName);
         }
-        catch(NullPointerException npe) {return null;}
-        catch(ClassCastException cce) {return null;}
+        catch(NullPointerException | ClassCastException npe) {return null;}
     }
 
     /**
@@ -120,8 +118,7 @@ public class DateMap {
         {
             return (String) this.getParamValueForDate(getJavaUtilDate(date), paramName);
         }
-        catch(NullPointerException npe) {return null;}
-        catch(ClassCastException cce) {return null;}
+        catch(NullPointerException | ClassCastException npe) {return null;}
     }
 
     /**
@@ -153,8 +150,7 @@ public class DateMap {
         {
             return ((HashMap)this.matrix.get(getJavaUtilDate(date))).get(paramName);
         }
-        catch(NullPointerException npe) {return null;}
-        catch(ClassCastException cce) {return null;}
+        catch(NullPointerException | ClassCastException npe) {return null;}
     }
 
 
@@ -169,8 +165,7 @@ public class DateMap {
         {
             return ((HashMap)this.matrix.get(getJavaUtilDate(date))).keySet();
         }
-        catch(NullPointerException npe) {return null;}
-        catch(ClassCastException cce) {return null;}
+        catch(NullPointerException | ClassCastException npe) {return null;}
     }
 
     /**
@@ -256,6 +251,13 @@ public class DateMap {
             Collections.sort(dates);
             return dates.get(0);
         }
+    }
+    
+    public List<Date> getSortedDateKeys()
+    {
+        ArrayList<Date> keys = new ArrayList(this.matrix.keySet());
+        Collections.sort(keys);
+        return keys;
     }
 
     @Override

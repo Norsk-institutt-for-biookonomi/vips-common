@@ -253,6 +253,20 @@ public class DateMap {
         }
     }
     
+    public Date getLastDateWithValues()
+    {
+        ArrayList<Date> dates = new ArrayList(this.matrix.keySet());
+        if(dates.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            Collections.sort(dates);
+            return dates.get(dates.size()-1);
+        }
+    }
+    
     public List<Date> getSortedDateKeys()
     {
         ArrayList<Date> keys = new ArrayList(this.matrix.keySet());

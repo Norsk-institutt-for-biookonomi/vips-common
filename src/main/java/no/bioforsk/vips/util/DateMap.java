@@ -2,12 +2,14 @@ package no.bioforsk.vips.util;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * Multiple parameters mapped by Date
@@ -272,6 +274,19 @@ public class DateMap {
         ArrayList<Date> keys = new ArrayList(this.matrix.keySet());
         Collections.sort(keys);
         return keys;
+    }
+    
+    public List<Date> getSortedDateAtMidnightKeys(TimeZone timeZone)
+    {
+        List<Date> retVal = new ArrayList<>();
+        Calendar cal = Calendar.getInstance(timeZone);
+        for(Date timeStamp:this.getSortedDateKeys())
+        {
+            cal.setTime(timeStamp);
+            if(cal.get(Calendar.HOUR_OF_DAY) == 0)
+                retVal.add(timeStamp);
+        }
+        return retVal;
     }
 
     @Override

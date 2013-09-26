@@ -20,6 +20,10 @@ public class ServletUtil {
         return request.getHeader("X-Forwarded-Host") != null ? request.getHeader("X-Forwarded-Host") : request.getServerName();
     }
     
+    /**
+     * For debugging purposes. Dumps all headers in request to stdout
+     * @param request 
+     */
     public static void debugDumpHeaders(HttpServletRequest request)
     {
         for(Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements();e.nextElement())
@@ -29,6 +33,11 @@ public class ServletUtil {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return the context path, regardless of reverse proxy mixing stuff up
+     */
     public static String getContextPath(HttpServletRequest request)
     {
         return request.getHeader("X-Forwarded-Host") != null ? "" : request.getContextPath();
@@ -42,5 +51,25 @@ public class ServletUtil {
     public static String getNormalizedServerNameAndPort(HttpServletRequest request)
     {
         return ServletUtil.getServerName(request) + (request.getServerPort() != 80 && request.getHeader("X-Forwarded-Host") == null ? ":" + request.getServerPort() : "");
+    }
+    
+    /**
+     * This method builds a full RequestURI, including query string, ignoring ServletContext,
+     * thus enabling correct restore of request when behind reverse proxy
+     * @param request
+     * @return 
+     */
+    public static String getFullRequestURI(HttpServletRequest request)
+    {
+        StringBuilder retVal = new StringBuilder(request.getServletPath());
+        if(request.getPathInfo() != null)
+        {
+            retVal.append(request.getPathInfo());
+        }
+        if(request.getQueryString() != null)
+        {
+            retVal.append("?").append(request.getQueryString());
+        }
+        return retVal.toString();
     }
 }

@@ -94,7 +94,7 @@ public class WeatherUtil {
             if(possibleDuplicate != null)
             {
                 throw new WeatherObservationListException(
-                        "Found duplicate weatherObservations for parameter " + 
+                        "Found duplicate weatherObservations for parameter " +
                         observation.getElementMeasurementTypeId() + " at time " +
                         observation.getTimeMeasured()
                 );
@@ -114,6 +114,7 @@ public class WeatherUtil {
             {
                 throw new WeatherObservationListException(
                         "Too few observations to aggregate for parameter " +
+                        templateObservation.getElementMeasurementTypeId() +
                         " at date " + aDay +". Found " + hourValuesForADay.size() +
                         ", expected minimum " + minimumObservationsPerDay
                         );

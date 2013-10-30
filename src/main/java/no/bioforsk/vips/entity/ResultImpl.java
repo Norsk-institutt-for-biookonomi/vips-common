@@ -13,7 +13,7 @@ import java.util.Set;
 public class ResultImpl implements Result{
     private Date resultValidTime;
     private Set<String> keys;
-    private HashMap<String, String> values;
+    private Map<String, String> values;
     private Integer warningStatus;
 
     @Override
@@ -51,6 +51,11 @@ public class ResultImpl implements Result{
     @Override
     public Map<String, String> getAllValues() {
         return this.values;
+    }
+    
+    @Override
+    public void setAllValues(Map<String, String> values){
+        this.values = values;
     }
 
     /**

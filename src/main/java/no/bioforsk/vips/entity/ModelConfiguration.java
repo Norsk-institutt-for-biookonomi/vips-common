@@ -14,7 +14,7 @@ import java.util.Map;
 public class ModelConfiguration {
     private String modelId;
     private Map<String, Object> configParameters;
-    
+        
     public ModelConfiguration()
     {
     }
@@ -71,5 +71,5 @@ public class ModelConfiguration {
         this.configParameters = configParameters;
     }
     
-   
+       
 }

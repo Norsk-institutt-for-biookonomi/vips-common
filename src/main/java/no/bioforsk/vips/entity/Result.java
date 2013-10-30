@@ -3,12 +3,14 @@ package no.bioforsk.vips.entity;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 /**
  * Represents a result from a model run
  * @copyright 2013 {@link http://www.bioforsk.no Bioforsk}
  * @author Tor-Einar Skog <tor-einar.skog@hyper.no>
  */
+@JsonDeserialize(as=ResultImpl.class)
 public interface Result extends Comparable{
     
     public final static Integer WARNING_STATUS_NO_WARNING = 0;
@@ -28,6 +30,7 @@ public interface Result extends Comparable{
     /* Setting and getting values */
     public void setValue(String key, String value);
     public String getValue(String key);
+    public void setAllValues(Map<String,String> values);
     public Map<String,String> getAllValues();
     
     public void setWarningStatus(Integer warningStatus);

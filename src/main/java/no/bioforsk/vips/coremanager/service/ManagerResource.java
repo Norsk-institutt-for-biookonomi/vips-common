@@ -2,6 +2,7 @@ package no.bioforsk.vips.coremanager.service;
 
 import java.util.Map;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,6 +27,11 @@ public interface ManagerResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response getUserInfo(Map<String,String> input);
+    
+    @GET
+    @Path("organizations/{organizationId}/users")
+    @Produces("application/json")
+    public Response getUsersForOrganization(@PathParam("organizationId") Integer organizationId);
     
     /**
      * Instantiates and runs the requested model

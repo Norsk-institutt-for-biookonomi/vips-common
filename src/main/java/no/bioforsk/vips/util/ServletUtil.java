@@ -54,6 +54,17 @@ public class ServletUtil {
     }
     
     /**
+     * Reconstructs the entire URL (including protocol) that was used for this request
+     * TODO: Check for https (how to??)
+     * @param request
+     * @return 
+     */
+    public static String getCompleteRequestURL(HttpServletRequest request)
+    {
+        return "http://" + getNormalizedServerNameAndPort(request) + getFullRequestURI(request);
+    }
+    
+    /**
      * This method builds a full RequestURI, including query string, ignoring ServletContext,
      * thus enabling correct restore of request when behind reverse proxy
      * @param request

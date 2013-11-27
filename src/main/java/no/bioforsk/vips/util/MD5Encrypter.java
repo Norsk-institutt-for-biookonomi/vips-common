@@ -9,9 +9,6 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MD5Encrypter {
     
-    /** Creates a new instance of CryptPassword */
-    public MD5Encrypter() {
-    }
     
     /**
      * 

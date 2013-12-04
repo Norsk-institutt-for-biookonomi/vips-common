@@ -83,4 +83,16 @@ public class ServletUtil {
         }
         return retVal.toString();
     }
+    
+    public static Integer getIntegerParameter(HttpServletRequest request, String parameterName)
+    {
+        try
+        {
+            return Integer.valueOf(request.getParameter(parameterName));
+        }
+        catch(NullPointerException | NumberFormatException ex)
+        {
+            return null;
+        }
+    }
 }

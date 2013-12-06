@@ -45,5 +45,104 @@ public interface ManagerResource {
     @Produces("application/json")
     public Response runModel(@PathParam("modelId") String modelId, ModelRunRequest request);
     
+    /**
+     * Lists all models available in this instance, using default language (English)
+     * @return list of all models available
+     */
+    @GET
+    @Path("models")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelList();
     
+    /**
+     * Lists all models available in this instance, using default language (English)
+     * @return list of all models available
+     */
+    @GET
+    @Path("models/json")
+    @Produces("application/json;charset=UTF-8")
+    public Response printModelListJSON();
+    
+     /**
+     * Lists all models available in this instance, using default language (English)
+     * @return list of all models available
+     */
+    @GET
+    @Path("models/json/{language}")
+    @Produces("application/json;charset=UTF-8")
+    public Response printModelListJSON(@PathParam("language") String language);
+    
+    
+    /**
+     * Lists all models available in this instance, using default language (English)
+     * @return list of all models available
+     */
+    @GET
+    @Path("models/{language}")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelList(@PathParam("language") String language);
+    
+    @GET
+    @Path("models/{modelId}/name")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelName(@PathParam("modelId") String modelId);
+    
+    @GET
+    @Path("models/{modelId}/name/{language}")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelName(@PathParam("modelId") String modelId,@PathParam("language") String language);
+    
+    @GET
+    @Path("models/{modelId}/license")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelLicense(@PathParam("modelId") String modelId);
+    
+    @GET
+    @Path("models/{modelId}/copyright")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelCopyright(@PathParam("modelId") String modelId);
+    
+    @GET
+    @Path("models/{modelId}/description")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelDescription(@PathParam("modelId") String modelId);
+
+    
+    @GET
+    @Path("models/{modelId}/description/{language}")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelDescription(@PathParam("modelId") String modelId,@PathParam("language") String language);
+
+    
+    /**
+     * Prints the usage instructions from the requested model
+     * @param modelId
+     * @param language two-letter code (<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO-639-2</a>)
+     * @return 
+     */
+    @GET
+    @Path("models/{modelId}/usage/{language}")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelUsage(@PathParam("modelId") String modelId, @PathParam("language") String language);
+    
+    /**
+     * Prints the usage instructions from the requested model
+     * @param modelId
+     * @param language two-letter code (<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO-639-2</a>)
+     * @return 
+     */
+    @GET
+    @Path("models/{modelId}/usage")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelUsage(@PathParam("modelId") String modelId);
+    
+    /**
+     * Outputs a sample configuration for the requested model
+     * @param modelId the requested model
+     * @return a sample configuration for the requested model
+     */
+    @GET
+    @Path("models/{modelId}/sampleconfig")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelSampleConfig(@PathParam("modelId") String modelId);
 }

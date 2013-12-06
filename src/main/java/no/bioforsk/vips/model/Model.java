@@ -36,6 +36,18 @@ public interface Model {
     
     /**
      * 
+     * @return the License for this piece of software
+     */
+    public String getLicense();
+    
+    /**
+     * 
+     * @return Name of person/organization that holds the copyright, and contact information
+     */
+    public String getCopyright();
+    
+    /**
+     * 
      * @return Description of model (In English). Should include interpretation of the red-yellow-green warning system
      */
     public String getModelDescription();

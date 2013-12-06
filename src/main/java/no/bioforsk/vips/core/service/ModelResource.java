@@ -65,6 +65,16 @@ public interface ModelResource {
     public Response printModelName(@PathParam("modelId") String modelId,@PathParam("language") String language);
     
     @GET
+    @Path("models/{modelId}/license")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelLicense(@PathParam("modelId") String modelId);
+    
+    @GET
+    @Path("models/{modelId}/copyright")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelCopyright(@PathParam("modelId") String modelId);
+    
+    @GET
     @Path("models/{modelId}/description")
     @Produces("text/plain;charset=UTF-8")
     public Response printModelDescription(@PathParam("modelId") String modelId);

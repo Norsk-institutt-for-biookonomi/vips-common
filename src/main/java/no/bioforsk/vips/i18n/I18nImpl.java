@@ -7,7 +7,8 @@ import java.util.ResourceBundle;
 import no.bioforsk.vips.model.Model;
 
 /**
- * Utility class to extend for classes that wish to have easy access to 
+ * Utility class to extend for classes that wish to have easy access to.
+ * Could also be used as a util class (without extending)
  * ResourceBundles
  * @copyright 2013 <a href="http://www.bioforsk.no">Bioforsk</a>
  * @author Tor-Einar Skog <tor-einar.skog@bioforsk.no>
@@ -27,7 +28,7 @@ public class I18nImpl {
      * must be provided, e.g. for the files no/bioforsk/vips/somepackage/texts[_lang].properties,
      * please specify "no.bioforsk.vips.somepackage.texts"
      */
-    protected I18nImpl(String resourceBundleBaseName)
+    public I18nImpl(String resourceBundleBaseName)
     {
         this.resourceBundleBaseName = resourceBundleBaseName;
     }
@@ -39,7 +40,7 @@ public class I18nImpl {
      * @return the requested text in the specified language or in default language (English) if the
      * text does not exist in the specified language, or null if the text doesn't exist at all
      */
-    protected String getText(String key, String language)
+    public String getText(String key, String language)
     {
         // Input control
         if(language == null)

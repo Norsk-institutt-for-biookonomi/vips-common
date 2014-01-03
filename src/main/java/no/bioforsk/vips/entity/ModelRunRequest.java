@@ -30,7 +30,7 @@ public class ModelRunRequest {
     private Map<String, Object> configParameters;
     private Map<String,String> loginInfo;
     private String modelId;
-    private Integer batchSystemClientId;
+    private Integer vipsCoreUserId;
 
     /**
      * Dummy constructor for Jackson
@@ -59,17 +59,17 @@ public class ModelRunRequest {
     }
 
     /**
-     * @return the batchSystemClientId
+     * @return the vipsCoreUserId
      */
-    public Integer getBatchSystemClientId() {
-        return batchSystemClientId;
+    public Integer getVipsCoreUserId() {
+        return vipsCoreUserId;
     }
 
     /**
-     * @param batchSystemClientId the batchSystemClientId to set
+     * @param vipsCoreUserId the vipsCoreUserId to set
      */
-    public void setBatchSystemClientId(Integer batchSystemClientId) {
-        this.batchSystemClientId = batchSystemClientId;
+    public void setVipsCoreUserId(Integer vipsCoreUserId) {
+        this.vipsCoreUserId = vipsCoreUserId;
     }
 
     /**

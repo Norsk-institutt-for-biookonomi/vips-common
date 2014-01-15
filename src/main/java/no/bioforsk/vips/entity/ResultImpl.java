@@ -37,15 +37,15 @@ public class ResultImpl implements Result{
     }
 
     @Override
-    public void setValue(String key, String value) {
+    public void setValue(String namespace, String key, String value) {
         if(this.values == null)
             this.values = new HashMap();
-        this.values.put(key, value);
+        this.values.put(namespace + "." + key, value);
     }
 
     @Override
-    public String getValue(String key) {
-        return this.values != null ? this.values.get(key) : null;
+    public String getValue(String namespace, String key) {
+        return this.values != null ? this.values.get(namespace + "." + key) : null;
     }
 
     @Override

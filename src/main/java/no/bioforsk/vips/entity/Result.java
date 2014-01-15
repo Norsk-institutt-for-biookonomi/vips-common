@@ -28,8 +28,8 @@ public interface Result extends Comparable{
     public Set<String> getKeys();
     
     /* Setting and getting values */
-    public void setValue(String key, String value);
-    public String getValue(String key);
+    public void setValue(String namespace, String key, String value);
+    public String getValue(String namespace, String key);
     public void setAllValues(Map<String,String> values);
     public Map<String,String> getAllValues();
     

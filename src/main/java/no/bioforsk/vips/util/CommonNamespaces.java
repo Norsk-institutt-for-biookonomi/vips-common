@@ -25,4 +25,5 @@ package no.bioforsk.vips.util;
  */
 public class CommonNamespaces {
     public final static String NS_WEATHER = "WEATHER";
+    public final static String NS_FORECAST = "FORECAST";
 }

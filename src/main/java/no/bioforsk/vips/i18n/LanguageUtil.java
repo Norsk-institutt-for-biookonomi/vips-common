@@ -20,8 +20,8 @@
 package no.bioforsk.vips.i18n;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @copyright 2014 <a href="http://www.bioforsk.no/">Bioforsk</a>
@@ -29,22 +29,23 @@ import java.util.Map;
  */
 public class LanguageUtil {
     
-    private static Locale[] distinctLanguages;
+    private static ULocale[] distinctLanguages;
 
     /**
      * 
      * @return All available locales with distinct languages
      */
-    public static Locale[] getAvailableLocalesWithDistinctLanguage()
+    public static ULocale[] getAvailableLocalesWithDistinctLanguage()
     {
+        
         if(distinctLanguages == null)
         {
-            Map<String, Locale> localeBucket = new HashMap<>();
-            for(Locale locale:Locale.getAvailableLocales())
+            Map<String, ULocale> localeBucket = new HashMap<>();
+            for(ULocale locale:ULocale.getAvailableLocales())
             {
                 localeBucket.put(locale.getLanguage(), locale);
             }
-            distinctLanguages = localeBucket.values().toArray(new Locale[0]);
+            distinctLanguages = localeBucket.values().toArray(new ULocale[0]);
         }
         
         return distinctLanguages;

@@ -24,10 +24,12 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import no.bioforsk.vips.entity.WeatherObservation;
+import no.bioforsk.vips.model.ConfigValidationException;
 
 /**
  * Weather related utility methods
@@ -41,6 +43,78 @@ public class WeatherUtil {
     public final static int AGGREGATION_TYPE_MINIMUM = 3;
     public final static int AGGREGATION_TYPE_MAXIMUM = 4;
 
+    /**
+     * 
+     * @param temperature
+     * @param relativeHumidity
+     * @return 
+     */
+    public List<WeatherObservation> calculateLeafWetnessHourSeriesSimple(List<WeatherObservation> temperature, List<WeatherObservation> rainfall, List<WeatherObservation> relativeHumidity) throws ConfigValidationException
+    {
+        List<WeatherObservation> retVal = new ArrayList<>();
+        Iterator<WeatherObservation> humIt = relativeHumidity.iterator();
+        WeatherObservation humObs;
+        Iterator<WeatherObservation> rainIt = rainfall.iterator();
+        WeatherObservation rainObs;
+        
+        for(WeatherObservation tempObs:temperature)
+        {
+            if(humIt.hasNext() && rainIt.hasNext())
+            {
+                humObs = humIt.next();
+                rainObs = rainIt.next();
+            }
+            else
+            {
+                throw new ConfigValidationException("When calculating leaf wetness: "
+                        + "Differing lengths of lists with input weather data. "
+                        + "Temperature list has " + temperature.size() + " elements, "
+                        + "rainfall list has " + rainfall.size() + " elements, "
+                        + "relative humidity list has " + relativeHumidity.size() + " elements.");
+            }
+            if(humObs.getTimeMeasured().compareTo(tempObs.getTimeMeasured()) != 0 || humObs.getTimeMeasured().compareTo(rainObs.getTimeMeasured()) != 0)
+            {
+                throw new ConfigValidationException("When calculating leaf wetness: "
+                        + "Timestamps of weather observations are not parallel. "
+                        + "Temperature has timestamp " + tempObs.getTimeMeasured() + ", "
+                        + "rainfall has timestamp " + rainObs.getTimeMeasured() + ", "
+                        + "relative humidity has timestamp " + humObs.getTimeMeasured() + ".");
+            }
+            
+            WeatherObservation leafWetness = new WeatherObservation();
+            leafWetness.setElementMeasurementTypeId(WeatherElements.LEAF_WETNESS);
+            leafWetness.setLogIntervalId(WeatherObservation.LOG_INTERVAL_ID_1H);
+            leafWetness.setTimeMeasured(humObs.getTimeMeasured());
+            leafWetness.setValue(this.calculateLeafWetnessHourSimple(tempObs.getValue(), rainObs.getValue(), humObs.getValue()));
+            retVal.add(leafWetness);
+        }
+        return retVal;
+    }
+
+    /**
+     * Calculate leaf wetness from a limited set of weather parameters.
+     * Based on the method used by Marc Trapman in RIMPro (version 2014)
+     * @param temperature degrees Celcius, average for 1 hour
+     * @param rainfall millimeters, aggregate for 1 hour
+     * @param relativeHumidity percent, average for 1 hour
+     * @return minutes with leaf wetness during one hour. In this simple method,
+     * it returns either 60 or 0 (all or nothing!)
+     */
+    public Double calculateLeafWetnessHourSimple(Double temperature, Double rainfall, Double relativeHumidity)
+    {
+        return (rainfall > 0 || this.getVaporPressureDeficit(temperature, relativeHumidity) < 2) ? 60d : 0;
+    }
+    
+    /**
+     * This is after Bolton 1980
+     * @param relativeHumidity
+     * @param temperature
+     * @return Vapor Pressure Deficit in kPa (kiloPascal)
+     */
+    public double getVaporPressureDeficit(Double temperature, Double relativeHumidity)
+    {
+        return ((100-relativeHumidity) / 100) * 6.112 * Math.exp(17.67 * temperature / (temperature + 243.5));
+    }
     
     /**
      * Calculates Water Vapor Deficiency in Pa

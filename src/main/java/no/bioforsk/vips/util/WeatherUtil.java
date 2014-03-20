@@ -19,9 +19,11 @@
 
 package no.bioforsk.vips.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +44,53 @@ public class WeatherUtil {
     public final static int AGGREGATION_TYPE_SUM = 2;
     public final static int AGGREGATION_TYPE_MINIMUM = 3;
     public final static int AGGREGATION_TYPE_MAXIMUM = 4;
+
+    /**
+     * Ensures that hourly values at the end of series that exceed
+     * the day before is cut of
+     * @param hourlyValues
+     * @return 
+     */
+    public List<WeatherObservation> cutTrailingHourlyValues(List<WeatherObservation> hourlyValues, TimeZone timeZone) {
+        // Special case: List has less than 24 hourly values, return empty list
+        if(hourlyValues.size() < 24)
+        {
+            return new ArrayList<>();
+        }
+        // Sort the list 
+        Collections.sort(hourlyValues);
+        // Get the last 24 values, see if they're in the same day
+        Integer dateShiftIndex = 0;
+        for(int i=1;i<24;i++)
+        {
+            if(!this.isSameDate(hourlyValues.get(hourlyValues.size()-i),hourlyValues.get(hourlyValues.size()-i-1),timeZone))
+            {
+                dateShiftIndex = hourlyValues.size()-i;
+                break;
+            }
+        }
+        if(dateShiftIndex == 0)
+        {
+            return hourlyValues;
+        }
+        else
+        {
+            return hourlyValues.subList(0,dateShiftIndex);
+        }
+    }
+
+    /**
+     * 
+     * @param obs1
+     * @param obs2
+     * @param timeZone
+     * @return true if the two dates are the same date, given the time zone
+     */
+    private boolean isSameDate(WeatherObservation obs1, WeatherObservation obs2, TimeZone timeZone) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setTimeZone(timeZone);
+        return format.format(obs1.getTimeMeasured()).equals(format.format(obs2.getTimeMeasured()));
+    }
 
     /**
      * 

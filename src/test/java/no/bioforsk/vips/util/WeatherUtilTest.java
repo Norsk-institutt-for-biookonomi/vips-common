@@ -103,13 +103,22 @@ public class WeatherUtilTest extends TestCase {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }*/
+    
+    public void testCutTrailingHourlyValues()
+    {
+        System.out.println("testCutTrailingHourlyValues");
+        WeatherUtil instance = new WeatherUtil();
+        List<WeatherObservation> TM = this.getObservations("/weatherDataTestCutTrailing.json");
+        List<WeatherObservation> result = instance.cutTrailingHourlyValues(TM, TimeZone.getTimeZone("Europe/Oslo"));
+        assertEquals(216, result.size());
+    }
 
     /**
      * Test of getAggregatedDailyValues method, of class WeatherUtil.
      */
     public void testGetAggregatedDailyValues() {
         System.out.println("getAggregatedDailyValues");
-        List<WeatherObservation> allObservations = this.getObservations();
+        List<WeatherObservation> allObservations = this.getObservations("/weatherData.json");
         List<WeatherObservation> TM = new ArrayList<>();
         for(WeatherObservation obs:allObservations)
         {
@@ -122,7 +131,7 @@ public class WeatherUtilTest extends TestCase {
         Double expAvg = 5.962125;
         Double expMin = -0.191;
         Double expMax = 12.71;
-        TimeZone timeZone = TimeZone.getDefault();
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Oslo");
         //System.out.println("TimeZone=" + timeZone.getDisplayName());
         List<WeatherObservation> avgResults = null;
         List<WeatherObservation> sumResults = null;
@@ -162,11 +171,11 @@ public class WeatherUtilTest extends TestCase {
         fail("The test case is a prototype.");
     }*/
     
-    private List<WeatherObservation> getObservations()
+    private List<WeatherObservation> getObservations(String fileName)
     {
         try
         {
-        BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream("/weatherData.json"));
+        BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(fileName));
             JsonFactory f = new MappingJsonFactory();
             JsonParser jp = f.createJsonParser(inputStream);
             JsonNode all = jp.readValueAsTree();

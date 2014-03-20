@@ -38,8 +38,8 @@ import java.util.TimeZone;
 public class DateMap {
     
 
-    private HashMap matrix;
-    private DecimalFormat decimalFormat;
+    private final HashMap matrix;
+    private final DecimalFormat decimalFormat;
 
     /** Creates a new instance of DateMap */
     public DateMap()
@@ -48,24 +48,18 @@ public class DateMap {
         this.decimalFormat = new DecimalFormat("0.0");
     }
 
-    private Date getJavaUtilDate(Date date)
-    {
-        if(date instanceof java.sql.Date)
-            return new Date(date.getTime());
-        else
-            return date;
-    }
+    
 
     public void setParamDoubleValueForDate(Date date, String paramName, Double value)
     {
-        this.setParamValueForDate(getJavaUtilDate(date), paramName, value);
+        this.setParamValueForDate(date, paramName, value);
     }
 
     public Double getParamDoubleValueForDate(Date date, String paramName)
     {
         try
         {
-            return (Double) this.getParamValueForDate(getJavaUtilDate(date), paramName);
+            return (Double) this.getParamValueForDate(date, paramName);
         }
         catch(NullPointerException | ClassCastException npe) {return null;}
     }
@@ -78,7 +72,7 @@ public class DateMap {
      */
     public void setParamFloatValueForDate(Date date, String paramName, Float value)
     {
-        this.setParamValueForDate(getJavaUtilDate(date), paramName, value);
+        this.setParamValueForDate(date, paramName, value);
     }
 
     /**
@@ -91,7 +85,7 @@ public class DateMap {
     {
         try
         {
-            return (Float) this.getParamValueForDate(getJavaUtilDate(date), paramName);
+            return (Float) this.getParamValueForDate(date, paramName);
         }
         catch(NullPointerException | ClassCastException npe) {return null;}
     }
@@ -104,7 +98,7 @@ public class DateMap {
      */
     public void setParamIntValueForDate(Date date, String paramName, Integer value)
     {
-        this.setParamValueForDate(getJavaUtilDate(date), paramName, value);
+        this.setParamValueForDate(date, paramName, value);
     }
 
     /**
@@ -117,7 +111,7 @@ public class DateMap {
     {
         try
         {
-            return (Integer) this.getParamValueForDate(getJavaUtilDate(date), paramName);
+            return (Integer) this.getParamValueForDate(date, paramName);
         }
         catch(NullPointerException | ClassCastException npe) {return null;}
     }
@@ -130,14 +124,14 @@ public class DateMap {
      */
     public void setParamStringValueForDate(Date date, String paramName, String value)
     {
-        this.setParamValueForDate(getJavaUtilDate(date), paramName, value);
+        this.setParamValueForDate(date, paramName, value);
     }
 
     public String getParamStringValueForDate(Date date, String paramName)
     {
         try
         {
-            return (String) this.getParamValueForDate(getJavaUtilDate(date), paramName);
+            return (String) this.getParamValueForDate(date, paramName);
         }
         catch(NullPointerException | ClassCastException npe) {return null;}
     }
@@ -150,11 +144,11 @@ public class DateMap {
      */
     public void setParamValueForDate(Date date, String paramName, Object value)
     {
-        HashMap valueSet = (HashMap) this.matrix.get(getJavaUtilDate(date));
+        HashMap valueSet = (HashMap) this.matrix.get(date);
         if(valueSet == null)
         {
             valueSet = new HashMap();
-            this.matrix.put(getJavaUtilDate(date), valueSet);
+            this.matrix.put(date, valueSet);
         }
         valueSet.put(paramName, value);
     }
@@ -169,7 +163,7 @@ public class DateMap {
     {
         try
         {
-            return ((HashMap)this.matrix.get(getJavaUtilDate(date))).get(paramName);
+            return ((HashMap)this.matrix.get(date)).get(paramName);
         }
         catch(NullPointerException | ClassCastException npe) {return null;}
     }
@@ -184,7 +178,7 @@ public class DateMap {
     {
         try
         {
-            return ((HashMap)this.matrix.get(getJavaUtilDate(date))).keySet();
+            return ((HashMap)this.matrix.get(date)).keySet();
         }
         catch(NullPointerException | ClassCastException npe) {return null;}
     }
@@ -201,7 +195,7 @@ public class DateMap {
      */
     public String getDefaultFormattedValueForDate(Date date, String paramName)
     {
-        Object retVal = this.getParamValueForDate(getJavaUtilDate(date), paramName);
+        Object retVal = this.getParamValueForDate(date, paramName);
         if(retVal != null)
         {
             if(retVal instanceof Float || retVal instanceof Double)
@@ -224,7 +218,7 @@ public class DateMap {
      */
     public void printValuesForDate(Date date)
     {
-        System.out.println(this.getValuesForDate(getJavaUtilDate(date)));
+        System.out.println(this.getValuesForDate(date));
     }
 
     /**
@@ -236,10 +230,10 @@ public class DateMap {
     {
         try
         {
-            HashMap valueSet = (HashMap)this.matrix.get(getJavaUtilDate(date));
+            HashMap valueSet = (HashMap)this.matrix.get(date);
             if(valueSet != null)
             {
-                StringBuilder result = new StringBuilder(getJavaUtilDate(date).toString() + ": ");
+                StringBuilder result = new StringBuilder(date.toString() + ": ");
                 for(Iterator i = valueSet.keySet().iterator();i.hasNext();)
                 {
                     String key = (String) i.next();
@@ -249,7 +243,7 @@ public class DateMap {
             }
             else
             {
-                return getJavaUtilDate(date).toString() + ": No values found for this date";
+                return date.toString() + ": No values found for this date";
             }
         }
         catch(NullPointerException npe) {return "No values";}
@@ -318,7 +312,7 @@ public class DateMap {
         for(Iterator<Date> i = keys.iterator();i.hasNext();)
         {
             Date date = i.next();
-            buffer.append(this.getValuesForDate(getJavaUtilDate(date))).append("\n");
+            buffer.append(this.getValuesForDate(date)).append("\n");
         }
         return buffer.toString();
     }

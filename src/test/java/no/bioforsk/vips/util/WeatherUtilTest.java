@@ -159,9 +159,9 @@ public class WeatherUtilTest extends TestCase {
         assertEquals(expMax, maxResults.get(0).getValue());
     }
     
-    public void testCalculateLeafWetnessHourSeriesNaerstad()
+    public void testCalculateLeafWetnessHourSeriesBestEffort()
     {
-        System.out.println("testCalculateLeafWetnessHourSeriesNaerstad");
+        System.out.println("testCalculateLeafWetnessHourSeriesBestEffort");
         List<WeatherObservation> allObservations = this.getObservations("/weatherDataLeafWetnessCalc.json");
         List<WeatherObservation> TM = new ArrayList<>();
         List<WeatherObservation> UM = new ArrayList<>();
@@ -209,6 +209,25 @@ public class WeatherUtilTest extends TestCase {
                 WeatherObservation orig = i < BT.size() ? BT.get(i) : null;
                 System.out.println(calc.getElementMeasurementTypeId() + " [" +calc.getTimeMeasured() + "]: " + calc.getValue() + " | " + (orig != null ? orig.getValue():"NULL"));
             }*/
+            
+            // Testing Nærstad with completely empty BT as input
+            BTtest = new ArrayList<>();
+            result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
+            System.out.println("result.size=" + result.size());
+            // Test 1 // Result have same length as input data
+            assertEquals(TM.size(), result.size());
+            // Starts with same timestamp
+            assertEquals(TM.get(0).getTimeMeasured(), result.get(0).getTimeMeasured());
+            // Ends with same timestamp
+            assertEquals(TM.get(TM.size()-1).getTimeMeasured(), result.get(TM.size()-1).getTimeMeasured());
+            /*
+            for(int i=0; i< result.size();i++)
+            {
+                WeatherObservation calc = result.get(i);
+                WeatherObservation orig = i < BT.size() ? BT.get(i) : null;
+                System.out.println(calc.getElementMeasurementTypeId() + " [" +calc.getTimeMeasured() + "]: " + calc.getValue() + " | " + (orig != null ? orig.getValue():"NULL"));
+            }*/
+            
             
             // Trapman should be called now
             Q0 = new ArrayList<>();

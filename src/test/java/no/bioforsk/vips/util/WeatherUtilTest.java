@@ -26,10 +26,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 import junit.framework.TestCase;
 import no.bioforsk.vips.entity.WeatherObservation;
+import no.bioforsk.vips.model.ConfigValidationException;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
@@ -154,6 +157,80 @@ public class WeatherUtilTest extends TestCase {
         assertEquals(expSum, sumResults.get(0).getValue());
         assertEquals(expMin, minResults.get(0).getValue());
         assertEquals(expMax, maxResults.get(0).getValue());
+    }
+    
+    public void testCalculateLeafWetnessHourSeriesNaerstad()
+    {
+        System.out.println("testCalculateLeafWetnessHourSeriesNaerstad");
+        List<WeatherObservation> allObservations = this.getObservations("/weatherDataLeafWetnessCalc.json");
+        List<WeatherObservation> TM = new ArrayList<>();
+        List<WeatherObservation> UM = new ArrayList<>();
+        List<WeatherObservation> FM2 = new ArrayList<>();
+        List<WeatherObservation> Q0 = new ArrayList<>();
+        List<WeatherObservation> RR = new ArrayList<>();
+        List<WeatherObservation> BT = new ArrayList<>();
+        // Add collections here
+        for(WeatherObservation obs:allObservations)
+        {
+            if(obs.getElementMeasurementTypeId().equals(WeatherElements.TEMPERATURE_MEAN))
+                TM.add(obs);
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+                UM.add(obs);
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.WIND_SPEED_2M))
+                FM2.add(obs);
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.GLOBAL_RADIATION))
+                Q0.add(obs);
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+                RR.add(obs);
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.LEAF_WETNESS))
+                BT.add(obs);
+        }
+        
+        // Trying "Best effort"
+        List<WeatherObservation> BTtest = BT.size() > 1 ? new ArrayList(BT.subList(0, BT.size()/2)) : new ArrayList(BT);
+        System.out.println("BTtest.size=" + BTtest.size());
+        System.out.println("BT.size=" + BT.size());
+        
+        WeatherUtil instance = new WeatherUtil();
+        try {
+            // Naerstad should be called now
+            List<WeatherObservation> result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
+            System.out.println("result.size=" + result.size());
+            // Test 1 // Result have same length as input data
+            assertEquals(TM.size(), result.size());
+            // Starts with same timestamp
+            assertEquals(TM.get(0).getTimeMeasured(), result.get(0).getTimeMeasured());
+            // Ends with same timestamp
+            assertEquals(TM.get(TM.size()-1).getTimeMeasured(), result.get(TM.size()-1).getTimeMeasured());
+            /*
+            for(int i=0; i< result.size();i++)
+            {
+                WeatherObservation calc = result.get(i);
+                WeatherObservation orig = i < BT.size() ? BT.get(i) : null;
+                System.out.println(calc.getElementMeasurementTypeId() + " [" +calc.getTimeMeasured() + "]: " + calc.getValue() + " | " + (orig != null ? orig.getValue():"NULL"));
+            }*/
+            
+            // Trapman should be called now
+            Q0 = new ArrayList<>();
+            BTtest = BT.size() > 1 ? new ArrayList(BT.subList(0, BT.size()/2)) : new ArrayList(BT);
+            result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
+            System.out.println("result.size=" + result.size());
+            // Test 1 // Result have same length as input data
+            assertEquals(TM.size(), result.size());
+            // Starts with same timestamp
+            assertEquals(TM.get(0).getTimeMeasured(), result.get(0).getTimeMeasured());
+            // Ends with same timestamp
+            assertEquals(TM.get(TM.size()-1).getTimeMeasured(), result.get(TM.size()-1).getTimeMeasured());
+            /*
+            for(int i=0; i< result.size();i++)
+            {
+                WeatherObservation calc = result.get(i);
+                WeatherObservation orig = i < BT.size() ? BT.get(i) : null;
+                System.out.println(calc.getElementMeasurementTypeId() + " [" +calc.getTimeMeasured() + "]: " + calc.getValue() + " | " + (orig != null ? orig.getValue():"NULL"));
+            }*/
+        } catch (ConfigValidationException ex) {
+            Logger.getLogger(WeatherUtilTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

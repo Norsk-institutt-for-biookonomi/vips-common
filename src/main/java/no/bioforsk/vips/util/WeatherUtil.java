@@ -330,4 +330,169 @@ public class WeatherUtil {
         cal.set(Calendar.MILLISECOND,0);
         return cal.getTime();
     }
+
+    /**
+     * Given input data, attempts to calculate leaf wetness. Does not overwrite provided leaf wetness data.
+     * Priority (depending on what data are provided):
+     * <ol>
+     * <li>Provided leaf wetness data</li>
+     * <li>Nærstad's leaf wetness calculation algorithm</li>
+     * <li>Trapman's simple leaf wetness calculation algorithm</li>
+     * </ol>
+     * <p>Requires that at least TM, RR, and UM are complete. And that all lists are sorted!</p>
+     * 
+     * @param BT Leaf wetness (minutes/hour)
+     * @param TM Mean temperature (hourly mean, degrees Celcius)
+     * @param RR Rainfall (mm, hourly aggregate)
+     * @param FM2 Wind speed at 2m height (average, m/s)
+     * @param Q0 Global radiation (unit??)
+     * @param UM Relative humidity (average, %)
+     * @return 
+     */
+    public List<WeatherObservation> calculateLeafWetnessHourSeriesBestEffort(List<WeatherObservation> BT, List<WeatherObservation> TM, List<WeatherObservation> RR, List<WeatherObservation> Q0, List<WeatherObservation> FM2, List<WeatherObservation> UM) throws ConfigValidationException {
+        // If BT is same length as TM, return BT unmodified
+        if(BT.size() == TM.size())
+        {
+            return BT;
+        }
+        
+        // Possible TODO: Validate that TM==RR==UM
+        // First: Find time and index for when to start calculating
+        Integer listIndex = BT.size();
+        Date startTime = TM.get(listIndex).getTimeMeasured();
+        
+        // If all parameters are complete, we can use Nærstad's algorithm. Otherwise, if we only have UM,
+        // we must resort to Trapman's algorithm
+        List<WeatherObservation> calculatedBT;
+        if(TM.size() == RR.size() && TM.size() == Q0.size() && TM.size() == FM2.size() && TM.size() == UM.size())
+        {
+            // The algorithm uses the first hour of input values as "startup"
+            // So if we have some leaf wetness, we can provide the first hour.
+            if(listIndex > 0)
+            {
+                calculatedBT = this.calculateLeafWetnessHourSeriesNaerstad(
+                                TM.subList(listIndex-1, TM.size()),
+                                RR.subList(listIndex-1, TM.size()),
+                                Q0.subList(listIndex-1, TM.size()),
+                                FM2.subList(listIndex-1, TM.size()),
+                                UM.subList(listIndex-1, TM.size()),
+                                BT.get(listIndex-1)
+                                );
+            }
+            // Otherwise, we have to create a dry hour as the first hour
+            else
+            {
+                WeatherObservation emptyObs = new WeatherObservation(
+                                                startTime,
+                                                WeatherElements.LEAF_WETNESS,
+                                                WeatherObservation.LOG_INTERVAL_ID_1H,
+                                                0d
+                                                );
+                calculatedBT = new ArrayList<>();
+                calculatedBT.add(emptyObs);
+                calculatedBT.addAll(this.calculateLeafWetnessHourSeriesNaerstad(TM, RR, Q0, FM2, UM, null));
+            }
+        }
+        else if(TM.size() == RR.size() && TM.size() == UM.size())
+        {
+            calculatedBT = this.calculateLeafWetnessHourSeriesSimple(
+                    TM.subList(listIndex, TM.size()), 
+                    RR.subList(listIndex, TM.size()),
+                    UM.subList(listIndex, TM.size())
+            );
+        }
+        else
+        {
+            throw new ConfigValidationException("Missing weather data");
+        }
+        BT.addAll(calculatedBT);
+        return BT;
+    }
+
+    /**
+     * 
+     * @param temperature
+     * @param precipitation
+     * @param globalRadiation
+     * @param wind2m
+     * @param relativeHumidity
+     * @param precedingLeafWetness
+     * @return Leaf wetness for the same time period as provided by input data, 
+     * EXCEPT for the first hour, as that is used for "startup" of the algorithm.
+     * So the size of the returned list is 1 less than the input lists.
+     */
+    private List<WeatherObservation> calculateLeafWetnessHourSeriesNaerstad(
+            List<WeatherObservation> temperature, 
+            List<WeatherObservation> precipitation, 
+            List<WeatherObservation> globalRadiation, 
+            List<WeatherObservation> wind2m, 
+            List<WeatherObservation> relativeHumidity,
+            WeatherObservation precedingLeafWetness) 
+    {
+        // TODO Validation
+        
+        List<WeatherObservation> calculatedLeafWetnessSeries = new ArrayList<>();
+        Double lastLatentHeatFlux = this.calculateLatentHeatFlux(
+                temperature.get(0).getValue(), 
+                relativeHumidity.get(0).getValue(), 
+                wind2m.get(0).getValue(), 
+                globalRadiation.get(0).getValue()
+        );
+        Integer precedingLeafWetnessValue = precedingLeafWetness != null ?  (int) precedingLeafWetness.getValue() : 0;
+        // Iterating list with index (instead of using Iterator pattern) has 
+        // performance gains on very long lists
+        for(int i=1;i<temperature.size();i++)
+        {
+            WeatherObservation calculatedLeafWetness = new WeatherObservation(
+                    temperature.get(i).getTimeMeasured(),
+                    WeatherElements.LEAF_WETNESS,
+                    WeatherObservation.LOG_INTERVAL_ID_1H,
+                    (double) this.calculateLeafWetnessNaerstad(lastLatentHeatFlux, precedingLeafWetnessValue, precipitation.get(i).getValue())
+            );
+            calculatedLeafWetnessSeries.add(calculatedLeafWetness);
+        }
+        return calculatedLeafWetnessSeries;
+    }
+    
+    /**
+     * Nærstad's model of leaf wetness calculation
+     * @param lastLatentHeatFlux
+     * @param lastLeafWetness
+     * @param precipitation
+     * @return
+     */
+    public Long calculateLeafWetnessNaerstad(Double lastLatentHeatFlux, Integer lastLeafWetness, Double precipitation) {
+
+        Long DLeafWetness = Math.round(lastLeafWetness - lastLatentHeatFlux);
+        if (DLeafWetness < 0) {
+            DLeafWetness = 0l;
+        } else if (DLeafWetness > 60) {
+            DLeafWetness = 60l;
+        }
+
+
+        Long leafWetness = Math.round(DLeafWetness + precipitation * 150);
+        if (leafWetness < 0) {
+            leafWetness = 0l;
+        } else if (leafWetness > 60) {
+            leafWetness = 60l;
+        }
+
+        return leafWetness;
+    }
+    
+    /**
+     * Part of the Nærstad leaf wetness calculation
+     * @return
+     */
+    public Double calculateLatentHeatFlux(Double temperature, Double relativeHumidity, Double wind2m, Double globalRadiation) {
+        // s(t) = 0.61078*EKSP(17.269* T(t)/( T(t)+237.3))*4.097*10000/(T(t)+237.3)2
+        Double s = 0.61078 * Math.exp(17.269 * temperature / (temperature + 237.3)) * 4.097 * 10000 / Math.pow(temperature + 237.3, 2);
+        // resistance(t) = 307*(0.07/( (windFF(t)   + 0.1) / 2 ))0.5
+        Double resistance = 307 * Math.pow(0.07 / ((wind2m + 0.1) / 2), 0.5);
+        // LE(t)  = -( (s(t) * Rn(t)  + (12(WVD (t) )/( resistance(t)))/(s(t) +0.64)
+        Double LE = (s * globalRadiation + (12 * this.getWVD(temperature, relativeHumidity) / resistance)) / (s + 0.64);
+
+        return LE;
+    }
 }

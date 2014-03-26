@@ -41,6 +41,20 @@ public class WeatherObservation implements Comparable{
     /** Creates a new instance of WeatherObservation */
     public WeatherObservation() {
     }
+    
+    /**
+     * 
+     * @param timeMeasured
+     * @param elementMeasurementTypeId
+     * @param logIntervalId
+     * @param value 
+     */
+    public WeatherObservation(Date timeMeasured, String elementMeasurementTypeId, Integer logIntervalId, Double value){
+        this.timeMeasured = timeMeasured;
+        this.elementMeasurementTypeId = elementMeasurementTypeId;
+        this.logIntervalId = logIntervalId;
+        this.value = value;
+    }
         
     public void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
     public Date getTimeMeasured() { return this.timeMeasured; }
@@ -58,6 +72,7 @@ public class WeatherObservation implements Comparable{
     /**
      * Compares by time measured in ascending order
      */
+    @Override
     public int compareTo(Object o) {
         WeatherObservation other = (WeatherObservation) o;
         return this.compareTo(other);

@@ -54,7 +54,10 @@ public class WeatherElements {
      * Leaf wetness (Minutes per hour)
      */
     public static final String LEAF_WETNESS = "BT";
-
+    /**
+     * 
+     */
+    public static final String WIND_SPEED_2M = "FM2";
     
     
 }

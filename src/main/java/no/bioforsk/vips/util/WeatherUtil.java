@@ -75,7 +75,7 @@ public class WeatherUtil {
         }
         else
         {
-            return hourlyValues.subList(0,dateShiftIndex);
+            return new ArrayList<>(hourlyValues.subList(0,dateShiftIndex));
         }
     }
 

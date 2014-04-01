@@ -217,6 +217,7 @@ public class WeatherUtil {
         Map<Date,Map> dateBucket = new HashMap<>();
         Calendar cal = Calendar.getInstance(timeZone);
         String expectedParameter = observations.get(0).getElementMeasurementTypeId();
+        Date lastDate = null;
         for(WeatherObservation observation:observations)
         {
             if(!observation.getElementMeasurementTypeId().equals(expectedParameter))
@@ -224,6 +225,7 @@ public class WeatherUtil {
                 throw new WeatherObservationListException("Found multiple parameters: " + observation.getElementMeasurementTypeId() + " and " + expectedParameter);
             }
             Date theDate = normalizeToExactDate(observation.getTimeMeasured(), timeZone);
+            lastDate = lastDate == null ? theDate : (lastDate.compareTo(theDate) < 0 ? theDate : lastDate);
             Map<Date, Double> hourValuesForDate = dateBucket.get(theDate);
             if(hourValuesForDate == null)
             {
@@ -252,7 +254,8 @@ public class WeatherUtil {
         {
             //System.out.println("date=" + aDay);
             Map hourValuesForADay = dateBucket.get(aDay);
-            if(hourValuesForADay.size() < minimumObservationsPerDay)
+            // We accept less than minimum values for the last day (we don't throw an error)
+            if(hourValuesForADay.size() < minimumObservationsPerDay && aDay.compareTo(lastDate) < 0)
             {
                 throw new WeatherObservationListException(
                         "Too few observations to aggregate for parameter " +
@@ -260,6 +263,11 @@ public class WeatherUtil {
                         " at date " + aDay +". Found " + hourValuesForADay.size() +
                         ", expected minimum " + minimumObservationsPerDay
                         );
+            }
+            // If last day and too few values: Skip it
+            else if(hourValuesForADay.size() < minimumObservationsPerDay)
+            {
+                continue;
             }
             switch(typeOfAggregation){
                 case WeatherUtil.AGGREGATION_TYPE_AVERAGE:
@@ -358,8 +366,23 @@ public class WeatherUtil {
         
         // Possible TODO: Validate that TM==RR==UM
         // First: Find time and index for when to start calculating
-        Integer listIndex = BT.size();
-        Date startTime = TM.get(listIndex).getTimeMeasured();
+        
+        Date startTime, lastBTTime;
+        if(BT.size() > 0)
+        {
+            lastBTTime = BT.get(BT.size()-1).getTimeMeasured();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(lastBTTime);
+            cal.add(Calendar.HOUR_OF_DAY, 1);
+            startTime = cal.getTime();
+        }
+        else
+        {
+            startTime = TM.get(0).getTimeMeasured();
+            lastBTTime = null;
+        }
+        
+        
         
         // If all parameters are complete, we can use Nærstad's algorithm. Otherwise, if we only have UM,
         // we must resort to Trapman's algorithm
@@ -368,20 +391,23 @@ public class WeatherUtil {
         {
             // The algorithm uses the first hour of input values as "startup"
             // So if we have some leaf wetness, we can provide the first hour.
-            if(listIndex > 0)
+            if(BT.size() > 0)
             {
+                //System.out.println("Nærstad BT with BT measured values: startTime=" + startTime);
+                //System.out.println("Last BT timestamp = " + BT.get(BT.size()-1).getTimeMeasured());
                 calculatedBT = this.calculateLeafWetnessHourSeriesNaerstad(
-                                TM.subList(listIndex-1, TM.size()),
-                                RR.subList(listIndex-1, TM.size()),
-                                Q0.subList(listIndex-1, TM.size()),
-                                FM2.subList(listIndex-1, TM.size()),
-                                UM.subList(listIndex-1, TM.size()),
-                                BT.get(listIndex-1)
-                                );
+                        this.getWeatherObservationsInPeriod(TM, lastBTTime, null),
+                        this.getWeatherObservationsInPeriod(RR, lastBTTime, null),
+                        this.getWeatherObservationsInPeriod(Q0, lastBTTime, null),
+                        this.getWeatherObservationsInPeriod(FM2, lastBTTime, null),
+                        this.getWeatherObservationsInPeriod(UM, lastBTTime, null),
+                        BT.get(BT.size()-1)
+                );
             }
             // Otherwise, we have to create a dry hour as the first hour
             else
             {
+                //System.out.println("Nærstad BT without BT measured values: startTime=" + startTime);
                 WeatherObservation emptyObs = new WeatherObservation(
                                                 startTime,
                                                 WeatherElements.LEAF_WETNESS,
@@ -395,18 +421,49 @@ public class WeatherUtil {
         }
         else if(TM.size() == RR.size() && TM.size() == UM.size())
         {
+            /*
+            System.out.println("Trapman BT: startTime=" + startTime);
+            if(BT.size() > 0)
+            {
+                System.out.println("Last BT timestamp = " + BT.get(BT.size()-1).getTimeMeasured());
+            }
+            */
             calculatedBT = this.calculateLeafWetnessHourSeriesSimple(
-                    TM.subList(listIndex, TM.size()), 
-                    RR.subList(listIndex, TM.size()),
-                    UM.subList(listIndex, TM.size())
+                    this.getWeatherObservationsInPeriod(TM, startTime, null),
+                    this.getWeatherObservationsInPeriod(RR, startTime, null),
+                    this.getWeatherObservationsInPeriod(UM, startTime, null)
             );
         }
         else
         {
             throw new ConfigValidationException("Missing weather data");
         }
+        //System.out.println("First new obs timestamp = " + calculatedBT.get(0).getTimeMeasured());
         BT.addAll(calculatedBT);
         return BT;
+    }
+    
+    /**
+     * Extract all observations in the given period from given list
+     * @param allObservations
+     * @param dateStart INCLUDING start date. May be null 
+     * @param dateEnd INCLUDING end time. May be null (if both dateStart AND dateEnd == null, the list is the same as the one sent in)
+     * @return 
+     */
+    public List<WeatherObservation> getWeatherObservationsInPeriod(List<WeatherObservation> allObservations, Date dateStart, Date dateEnd)
+    {
+        List<WeatherObservation> retVal = new ArrayList<>();
+        for(WeatherObservation obs:allObservations)
+        {
+            if(
+                    (dateStart == null || obs.getTimeMeasured().compareTo(dateStart) >= 0) 
+                    && (dateEnd == null || obs.getTimeMeasured().compareTo(dateEnd) <= 0)
+                    )
+            {
+                retVal.add(obs);
+            }
+        }
+        return retVal;
     }
 
     /**
@@ -494,5 +551,112 @@ public class WeatherUtil {
         Double LE = (s * globalRadiation + (12 * this.getWVD(temperature, relativeHumidity) / resistance)) / (s + 0.64);
 
         return LE;
+    }
+
+    /**
+     * Fixes by 
+     * <ul>
+     * <li>Simple interpolation for continuous parameters (temperature, humidity)</li>
+     * <li>Setting values to 0 for non continuous parameters (rainfall)</li>
+     * </ul>
+     * Maximum number of missing values in hole: 3 (hours)
+     * @param obsList
+     * @return 
+     */
+    public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHoles(List<WeatherObservation> obsList) throws WeatherObservationListException {
+        if(obsList == null || obsList.isEmpty())
+        {
+            return obsList;
+        }
+        // First we sort the list
+        Collections.sort(obsList);
+        Date currentTime = obsList.get(0).getTimeMeasured();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentTime);
+        for(int i=0;i<obsList.size();i++)
+        {
+            /*
+            WeatherObservation debugObs = obsList.get(i);
+            if(debugObs.getElementMeasurementTypeId().equals("Q0"))
+            {
+                System.out.println(debugObs.getTimeMeasured() + ": " + debugObs.getValue());
+            }
+            */
+            int missingValues = 0;
+            while(obsList.get(i).getTimeMeasured().compareTo(currentTime) != 0)
+            {
+                missingValues++;
+                // We have a hole
+                //System.out.println("Hole found! At " + currentTime);
+                // Must advance time until we find a matching time
+                cal.add(Calendar.HOUR, 1);
+                currentTime = cal.getTime();
+            }
+            //System.out.println("Missing values=" + missingValues);
+            if(missingValues > 3)
+            {
+                throw new WeatherObservationListException("More than three missing values for "
+                        + "parameter " + obsList.get(0).getElementMeasurementTypeId() 
+                        + " between " + obsList.get(i-1).getTimeMeasured() + " and "
+                        + obsList.get(i).getTimeMeasured() + ". Can't fix this!");
+            }
+            else if(missingValues > 0)
+            {
+                List<WeatherObservation> calculatedValues = new ArrayList<>();
+                String elementMeasurementTypeId = obsList.get(i).getElementMeasurementTypeId();
+                String fixingStrategy = this.getFixingStrategy(elementMeasurementTypeId);
+                Date lastTimestampBeforeHole = obsList.get(i-1).getTimeMeasured();
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTime(lastTimestampBeforeHole);
+                cal2.add(Calendar.HOUR_OF_DAY, 1);
+                if(fixingStrategy.equals(WeatherElements.FIXING_STRATEGY_INTERPOLATE))
+                {
+                    Double lastValueBeforeHole = obsList.get(i-1).getValue();
+                    Double valueDifference = obsList.get(i).getValue() - lastValueBeforeHole;
+                    Double step = valueDifference / (missingValues + 1);
+                    
+                    for(int j=1;j<=missingValues;j++)
+                    {
+                        Double calculatedValue = lastValueBeforeHole + (step * j);
+                        //System.out.println("CalculatedValue=" + calculatedValue);
+                        WeatherObservation calculatedObservation = new WeatherObservation(
+                                cal2.getTime(), 
+                                elementMeasurementTypeId,
+                                WeatherObservation.LOG_INTERVAL_ID_1H,
+                                calculatedValue
+                        );
+                        cal2.add(Calendar.HOUR_OF_DAY, 1);
+                        calculatedValues.add(calculatedObservation);
+                    }
+                }
+                else if(fixingStrategy.equals(WeatherElements.FIXING_STRATEGY_SET_ZERO))
+                {
+                    for(int j=1;j<=missingValues;j++)
+                    {
+                        //System.out.println("CalculatedValue=" + calculatedValue);
+                        WeatherObservation calculatedObservation = new WeatherObservation(
+                                cal2.getTime(), // TODO!!!
+                                elementMeasurementTypeId,
+                                WeatherObservation.LOG_INTERVAL_ID_1H,
+                                0d
+                        );
+                        cal2.add(Calendar.HOUR_OF_DAY, 1);
+                        calculatedValues.add(calculatedObservation);
+                    }
+                }
+                obsList.addAll(i, calculatedValues);
+                i = i + missingValues;
+            }
+            
+            // Advance time, move on
+            cal.add(Calendar.HOUR, 1);
+            currentTime = cal.getTime();
+        }
+        return obsList;
+    }
+    
+    public String getFixingStrategy(String elementMeasurementCode)
+    {
+        return elementMeasurementCode.equals(WeatherElements.PRECIPITATION) ? WeatherElements.FIXING_STRATEGY_SET_ZERO : WeatherElements.FIXING_STRATEGY_INTERPOLATE;
     }
 }

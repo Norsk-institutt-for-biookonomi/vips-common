@@ -59,5 +59,8 @@ public class WeatherElements {
      */
     public static final String WIND_SPEED_2M = "FM2";
     
+    public static final String FIXING_STRATEGY_INTERPOLATE = "INTERPOLATE";
+    public static final String FIXING_STRATEGY_SET_ZERO = "SET_ZERO";
+    
     
 }

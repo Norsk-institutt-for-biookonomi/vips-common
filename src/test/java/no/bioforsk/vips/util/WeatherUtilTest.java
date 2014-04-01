@@ -115,6 +115,32 @@ public class WeatherUtilTest extends TestCase {
         List<WeatherObservation> result = instance.cutTrailingHourlyValues(TM, TimeZone.getTimeZone("Europe/Oslo"));
         assertEquals(216, result.size());
     }
+    
+    public void testCheckForAndFixHourlyTimeSeriesHoles()
+    {
+        try {
+            System.out.println("testCheckForAndFixHourlyTimeSeriesHoles");
+            // Testing with TM values firrst
+            List<WeatherObservation> seriesWithHoles = this.getObservations("/weatherDataWithHoles.json");
+            WeatherUtil wUtil = new WeatherUtil();
+            List<WeatherObservation> result = wUtil.checkForAndFixHourlyTimeSeriesHoles(seriesWithHoles);
+            /*for(WeatherObservation o:result)
+            {
+                System.out.println(o.getTimeMeasured() + ": " + o.getValue());
+            }*/
+            assertEquals(48,result.size());
+            // Testing with RR values - should be calculated to 0
+            seriesWithHoles = this.getObservations("/weatherDataWithHolesRR.json");
+            result = wUtil.checkForAndFixHourlyTimeSeriesHoles(seriesWithHoles);
+            /*for(WeatherObservation o:result)
+            {
+                System.out.println(o.getTimeMeasured() + ": " + o.getValue());
+            }*/
+            assertEquals(48,result.size());
+        } catch (WeatherObservationListException ex) {
+            fail(ex.getMessage());
+        }
+    }
 
     /**
      * Test of getAggregatedDailyValues method, of class WeatherUtil.

@@ -573,21 +573,24 @@ public class WeatherUtil {
         Date currentTime = obsList.get(0).getTimeMeasured();
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
+        //System.out.println("checkForAndFixHourlyTimeSeriesHoles " + obsList.get(0).getElementMeasurementTypeId() + ",start time= " + currentTime );
         for(int i=0;i<obsList.size();i++)
         {
             /*
             WeatherObservation debugObs = obsList.get(i);
-            if(debugObs.getElementMeasurementTypeId().equals("Q0"))
+            if(debugObs.getElementMeasurementTypeId().equals("TM"))
             {
                 System.out.println(debugObs.getTimeMeasured() + ": " + debugObs.getValue());
-            }
-            */
+            }*/
+            
             int missingValues = 0;
-            while(obsList.get(i).getTimeMeasured().compareTo(currentTime) != 0)
+            while(obsList.get(i).getTimeMeasured().compareTo(currentTime) != 0 
+                    && obsList.get(i).getTimeMeasured().compareTo(currentTime) > 0)
             {
                 missingValues++;
                 // We have a hole
                 //System.out.println("Hole found! At " + currentTime);
+                
                 // Must advance time until we find a matching time
                 cal.add(Calendar.HOUR, 1);
                 currentTime = cal.getTime();
@@ -658,5 +661,16 @@ public class WeatherUtil {
     public String getFixingStrategy(String elementMeasurementCode)
     {
         return elementMeasurementCode.equals(WeatherElements.PRECIPITATION) ? WeatherElements.FIXING_STRATEGY_SET_ZERO : WeatherElements.FIXING_STRATEGY_INTERPOLATE;
+    }
+    
+    public String dumpWeatherObservationList(List<WeatherObservation> list)
+    {
+        Collections.sort(list);
+        StringBuilder retVal = new StringBuilder();
+        for(WeatherObservation obs:list)
+        {
+            retVal.append(obs.getElementMeasurementTypeId()).append("[").append(obs.getTimeMeasured()).append("] : ").append(obs.getValue()).append("\n");
+        }
+        return retVal.toString();
     }
 }

@@ -141,6 +141,33 @@ public class WeatherUtilTest extends TestCase {
             fail(ex.getMessage());
         }
     }
+    
+    public void testBosnianData()
+    {
+        try {
+            System.out.println("testBosnianData");
+            // Testing with TM values first
+            List<WeatherObservation> allData = this.getObservations("/bosniandata.json");
+            List<WeatherObservation> TM = new ArrayList<>();
+            for(WeatherObservation obs:allData)
+            {
+                if(obs.getElementMeasurementTypeId().equals("TM"))
+                    TM.add(obs);
+            }
+            WeatherUtil wUtil = new WeatherUtil();
+            List<WeatherObservation> result = wUtil.checkForAndFixHourlyTimeSeriesHoles(TM);
+            /*for(WeatherObservation o:result)
+            {
+                System.out.println(o.getTimeMeasured() + ": " + o.getValue());
+            }*/
+            assertEquals(1128,result.size());
+            
+        } catch (WeatherObservationListException ex) {
+            fail(ex.getMessage());
+        }
+    }
+    
+    
 
     /**
      * Test of getAggregatedDailyValues method, of class WeatherUtil.

@@ -673,4 +673,29 @@ public class WeatherUtil {
         }
         return retVal.toString();
     }
+    
+    /**
+     * Searches a time series of one parameter for holes
+     * @param observations
+     * @param logInterval @see WeatherObservation
+     * @return 
+     */
+    public Date findFirstHoleInObservationSeries(List<WeatherObservation> observations, Integer logInterval)
+    {
+        Collections.sort(observations);
+        Date currentTime = observations.get(0).getTimeMeasured();
+        Calendar cal = Calendar.getInstance();
+        for(WeatherObservation obs:observations)
+        {
+            if(obs.getTimeMeasured().compareTo(currentTime) != 0)
+            {
+                return currentTime;
+            }
+            cal.setTime(currentTime);
+            int interval = logInterval.equals(WeatherObservation.LOG_INTERVAL_ID_1H) ? Calendar.HOUR_OF_DAY : Calendar.DATE;
+            cal.add(interval, 1);
+            currentTime = cal.getTime();
+        }
+        return null;
+    }
 }

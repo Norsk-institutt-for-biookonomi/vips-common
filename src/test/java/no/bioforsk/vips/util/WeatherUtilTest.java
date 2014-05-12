@@ -304,6 +304,31 @@ public class WeatherUtilTest extends TestCase {
             Logger.getLogger(WeatherUtilTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void testFindFirstHoleInObservationSeries()
+    {
+        System.out.println("testFindFirstHoleInObservationSeries");
+        List<WeatherObservation> TM = this.getObservations("/JSONWeatherDataTMDailyComplete.json");
+        WeatherUtil instance = new WeatherUtil();
+        assertNull(instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D));
+        
+        TM = this.getObservations("/JSONWeatherDataTMDailyFaulty.json");
+        Date result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D);
+        System.out.println("Found hole here: " + result);
+        assertNotNull(result);
+        
+        // TEST hourly data
+        TM = this.getObservations("/weatherDataWithoutHolesRR.json");
+        result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H);
+        if(result != null)
+            System.out.println("Found hole here: " + result);
+        assertNull(result);
+        
+        TM = this.getObservations("/weatherDataWithHolesRR.json");
+        result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H);
+        System.out.println("Found hole here: " + result);
+        assertNotNull(result);
+    }
 
     /**
      * Test of normalizeToExactDate method, of class WeatherUtil.

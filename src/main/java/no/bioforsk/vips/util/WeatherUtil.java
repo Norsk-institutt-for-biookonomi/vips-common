@@ -680,11 +680,11 @@ public class WeatherUtil {
      * @param logInterval @see WeatherObservation
      * @return 
      */
-    public Date findFirstHoleInObservationSeries(List<WeatherObservation> observations, Integer logInterval)
+    public Date findFirstHoleInObservationSeries(List<WeatherObservation> observations, Integer logInterval, TimeZone timeZone)
     {
         Collections.sort(observations);
         Date currentTime = observations.get(0).getTimeMeasured();
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(timeZone);
         for(WeatherObservation obs:observations)
         {
             if(obs.getTimeMeasured().compareTo(currentTime) != 0)

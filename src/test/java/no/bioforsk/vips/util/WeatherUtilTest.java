@@ -307,25 +307,26 @@ public class WeatherUtilTest extends TestCase {
     
     public void testFindFirstHoleInObservationSeries()
     {
+        TimeZone tz = TimeZone.getTimeZone("Europe/Oslo");
         System.out.println("testFindFirstHoleInObservationSeries");
         List<WeatherObservation> TM = this.getObservations("/JSONWeatherDataTMDailyComplete.json");
         WeatherUtil instance = new WeatherUtil();
-        assertNull(instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D));
+        assertNull(instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D,tz));
         
         TM = this.getObservations("/JSONWeatherDataTMDailyFaulty.json");
-        Date result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D);
+        Date result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D,tz);
         System.out.println("Found hole here: " + result);
         assertNotNull(result);
         
         // TEST hourly data
         TM = this.getObservations("/weatherDataWithoutHolesRR.json");
-        result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H);
+        result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H,tz);
         if(result != null)
             System.out.println("Found hole here: " + result);
         assertNull(result);
         
         TM = this.getObservations("/weatherDataWithHolesRR.json");
-        result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H);
+        result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H,tz);
         System.out.println("Found hole here: " + result);
         assertNotNull(result);
     }

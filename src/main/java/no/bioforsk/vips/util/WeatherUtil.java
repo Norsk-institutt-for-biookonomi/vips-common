@@ -698,4 +698,66 @@ public class WeatherUtil {
         }
         return null;
     }
+    
+    /**
+     * Basic weather data time series health check. Same length? Starts and
+     * ends at same time?
+     * @param series
+     * @return true if passed all tests
+     * @throws WeatherObservationListException if at least one test fails
+     */
+    public boolean isHomogenousTimeSeries(List<WeatherObservation>... series) throws WeatherObservationListException
+    {
+        // Must be of same length
+        for(List<WeatherObservation> list:series)
+        {
+            // If a list has no elements, it's not a time series
+            if(list == null || list.isEmpty())
+            {
+                throw new WeatherObservationListException("At least one list is empty or NULL");
+            }
+            Collections.sort(list);
+            // Must be of same length
+            if(series[0].size() != list.size())
+            {
+                StringBuilder msg = new StringBuilder("Unequal length of lists.");
+                for (List<WeatherObservation> serie : series) {
+                    msg     .append("List with ")
+                            .append(serie.get(0).getElementMeasurementTypeId())
+                            .append(" length=")
+                            .append(serie.size())
+                            .append(".\n");
+                }
+                throw new WeatherObservationListException(msg.toString());
+            }
+            // Must be starting at same time
+            if(series[0].get(0).getTimeMeasured().compareTo(list.get(0).getTimeMeasured()) != 0)
+            {
+                StringBuilder msg = new StringBuilder("Weather parameter lists do not start at same time");
+                for (List<WeatherObservation> serie : series) {
+                    msg     .append("List with ")
+                            .append(serie.get(0).getElementMeasurementTypeId())
+                            .append(" starts at ")
+                            .append(serie.get(0).getTimeMeasured())
+                            .append(".\n");
+                }
+                throw new WeatherObservationListException(msg.toString());
+            }
+            // Must be ending at same time
+            int lastIndex = series[0].size() - 1;
+            if(series[0].get(lastIndex).getTimeMeasured().compareTo(list.get(lastIndex).getTimeMeasured()) != 0)
+            {
+                StringBuilder msg = new StringBuilder("Weather parameter lists do not end at same time");
+                for (List<WeatherObservation> serie : series) {
+                    msg     .append("List with ")
+                            .append(serie.get(lastIndex).getElementMeasurementTypeId())
+                            .append(" ends at ")
+                            .append(serie.get(lastIndex).getTimeMeasured())
+                            .append(".\n");
+                }
+                throw new WeatherObservationListException(msg.toString());
+            }
+        }
+        return true;
+    }
 }

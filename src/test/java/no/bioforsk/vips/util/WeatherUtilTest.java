@@ -330,6 +330,172 @@ public class WeatherUtilTest extends TestCase {
         System.out.println("Found hole here: " + result);
         assertNotNull(result);
     }
+    
+    public void testIsHomogenousTimeSeries()
+    {
+        System.out.println("testIsHomogenousTimeSeries");
+        
+        WeatherUtil instance = new WeatherUtil();
+        
+        List<WeatherObservation> TM = new ArrayList<>();
+        List<WeatherObservation> RR = new ArrayList<>();
+        List<WeatherObservation> UM = new ArrayList<>();
+
+
+        List<WeatherObservation> faultySeries = this.getObservations("/weatherDataFaultyUnequalSize.json");
+        
+        for(WeatherObservation o:faultySeries)
+        {
+            switch(o.getElementMeasurementTypeId())
+            {
+                case WeatherElements.TEMPERATURE_MEAN:
+                    TM.add(o); 
+                    break;
+                case WeatherElements.PRECIPITATION:
+                    RR.add(o); 
+                    break;
+                case WeatherElements.RELATIVE_HUMIDITY:
+                    UM.add(o); 
+                    break;
+                default:
+                    // Let it pass in silence 
+                    break;
+            }
+        }
+        
+        try
+        {
+            // Should throw exception if at least one list is empty/NULL
+            instance.isHomogenousTimeSeries(TM, new ArrayList<WeatherObservation>());
+            fail("Method should have thrown exception");
+        }
+         catch(WeatherObservationListException ex) {
+            // This means that the method works as expected
+        }
+        
+        try
+        {
+            // Should throw exception with faulty data
+            instance.isHomogenousTimeSeries(TM,RR,UM);
+            fail("Method should have thrown exception");
+        }
+        catch(WeatherObservationListException ex) {
+            // This means that the method works as expected
+        }
+        
+        // Test for data where at least one series starts at a different time
+        
+        TM.removeAll(TM);
+        UM.removeAll(UM);
+        RR.removeAll(RR);
+        
+        faultySeries = this.getObservations("/weatherDataFaultyUnequalStart.json");
+        
+        for(WeatherObservation o:faultySeries)
+        {
+            switch(o.getElementMeasurementTypeId())
+            {
+                case WeatherElements.TEMPERATURE_MEAN:
+                    TM.add(o); 
+                    break;
+                case WeatherElements.PRECIPITATION:
+                    RR.add(o); 
+                    break;
+                case WeatherElements.RELATIVE_HUMIDITY:
+                    UM.add(o); 
+                    break;
+                default:
+                    // Let it pass in silence 
+                    break;
+            }
+        }
+        
+        try
+        {
+            // Should throw exception with faulty data
+            instance.isHomogenousTimeSeries(TM,RR,UM);
+            fail("Method should have thrown exception");
+        }
+        catch(WeatherObservationListException ex) {
+            System.out.println(ex.getMessage());
+            // This means that the method works as expected
+        }
+        
+        // Test for data where at least one series ends at a different time
+        
+        TM.removeAll(TM);
+        UM.removeAll(UM);
+        RR.removeAll(RR);
+        
+        faultySeries = this.getObservations("/weatherDataFaultyUnequalEnd.json");
+        
+        for(WeatherObservation o:faultySeries)
+        {
+            switch(o.getElementMeasurementTypeId())
+            {
+                case WeatherElements.TEMPERATURE_MEAN:
+                    TM.add(o); 
+                    break;
+                case WeatherElements.PRECIPITATION:
+                    RR.add(o); 
+                    break;
+                case WeatherElements.RELATIVE_HUMIDITY:
+                    UM.add(o); 
+                    break;
+                default:
+                    // Let it pass in silence 
+                    break;
+            }
+        }
+        
+        try
+        {
+            // Should throw exception with faulty data
+            instance.isHomogenousTimeSeries(TM,RR,UM);
+            fail("Method should have thrown exception");
+        }
+        catch(WeatherObservationListException ex) {
+            System.out.println(ex.getMessage());
+            // This means that the method works as expected
+        }
+        
+        // Finally, should let valid series pass
+        
+        TM.removeAll(TM);
+        UM.removeAll(UM);
+        RR.removeAll(RR);
+        
+        faultySeries = this.getObservations("/weatherDataNotFaulty.json");
+        
+        for(WeatherObservation o:faultySeries)
+        {
+            switch(o.getElementMeasurementTypeId())
+            {
+                case WeatherElements.TEMPERATURE_MEAN:
+                    TM.add(o); 
+                    break;
+                case WeatherElements.PRECIPITATION:
+                    RR.add(o); 
+                    break;
+                case WeatherElements.RELATIVE_HUMIDITY:
+                    UM.add(o); 
+                    break;
+                default:
+                    // Let it pass in silence 
+                    break;
+            }
+        }
+        
+        try
+        {
+            // Should not throw exception
+            instance.isHomogenousTimeSeries(TM,RR,UM);
+        }
+        catch(WeatherObservationListException ex) {
+            fail(ex.getMessage());
+        }
+        
+    }
 
     /**
      * Test of normalizeToExactDate method, of class WeatherUtil.

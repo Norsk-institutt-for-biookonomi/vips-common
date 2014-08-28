@@ -61,7 +61,8 @@ public class DateMap {
         {
             return (Double) this.getParamValueForDate(date, paramName);
         }
-        catch(NullPointerException | ClassCastException npe) {return null;}
+        catch(NullPointerException ex) {return null; }
+        catch(ClassCastException npe) {return null;}
     }
 
     /**
@@ -87,7 +88,8 @@ public class DateMap {
         {
             return (Float) this.getParamValueForDate(date, paramName);
         }
-        catch(NullPointerException | ClassCastException npe) {return null;}
+        catch(NullPointerException ex) {return null; }
+        catch(ClassCastException npe) {return null;}
     }
 
     /**
@@ -113,7 +115,8 @@ public class DateMap {
         {
             return (Integer) this.getParamValueForDate(date, paramName);
         }
-        catch(NullPointerException | ClassCastException npe) {return null;}
+        catch(NullPointerException ex) {return null; }
+        catch(ClassCastException npe) {return null;}
     }
 
     /**
@@ -133,7 +136,8 @@ public class DateMap {
         {
             return (String) this.getParamValueForDate(date, paramName);
         }
-        catch(NullPointerException | ClassCastException npe) {return null;}
+        catch(NullPointerException ex) {return null; }
+        catch(ClassCastException npe) {return null;}
     }
 
     /**
@@ -165,7 +169,8 @@ public class DateMap {
         {
             return ((HashMap)this.matrix.get(date)).get(paramName);
         }
-        catch(NullPointerException | ClassCastException npe) {return null;}
+        catch(NullPointerException ex) {return null; }
+        catch(ClassCastException npe) {return null;}
     }
 
 
@@ -180,7 +185,8 @@ public class DateMap {
         {
             return ((HashMap)this.matrix.get(date)).keySet();
         }
-        catch(NullPointerException | ClassCastException npe) {return null;}
+        catch(NullPointerException ex) {return null; }
+        catch(ClassCastException npe) {return null;}
     }
 
     /**
@@ -291,7 +297,7 @@ public class DateMap {
     
     public List<Date> getSortedDateAtMidnightKeys(TimeZone timeZone)
     {
-        List<Date> retVal = new ArrayList<>();
+        List<Date> retVal = new ArrayList<Date>();
         Calendar cal = Calendar.getInstance(timeZone);
         for(Date timeStamp:this.getSortedDateKeys())
         {

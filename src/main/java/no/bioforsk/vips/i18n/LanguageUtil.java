@@ -40,7 +40,7 @@ public class LanguageUtil {
         
         if(distinctLanguages == null)
         {
-            Map<String, ULocale> localeBucket = new HashMap<>();
+            Map<String, ULocale> localeBucket = new HashMap<String, ULocale>();
             for(ULocale locale:ULocale.getAvailableLocales())
             {
                 localeBucket.put(locale.getLanguage(), locale);

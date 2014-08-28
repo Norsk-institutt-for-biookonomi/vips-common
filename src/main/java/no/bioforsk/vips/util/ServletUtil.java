@@ -109,9 +109,7 @@ public class ServletUtil {
         {
             return Integer.valueOf(request.getParameter(parameterName));
         }
-        catch(NullPointerException | NumberFormatException ex)
-        {
-            return null;
-        }
+        catch(NullPointerException ex) {return null; }
+        catch(NumberFormatException nfe) {return null;}
     }
 }

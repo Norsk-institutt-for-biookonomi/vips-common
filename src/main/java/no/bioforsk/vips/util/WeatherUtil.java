@@ -55,7 +55,7 @@ public class WeatherUtil {
         // Special case: List has less than 24 hourly values, return empty list
         if(hourlyValues.size() < 24)
         {
-            return new ArrayList<>();
+            return new ArrayList<WeatherObservation>();
         }
         // Sort the list 
         Collections.sort(hourlyValues);
@@ -75,7 +75,7 @@ public class WeatherUtil {
         }
         else
         {
-            return new ArrayList<>(hourlyValues.subList(0,dateShiftIndex));
+            return new ArrayList<WeatherObservation>(hourlyValues.subList(0,dateShiftIndex));
         }
     }
 
@@ -100,7 +100,7 @@ public class WeatherUtil {
      */
     public List<WeatherObservation> calculateLeafWetnessHourSeriesSimple(List<WeatherObservation> temperature, List<WeatherObservation> rainfall, List<WeatherObservation> relativeHumidity) throws ConfigValidationException
     {
-        List<WeatherObservation> retVal = new ArrayList<>();
+        List<WeatherObservation> retVal = new ArrayList<WeatherObservation>();
         Iterator<WeatherObservation> humIt = relativeHumidity.iterator();
         WeatherObservation humObs;
         Iterator<WeatherObservation> rainIt = rainfall.iterator();
@@ -214,7 +214,7 @@ public class WeatherUtil {
             InvalidAggregationTypeException
     {
         // First we organize the hourly values into one bucket per day
-        Map<Date,Map> dateBucket = new HashMap<>();
+        Map<Date,Map> dateBucket = new HashMap<Date,Map>();
         Calendar cal = Calendar.getInstance(timeZone);
         String expectedParameter = observations.get(0).getElementMeasurementTypeId();
         Date lastDate = null;
@@ -229,7 +229,7 @@ public class WeatherUtil {
             Map<Date, Double> hourValuesForDate = dateBucket.get(theDate);
             if(hourValuesForDate == null)
             {
-                hourValuesForDate = new HashMap<>();
+                hourValuesForDate = new HashMap<Date,Double>();
                 dateBucket.put(theDate, hourValuesForDate);
             }
             
@@ -247,7 +247,7 @@ public class WeatherUtil {
         }
         
         // Then we iterate the buckets, do the aggregation and create return values
-        List<WeatherObservation> aggregatedObservations = new ArrayList<>();
+        List<WeatherObservation> aggregatedObservations = new ArrayList<WeatherObservation>();
         WeatherObservation templateObservation = observations.get(0);
         Double aggregateValue;
         for(Date aDay:dateBucket.keySet())
@@ -414,7 +414,7 @@ public class WeatherUtil {
                                                 WeatherObservation.LOG_INTERVAL_ID_1H,
                                                 0d
                                                 );
-                calculatedBT = new ArrayList<>();
+                calculatedBT = new ArrayList<WeatherObservation>();
                 calculatedBT.add(emptyObs);
                 calculatedBT.addAll(this.calculateLeafWetnessHourSeriesNaerstad(TM, RR, Q0, FM2, UM, null));
             }
@@ -452,7 +452,7 @@ public class WeatherUtil {
      */
     public List<WeatherObservation> getWeatherObservationsInPeriod(List<WeatherObservation> allObservations, Date dateStart, Date dateEnd)
     {
-        List<WeatherObservation> retVal = new ArrayList<>();
+        List<WeatherObservation> retVal = new ArrayList<WeatherObservation>();
         for(WeatherObservation obs:allObservations)
         {
             if(
@@ -488,7 +488,7 @@ public class WeatherUtil {
     {
         // TODO Validation
         
-        List<WeatherObservation> calculatedLeafWetnessSeries = new ArrayList<>();
+        List<WeatherObservation> calculatedLeafWetnessSeries = new ArrayList<WeatherObservation>();
         Double lastLatentHeatFlux = this.calculateLatentHeatFlux(
                 temperature.get(0).getValue(), 
                 relativeHumidity.get(0).getValue(), 
@@ -605,7 +605,7 @@ public class WeatherUtil {
             }
             else if(missingValues > 0)
             {
-                List<WeatherObservation> calculatedValues = new ArrayList<>();
+                List<WeatherObservation> calculatedValues = new ArrayList<WeatherObservation>();
                 String elementMeasurementTypeId = obsList.get(i).getElementMeasurementTypeId();
                 String fixingStrategy = this.getFixingStrategy(elementMeasurementTypeId);
                 Date lastTimestampBeforeHole = obsList.get(i-1).getTimeMeasured();

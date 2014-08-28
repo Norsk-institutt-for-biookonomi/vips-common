@@ -148,7 +148,7 @@ public class WeatherUtilTest extends TestCase {
             System.out.println("testBosnianData");
             // Testing with TM values first
             List<WeatherObservation> allData = this.getObservations("/bosniandata.json");
-            List<WeatherObservation> TM = new ArrayList<>();
+            List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
             for(WeatherObservation obs:allData)
             {
                 if(obs.getElementMeasurementTypeId().equals("TM"))
@@ -175,7 +175,7 @@ public class WeatherUtilTest extends TestCase {
     public void testGetAggregatedDailyValues() {
         System.out.println("getAggregatedDailyValues");
         List<WeatherObservation> allObservations = this.getObservations("/weatherData.json");
-        List<WeatherObservation> TM = new ArrayList<>();
+        List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
         for(WeatherObservation obs:allObservations)
         {
             if(obs.getElementMeasurementTypeId().equals("TM"))
@@ -203,7 +203,11 @@ public class WeatherUtilTest extends TestCase {
             maxResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_MAXIMUM);
             Collections.sort(maxResults);
             
-        } catch (WeatherObservationListException | InvalidAggregationTypeException ex) {
+        } catch (WeatherObservationListException ex)
+        {fail(ex.getMessage());
+        }
+        catch(InvalidAggregationTypeException ex) 
+        {
             fail(ex.getMessage());
         }
         assertEquals(expAvg, avgResults.get(0).getValue());
@@ -216,12 +220,12 @@ public class WeatherUtilTest extends TestCase {
     {
         System.out.println("testCalculateLeafWetnessHourSeriesBestEffort");
         List<WeatherObservation> allObservations = this.getObservations("/weatherDataLeafWetnessCalc.json");
-        List<WeatherObservation> TM = new ArrayList<>();
-        List<WeatherObservation> UM = new ArrayList<>();
-        List<WeatherObservation> FM2 = new ArrayList<>();
-        List<WeatherObservation> Q0 = new ArrayList<>();
-        List<WeatherObservation> RR = new ArrayList<>();
-        List<WeatherObservation> BT = new ArrayList<>();
+        List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> UM = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> FM2 = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> Q0 = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> RR = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> BT = new ArrayList<WeatherObservation>();
         // Add collections here
         for(WeatherObservation obs:allObservations)
         {
@@ -264,7 +268,7 @@ public class WeatherUtilTest extends TestCase {
             }*/
             
             // Testing Nærstad with completely empty BT as input
-            BTtest = new ArrayList<>();
+            BTtest = new ArrayList<WeatherObservation>();
             result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
             System.out.println("result.size=" + result.size());
             // Test 1 // Result have same length as input data
@@ -283,7 +287,7 @@ public class WeatherUtilTest extends TestCase {
             
             
             // Trapman should be called now
-            Q0 = new ArrayList<>();
+            Q0 = new ArrayList<WeatherObservation>();
             BTtest = BT.size() > 1 ? new ArrayList(BT.subList(0, BT.size()/2)) : new ArrayList(BT);
             result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
             System.out.println("result.size=" + result.size());
@@ -337,29 +341,26 @@ public class WeatherUtilTest extends TestCase {
         
         WeatherUtil instance = new WeatherUtil();
         
-        List<WeatherObservation> TM = new ArrayList<>();
-        List<WeatherObservation> RR = new ArrayList<>();
-        List<WeatherObservation> UM = new ArrayList<>();
+        List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> RR = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> UM = new ArrayList<WeatherObservation>();
 
 
         List<WeatherObservation> faultySeries = this.getObservations("/weatherDataFaultyUnequalSize.json");
         
         for(WeatherObservation o:faultySeries)
         {
-            switch(o.getElementMeasurementTypeId())
+            if(o.getElementMeasurementTypeId().equals(WeatherElements.TEMPERATURE_MEAN))
             {
-                case WeatherElements.TEMPERATURE_MEAN:
-                    TM.add(o); 
-                    break;
-                case WeatherElements.PRECIPITATION:
-                    RR.add(o); 
-                    break;
-                case WeatherElements.RELATIVE_HUMIDITY:
-                    UM.add(o); 
-                    break;
-                default:
-                    // Let it pass in silence 
-                    break;
+                TM.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+            {
+                RR.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            {
+                UM.add(o);
             }
         }
         
@@ -393,20 +394,17 @@ public class WeatherUtilTest extends TestCase {
         
         for(WeatherObservation o:faultySeries)
         {
-            switch(o.getElementMeasurementTypeId())
+            if(o.getElementMeasurementTypeId().equals(WeatherElements.TEMPERATURE_MEAN))
             {
-                case WeatherElements.TEMPERATURE_MEAN:
-                    TM.add(o); 
-                    break;
-                case WeatherElements.PRECIPITATION:
-                    RR.add(o); 
-                    break;
-                case WeatherElements.RELATIVE_HUMIDITY:
-                    UM.add(o); 
-                    break;
-                default:
-                    // Let it pass in silence 
-                    break;
+                TM.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+            {
+                RR.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            {
+                UM.add(o);
             }
         }
         
@@ -431,20 +429,17 @@ public class WeatherUtilTest extends TestCase {
         
         for(WeatherObservation o:faultySeries)
         {
-            switch(o.getElementMeasurementTypeId())
+            if(o.getElementMeasurementTypeId().equals(WeatherElements.TEMPERATURE_MEAN))
             {
-                case WeatherElements.TEMPERATURE_MEAN:
-                    TM.add(o); 
-                    break;
-                case WeatherElements.PRECIPITATION:
-                    RR.add(o); 
-                    break;
-                case WeatherElements.RELATIVE_HUMIDITY:
-                    UM.add(o); 
-                    break;
-                default:
-                    // Let it pass in silence 
-                    break;
+                TM.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+            {
+                RR.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            {
+                UM.add(o);
             }
         }
         
@@ -469,20 +464,17 @@ public class WeatherUtilTest extends TestCase {
         
         for(WeatherObservation o:faultySeries)
         {
-            switch(o.getElementMeasurementTypeId())
+            if(o.getElementMeasurementTypeId().equals(WeatherElements.TEMPERATURE_MEAN))
             {
-                case WeatherElements.TEMPERATURE_MEAN:
-                    TM.add(o); 
-                    break;
-                case WeatherElements.PRECIPITATION:
-                    RR.add(o); 
-                    break;
-                case WeatherElements.RELATIVE_HUMIDITY:
-                    UM.add(o); 
-                    break;
-                default:
-                    // Let it pass in silence 
-                    break;
+                TM.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+            {
+                RR.add(o);
+            }
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            {
+                UM.add(o);
             }
         }
         
@@ -520,7 +512,7 @@ public class WeatherUtilTest extends TestCase {
             JsonFactory f = new MappingJsonFactory();
             JsonParser jp = f.createJsonParser(inputStream);
             JsonNode all = jp.readValueAsTree();
-            List<WeatherObservation> observations = new ArrayList<>();
+            List<WeatherObservation> observations = new ArrayList<WeatherObservation>();
             ObjectMapper mapper = new ObjectMapper();
 
             Date firstDate = null;

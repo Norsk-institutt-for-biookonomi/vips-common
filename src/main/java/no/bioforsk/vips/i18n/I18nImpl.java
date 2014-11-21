@@ -71,7 +71,9 @@ public class I18nImpl {
         if(this.resourceBundles == null)
         {
             this.resourceBundles = new HashMap();
-            this.resourceBundles.put(Model.DEFAULT_LANGUAGE, ResourceBundle.getBundle(this.resourceBundleBaseName));
+            // We explicitly use the current classloader to ensure that we find the resource bundle
+            // This is an issue when using the module classloading system in JBoss/WildFly
+            this.resourceBundles.put(Model.DEFAULT_LANGUAGE, ResourceBundle.getBundle(this.resourceBundleBaseName, new Locale(Model.DEFAULT_LANGUAGE), this.getClass().getClassLoader()));
         }
         
         // Has the bundle for the specified language been cached?
@@ -79,7 +81,9 @@ public class I18nImpl {
         {
             try
             {
-                this.resourceBundles.put(language, ResourceBundle.getBundle(this.resourceBundleBaseName, new Locale(language)));
+                // We explicitly use the current classloader to ensure that we find the resource bundle
+                // This is an issue when using the module classloading system in JBoss/WildFly
+                this.resourceBundles.put(language, ResourceBundle.getBundle(this.resourceBundleBaseName, new Locale(language),this.getClass().getClassLoader()));
             }
             catch(MissingResourceException mre)
             {

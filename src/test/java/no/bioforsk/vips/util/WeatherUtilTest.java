@@ -19,6 +19,12 @@
 
 package no.bioforsk.vips.util;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,16 +39,10 @@ import static junit.framework.Assert.fail;
 import junit.framework.TestCase;
 import no.bioforsk.vips.entity.WeatherObservation;
 import no.bioforsk.vips.model.ConfigValidationException;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.MappingJsonFactory;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 /**
  *
- * @author treinar
+ * @author Tor-Einar Skog <tor-einar.skog@bioforsk.no>
  */
 public class WeatherUtilTest extends TestCase {
     
@@ -510,9 +510,9 @@ public class WeatherUtilTest extends TestCase {
         {
         BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(fileName));
             JsonFactory f = new MappingJsonFactory();
-            JsonParser jp = f.createJsonParser(inputStream);
+            JsonParser jp = f.createParser(inputStream);
             JsonNode all = jp.readValueAsTree();
-            List<WeatherObservation> observations = new ArrayList<WeatherObservation>();
+            List<WeatherObservation> observations = new ArrayList<>();
             ObjectMapper mapper = new ObjectMapper();
 
             Date firstDate = null;
@@ -520,7 +520,7 @@ public class WeatherUtilTest extends TestCase {
             if(all.isArray())
             {
                 for(JsonNode node : all){
-                    Date timeMeasured = (Date)mapper.convertValue(node.get("timeMeasured").getTextValue(), new TypeReference<Date>(){});
+                    Date timeMeasured = (Date)mapper.convertValue(node.get("timeMeasured").asText(), new TypeReference<Date>(){});
                     if(firstDate == null || firstDate.compareTo(timeMeasured) > 0)
                     {
                         firstDate = timeMeasured;
@@ -532,9 +532,9 @@ public class WeatherUtilTest extends TestCase {
                     //System.out.println(node.toString());
                     WeatherObservation observation = new WeatherObservation();
                     observation.setTimeMeasured(timeMeasured);
-                    observation.setLogIntervalId(node.get("logIntervalId").getIntValue());
-                    observation.setElementMeasurementTypeId(node.get("elementMeasurementTypeId").getTextValue());
-                    observation.setValue(node.get("value").getDoubleValue());
+                    observation.setLogIntervalId(node.get("logIntervalId").asInt());
+                    observation.setElementMeasurementTypeId(node.get("elementMeasurementTypeId").asText());
+                    observation.setValue(node.get("value").asDouble());
                     observations.add(observation);
                 }
 

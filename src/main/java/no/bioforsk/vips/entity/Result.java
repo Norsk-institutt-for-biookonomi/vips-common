@@ -22,7 +22,8 @@ package no.bioforsk.vips.entity;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 
 /**
  * Represents a result from a model run

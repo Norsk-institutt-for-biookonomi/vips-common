@@ -160,9 +160,5 @@ public interface ModelResource {
     @Produces("application/json")
     public Response runModel(@PathParam("modelId") String modelId, ModelConfiguration config);
     
-    @GET
-    @Path("test")
-    @Produces("text/plain;charset=UTF-8")
-    public Response testService();
     
 }

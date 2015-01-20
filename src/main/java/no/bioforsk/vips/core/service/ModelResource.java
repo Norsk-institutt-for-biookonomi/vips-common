@@ -36,6 +36,12 @@ import no.bioforsk.vips.entity.ModelConfiguration;
  */
 @Path("") 
 public interface ModelResource {
+    
+    @GET
+    @Path("")
+    @Produces("text/html")
+    public Response defaultResponse();
+    
     /**
      * Lists all models available in this instance, using default language (English)
      * @return list of all models available

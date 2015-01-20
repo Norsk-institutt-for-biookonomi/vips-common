@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  	&copy; 2014 Bioforsk
+	Author: Tor-Einar Skog <tor-einar.skog@bioforsk.no>
+  -->
+
+<module xmlns="urn:jboss:module:1.1" name="no.bioforsk.vips.VIPSCommon">
+    <resources>
+        <!--resource-root path="."/-->
+	<resource-root path="VIPSCommon-1.0-SNAPSHOT.jar"/>
+
+        <!-- Insert resources here -->
+    </resources>
+    <dependencies>
+		<module name="org.codehaus.jackson.jackson-core-asl" export="false"/>
+		<module name="org.codehaus.jackson.jackson-mapper-asl" export="false"/>
+		<module name="javax.ws.rs.api" export="false"/>
+		<module name="javax.servlet.api" export="false"/>
+    </dependencies>
+    
+</module>

@@ -55,7 +55,7 @@ public class WeatherUtil {
         // Special case: List has less than 24 hourly values, return empty list
         if(hourlyValues.size() < 24)
         {
-            return new ArrayList<WeatherObservation>();
+            return new ArrayList<>();
         }
         // Sort the list 
         Collections.sort(hourlyValues);
@@ -488,7 +488,7 @@ public class WeatherUtil {
     {
         // TODO Validation
         
-        List<WeatherObservation> calculatedLeafWetnessSeries = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> calculatedLeafWetnessSeries = new ArrayList<>();
         Double lastLatentHeatFlux = this.calculateLatentHeatFlux(
                 temperature.get(0).getValue(), 
                 relativeHumidity.get(0).getValue(), 
@@ -605,7 +605,7 @@ public class WeatherUtil {
             }
             else if(missingValues > 0)
             {
-                List<WeatherObservation> calculatedValues = new ArrayList<WeatherObservation>();
+                List<WeatherObservation> calculatedValues = new ArrayList<>();
                 String elementMeasurementTypeId = obsList.get(i).getElementMeasurementTypeId();
                 String fixingStrategy = this.getFixingStrategy(elementMeasurementTypeId);
                 Date lastTimestampBeforeHole = obsList.get(i-1).getTimeMeasured();

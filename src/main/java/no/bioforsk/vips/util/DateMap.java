@@ -48,13 +48,23 @@ public class DateMap {
         this.decimalFormat = new DecimalFormat("0.0");
     }
 
-    
-
+    /**
+     * Set a double value
+     * @param date
+     * @param paramName
+     * @param value 
+     */
     public void setParamDoubleValueForDate(Date date, String paramName, Double value)
     {
         this.setParamValueForDate(date, paramName, value);
     }
 
+    /**
+     * Get a double value
+     * @param date
+     * @param paramName
+     * @return 
+     */
     public Double getParamDoubleValueForDate(Date date, String paramName)
     {
         try
@@ -130,6 +140,12 @@ public class DateMap {
         this.setParamValueForDate(date, paramName, value);
     }
 
+    /**
+     * Get a string value
+     * @param date
+     * @param paramName
+     * @return 
+     */
     public String getParamStringValueForDate(Date date, String paramName)
     {
         try
@@ -274,6 +290,10 @@ public class DateMap {
         }
     }
     
+    /**
+     * 
+     * @return the last date with values
+     */
     public Date getLastDateWithValues()
     {
         ArrayList<Date> dates = new ArrayList(this.matrix.keySet());
@@ -288,6 +308,10 @@ public class DateMap {
         }
     }
     
+    /**
+     * 
+     *  return all dates with values, sorted ascending
+     */
     public List<Date> getSortedDateKeys()
     {
         ArrayList<Date> keys = new ArrayList(this.matrix.keySet());
@@ -295,6 +319,11 @@ public class DateMap {
         return keys;
     }
     
+    /**
+     * 
+     * @param timeZone
+     * @return 
+     */
     public List<Date> getSortedDateAtMidnightKeys(TimeZone timeZone)
     {
         List<Date> retVal = new ArrayList<Date>();
@@ -306,6 +335,32 @@ public class DateMap {
                 retVal.add(timeStamp);
         }
         return retVal;
+    }
+    
+    /**
+     * 
+     * @param parameter
+     * @return The first date with value for this parameter, null if not set
+     */
+    public Date getFirstDateWithParameterValue(String parameter)
+    {
+        ArrayList<Date> dates = new ArrayList(this.matrix.keySet());
+        if(dates.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            Collections.sort(dates);
+            for(Date date:dates)
+            {
+                if(this.getParamValueForDate(date, parameter) != null)
+                {
+                    return date;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -361,6 +362,30 @@ public class DateMap {
             }
         }
         return null;
+    }
+    
+    /**
+     * Get a list of all values for a parameter. The list is sorted by date.
+     * @param parameter
+     * @return 
+     */
+    public List getAllValuesForParameterAsList(String parameter)
+    {
+        List retVal = new ArrayList();
+        ArrayList<Date> dates = new ArrayList(this.matrix.keySet());
+        if(dates.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            Collections.sort(dates);
+            for(Date date:dates)
+            {
+                retVal.add(this.getParamValueForDate(date, parameter));
+            }
+        }
+        return retVal;
     }
 
     @Override

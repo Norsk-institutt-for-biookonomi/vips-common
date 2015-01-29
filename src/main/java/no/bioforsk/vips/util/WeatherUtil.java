@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Bioforsk <http://www.bioforsk.no/>. 
+ * Copyright (c) 2015 Bioforsk <http://www.bioforsk.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -35,7 +35,6 @@ import no.bioforsk.vips.model.ConfigValidationException;
 
 /**
  * Weather related utility methods
- * @copyright 2013 <a href="http://www.bioforsk.no/">Bioforsk</a>
  * @author Tor-Einar Skog <tor-einar.skog@bioforsk.no>
  */
 public class WeatherUtil {
@@ -215,7 +214,6 @@ public class WeatherUtil {
     {
         // First we organize the hourly values into one bucket per day
         Map<Date,Map> dateBucket = new HashMap<Date,Map>();
-        Calendar cal = Calendar.getInstance(timeZone);
         String expectedParameter = observations.get(0).getElementMeasurementTypeId();
         Date lastDate = null;
         for(WeatherObservation observation:observations)
@@ -247,7 +245,7 @@ public class WeatherUtil {
         }
         
         // Then we iterate the buckets, do the aggregation and create return values
-        List<WeatherObservation> aggregatedObservations = new ArrayList<WeatherObservation>();
+        List<WeatherObservation> aggregatedObservations = new ArrayList<>();
         WeatherObservation templateObservation = observations.get(0);
         Double aggregateValue;
         for(Date aDay:dateBucket.keySet())

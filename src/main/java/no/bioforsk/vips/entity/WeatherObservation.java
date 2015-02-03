@@ -19,6 +19,8 @@
 
 package no.bioforsk.vips.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -57,6 +59,7 @@ public class WeatherObservation implements Comparable{
     }
         
     public void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssZ", timezone="CET")
     public Date getTimeMeasured() { return this.timeMeasured; }
     
     public void setElementMeasurementTypeId(String elementMeasurementTypeId) { 

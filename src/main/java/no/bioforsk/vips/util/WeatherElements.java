@@ -39,15 +39,23 @@ public class WeatherElements {
      */
     public static final String TEMPERATURE_MAXIMUM = "TX";
     /**
+     * Instantaneous temperature (Celcius)
+     */
+    public static final String TEMPERATURE_INSTANTANEOUS = "TT";
+    /**
      * Aggregated rainfall (millimeters)
      */
     public static final String PRECIPITATION = "RR";
     /**
-     * Relative humidity (%)
+     * Average relative humidity (%)
      */
-    public static final String RELATIVE_HUMIDITY = "UM";
+    public static final String RELATIVE_HUMIDITY_MEAN = "UM";
     /**
-     * Global radiation (unit??)
+     * Instantaneous relative humidity (%)
+     */
+    public static final String RELATIVE_HUMIDITY_INSTANTANEOUS = "UU";
+    /**
+     * Global radiation (W/sqm)
      */
     public static final String GLOBAL_RADIATION = "Q0";
     /**
@@ -55,7 +63,7 @@ public class WeatherElements {
      */
     public static final String LEAF_WETNESS = "BT";
     /**
-     * 
+     * Average wind speed (meters / second)
      */
     public static final String WIND_SPEED_2M = "FM2";
     

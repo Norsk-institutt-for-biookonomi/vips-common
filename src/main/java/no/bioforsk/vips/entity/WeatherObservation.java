@@ -20,7 +20,6 @@
 package no.bioforsk.vips.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -32,9 +31,10 @@ import java.util.Date;
 public class WeatherObservation implements Comparable{
     
     public final static Integer LOG_INTERVAL_ID_1H = 1;
+    public final static Integer LOG_INTERVAL_ID_3H = 3;
+    public final static Integer LOG_INTERVAL_ID_6H = 6;
     public final static Integer LOG_INTERVAL_ID_1D = 2;
 
-   
     private String elementMeasurementTypeId;
     private Integer logIntervalId;
     private Date timeMeasured;
@@ -105,6 +105,7 @@ public class WeatherObservation implements Comparable{
         return "Observation \n" +
                 "elementMeasurementTypeId=" + this.getElementMeasurementTypeId() + "\n" +
                 "timeMeasured=" + this.getTimeMeasured().toString() + "\n" +
+                "logIntervalId=" + this.getLogIntervalId().toString() + "\n" +
                 "value=" + this.getValue();
     }
 

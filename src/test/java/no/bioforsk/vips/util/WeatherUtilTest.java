@@ -231,7 +231,7 @@ public class WeatherUtilTest extends TestCase {
         {
             if(obs.getElementMeasurementTypeId().equals(WeatherElements.TEMPERATURE_MEAN))
                 TM.add(obs);
-            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY_MEAN))
                 UM.add(obs);
             else if(obs.getElementMeasurementTypeId().equals(WeatherElements.WIND_SPEED_2M))
                 FM2.add(obs);
@@ -358,7 +358,7 @@ public class WeatherUtilTest extends TestCase {
             {
                 RR.add(o);
             }
-            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY_MEAN))
             {
                 UM.add(o);
             }
@@ -402,7 +402,7 @@ public class WeatherUtilTest extends TestCase {
             {
                 RR.add(o);
             }
-            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY_MEAN))
             {
                 UM.add(o);
             }
@@ -437,7 +437,7 @@ public class WeatherUtilTest extends TestCase {
             {
                 RR.add(o);
             }
-            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY_MEAN))
             {
                 UM.add(o);
             }
@@ -472,7 +472,7 @@ public class WeatherUtilTest extends TestCase {
             {
                 RR.add(o);
             }
-            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY))
+            else if(o.getElementMeasurementTypeId().equals(WeatherElements.RELATIVE_HUMIDITY_MEAN))
             {
                 UM.add(o);
             }

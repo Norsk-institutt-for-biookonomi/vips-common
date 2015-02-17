@@ -59,7 +59,7 @@ public class WeatherObservation implements Comparable{
     }
         
     public void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssZ", timezone="UTC")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssXXX", timezone="UTC")
     public Date getTimeMeasured() { return this.timeMeasured; }
     
     public void setElementMeasurementTypeId(String elementMeasurementTypeId) { 

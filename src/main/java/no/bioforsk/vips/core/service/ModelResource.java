@@ -110,6 +110,15 @@ public interface ModelResource {
     @Produces("text/plain;charset=UTF-8")
     public Response printModelDescription(@PathParam("modelId") String modelId,@PathParam("language") String language);
 
+    @GET
+    @Path("models/{modelId}/warningstatusinterpretation")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelWarningStatusInterpretation(@PathParam("modelId") String modelId);
+    
+    @GET
+    @Path("models/{modelId}/warningstatusinterpretation/{language}")
+    @Produces("text/plain;charset=UTF-8")
+    public Response printModelWarningStatusInterpretation(@PathParam("modelId") String modelId,@PathParam("language") String language);
     
     /**
      * Prints the usage instructions from the requested model

@@ -70,13 +70,26 @@ public interface Model {
      * @return Description of model (In English). Should include interpretation of the red-yellow-green warning system
      */
     public String getModelDescription();
-    
+        
     /**
      * 
      * @param language two-letter code (<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO-639-2</a>)
      * @return Description of model (In requested language, with English as fallback). Should include interpretation of the red-yellow-green warning system
      */
     public String getModelDescription(String language);
+    
+    /**
+     * 
+     * @return How to interpret the warning status (red-yellow-green, what does it mean?)
+     */
+    public String getWarningStatusInterpretation();
+    
+    /**
+     * 
+     * @param language two-letter code (<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO-639-2</a>)
+     * @return How to interpret the warning status (red-yellow-green, what does it mean?)
+     */
+    public String getWarningStatusInterpretation(String language);
     
     /**
      * @return a thorough manual for this model, in English (Language code "en", referring to <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO-639-2</a>)

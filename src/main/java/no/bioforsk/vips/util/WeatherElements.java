@@ -43,6 +43,14 @@ public class WeatherElements {
      */
     public static final String TEMPERATURE_INSTANTANEOUS = "TT";
     /**
+     * Soil temperature at 5cm, mean
+     */
+    public static final String SOIL_TEMPERATURE_5CM_MEAN ="TJM5";
+    /**
+     * Soil temperature at 10cm, mean
+     */
+    public static final String SOIL_TEMPERATURE_10CM_MEAN ="TJM10";
+    /**
      * Aggregated rainfall (millimeters)
      */
     public static final String PRECIPITATION = "RR";

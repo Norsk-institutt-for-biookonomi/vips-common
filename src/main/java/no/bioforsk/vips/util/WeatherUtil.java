@@ -202,7 +202,7 @@ public class WeatherUtil {
     /**
      * 
      * @param observation hourly Values (logInterval 1h)
-     * @return aggregated daily values (logInterval 24h/1d)
+     * @return aggregated daily values (logInterval 24h/1d) or NULL if no observations are given
      */
     public List<WeatherObservation> getAggregatedDailyValues(
             List<WeatherObservation> observations, 
@@ -212,6 +212,10 @@ public class WeatherUtil {
             throws WeatherObservationListException,
             InvalidAggregationTypeException
     {
+        if(observations == null || observations.isEmpty())
+        {
+            return null;
+        }
         // First we organize the hourly values into one bucket per day
         Map<Date,Map> dateBucket = new HashMap<Date,Map>();
         String expectedParameter = observations.get(0).getElementMeasurementTypeId();
@@ -326,10 +330,41 @@ public class WeatherUtil {
         return maximum;
     }
     
+    /**
+     * Sets hours, minutes, seconds and milliseconds to ZERO
+     * @param timeStamp
+     * @param timeZone
+     * @return 
+     */
     public Date normalizeToExactDate(Date timeStamp, TimeZone timeZone)
     {
         Calendar cal = Calendar.getInstance(timeZone);
         cal.setTime(timeStamp);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        return cal.getTime();
+    }
+    
+    /**
+     * Assuming that this is a midnight timestamp that has been skewed 
+     * due to DST changes, the method attempts to return a correct midnight
+     * time stamp in the requested time zone
+     * @param timeStamp
+     * @param timeZone
+     * @return 
+     */
+    public Date pragmaticAdjustmentToMidnight(Date timeStamp, TimeZone timeZone)
+    {
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.setTime(timeStamp);
+        // If we're close to BEFORE midnight, add one day
+        if(cal.get(Calendar.HOUR_OF_DAY) >= 22)
+        {
+            cal.add(Calendar.DATE, 1);
+        }
+        // Then set hours, minutes etc. to zero
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND,0);

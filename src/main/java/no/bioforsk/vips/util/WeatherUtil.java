@@ -469,7 +469,11 @@ public class WeatherUtil {
         }
         else
         {
-            throw new ConfigValidationException("Missing weather data");
+            throw new ConfigValidationException("Missing weather data. Number of observations per parameter: "
+                    + "TM=" + TM.size()
+                    + ",RR=" + RR.size()
+                    + ",UM=" + UM.size()
+            );
         }
         //System.out.println("First new obs timestamp = " + calculatedBT.get(0).getTimeMeasured());
         BT.addAll(calculatedBT);

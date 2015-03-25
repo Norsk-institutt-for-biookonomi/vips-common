@@ -469,7 +469,7 @@ public class WeatherUtil {
         }
         else
         {
-            throw new ConfigValidationException("Missing weather data. Number of observations per parameter: "
+            throw new ConfigValidationException("Missing weather data. Number of _found_ observations per parameter (deviating number indicates missing data for that parameter): "
                     + "TM=" + TM.size()
                     + ",RR=" + RR.size()
                     + ",UM=" + UM.size()

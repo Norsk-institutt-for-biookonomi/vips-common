@@ -28,9 +28,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -161,6 +165,64 @@ public class WeatherUtilTest extends TestCase {
                 System.out.println(o.getTimeMeasured() + ": " + o.getValue());
             }*/
             assertEquals(1128,result.size());
+            
+        } catch (WeatherObservationListException ex) {
+            fail(ex.getMessage());
+        }
+    }
+    
+    public void testSwedishData()
+    {
+        try {
+            System.out.println("testSwedishData");
+            // Testing with TM values first
+            List<WeatherObservation> allData = this.getObservations("/swedishData.json");
+            List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
+            for(WeatherObservation obs:allData)
+            {
+                if(obs.getElementMeasurementTypeId().equals("TM"))
+                    TM.add(obs);
+            }
+            WeatherUtil wUtil = new WeatherUtil();
+            List<WeatherObservation> result = wUtil.checkForAndFixHourlyTimeSeriesHoles(TM);
+            /*for(WeatherObservation o:result)
+            {
+                System.out.println(o.getTimeMeasured() + ": " + o.getValue());
+            }*/
+            assertEquals(271,result.size());
+            
+        } catch (WeatherObservationListException ex) {
+            fail(ex.getMessage());
+        }
+    }
+    
+    public void testFixHourlyValuesForParameters()
+    {
+        try {
+            System.out.println("testFixHourlyValuesForParameters");
+            // Testing first with data with RR present in both ends
+            List<WeatherObservation> allData = this.getObservations("/swedishData.json");
+            WeatherUtil wUtil = new WeatherUtil();
+            Set<String> paramNames = new HashSet(Arrays.asList("TM", "UM","RR"));
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"));
+            cal.set(2015, Calendar.MARCH, 15, 0, 0, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            List<WeatherObservation> result = wUtil.fixHourlyValuesForParameters(allData, paramNames, cal.getTime(),null);
+            /*for(WeatherObservation o:result)
+            {
+                System.out.println(o.getTimeMeasured() + ": " + o.getValue());
+            }*/
+            assertEquals(271*3,result.size());
+            
+            // Testing with data where RR is missing at the end
+            allData = this.getObservations("/swedishData_1.json");
+            result = wUtil.fixHourlyValuesForParameters(allData, paramNames, cal.getTime(),null);
+            assertEquals(270*3,result.size());
+            
+            // Testing with data where RR is "accidentally" added at the end
+            allData = this.getObservations("/swedishData_2.json");
+            result = wUtil.fixHourlyValuesForParameters(allData, paramNames, cal.getTime(),null);
+            assertEquals(296*3,result.size());
             
         } catch (WeatherObservationListException ex) {
             fail(ex.getMessage());
@@ -550,4 +612,6 @@ public class WeatherUtilTest extends TestCase {
             return null;
         }
     }
+    
+    
 }

@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import no.bioforsk.vips.entity.WeatherObservation;
 import no.bioforsk.vips.model.ConfigValidationException;
@@ -597,7 +598,7 @@ public class WeatherUtil {
      * <li>Setting values to 0 for non continuous parameters (rainfall)</li>
      * </ul>
      * Maximum number of missing values in hole: 3 (hours)
-     * @param obsList
+     * @param obsList list of observations of same type (parameter)
      * @return 
      */
     public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHoles(List<WeatherObservation> obsList) throws WeatherObservationListException {
@@ -698,6 +699,165 @@ public class WeatherUtil {
     public String getFixingStrategy(String elementMeasurementCode)
     {
         return elementMeasurementCode.equals(WeatherElements.PRECIPITATION) ? WeatherElements.FIXING_STRATEGY_SET_ZERO : WeatherElements.FIXING_STRATEGY_INTERPOLATE;
+    }
+    
+    /**
+     * Attempts to return a list with complete series in same period for different parameters
+     * @param mixedParameterList
+     * @param parameterNames 
+     * @return 
+     */
+    public List<WeatherObservation> fixHourlyValuesForParameters(List<WeatherObservation> mixedParameterList, Set parameterNames, Date firstTimestamp, Date lastTimestamp) throws WeatherObservationListException
+    {
+        Map<String, List<WeatherObservation>> separatedParameters = new HashMap<>();
+        
+        Date estimatedLastTimestamp = lastTimestamp;
+        // Separating the parameters
+        for(WeatherObservation obs : mixedParameterList)
+        {
+            // Skip the irrelevant observations
+            // Check for parameter name and timestamp
+            if( 
+                    !parameterNames.contains(obs.getElementMeasurementTypeId())
+                    || obs.getTimeMeasured().compareTo(firstTimestamp) < 0
+                    || (lastTimestamp != null && obs.getTimeMeasured().compareTo(lastTimestamp) > 0)
+            )                
+            {
+                continue;
+            }
+            if(separatedParameters.get(obs.getElementMeasurementTypeId()) == null)
+            {
+                separatedParameters.put(obs.getElementMeasurementTypeId(), new ArrayList<WeatherObservation>());
+            }
+            
+            separatedParameters.get(obs.getElementMeasurementTypeId()).add(obs);
+            if(estimatedLastTimestamp == null || estimatedLastTimestamp.compareTo(obs.getTimeMeasured()) < 0)
+            {
+                estimatedLastTimestamp = obs.getTimeMeasured();
+            }
+            
+        }
+        // Correcting last timestamp if necessary
+        lastTimestamp = lastTimestamp != null ? lastTimestamp : estimatedLastTimestamp;
+            
+        // Filling holes
+        for(String parameterName:separatedParameters.keySet())
+        {
+            separatedParameters.put(parameterName,this.checkForAndFixHourlyTimeSeriesHoles(separatedParameters.get(parameterName)));
+        }
+        // Comparing stuff, trying to fix if not fixed
+        // For precipitation, set artificial values to 0
+        // For all other values, set to same as copying value
+        // Maximum number of missing values at beginning or end: 3
+        Integer maxMissing = 3;
+        if(!areListsComplete(separatedParameters, firstTimestamp, lastTimestamp))
+        {
+            Calendar cal = Calendar.getInstance();
+            for(String parameterName:separatedParameters.keySet())
+            {
+                //System.out.println("Checking " + parameterName);
+                
+                List<WeatherObservation> list = separatedParameters.get(parameterName);
+                //System.out.println("First = " + list.get(0).getTimeMeasured());
+                //System.out.println("Last = " + list.get(list.size()-1).getTimeMeasured());
+                Integer counter = 0;
+                while(list.get(0).getTimeMeasured().compareTo(firstTimestamp) != 0 && counter++ < maxMissing)
+                {
+                    cal.setTime(list.get(0).getTimeMeasured());
+                    cal.add(Calendar.HOUR_OF_DAY, -1);
+                    Date hourBefore = cal.getTime();
+                    WeatherObservation newObs = new WeatherObservation(list.get(0));
+                    newObs.setTimeMeasured(hourBefore);
+                    if(newObs.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+                    {
+                        newObs.setValue(0.0);
+                    }
+                    //System.out.println("Prepending this: " + newObs);
+                    list.add(0, newObs);
+                }
+
+                counter = 0;
+                while(list.get(list.size()-1).getTimeMeasured().compareTo(lastTimestamp) != 0 && counter++ < maxMissing)
+                {
+                    cal.setTime(list.get(list.size()-1).getTimeMeasured());
+                    cal.add(Calendar.HOUR_OF_DAY, 1);
+                    Date hourAfter = cal.getTime();
+                    WeatherObservation newObs = new WeatherObservation(list.get(list.size()-1));
+                    newObs.setTimeMeasured(hourAfter);
+                    if(newObs.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
+                    {
+                        newObs.setValue(0.0);
+                    }
+                    //System.out.println("Appending this: " + newObs);
+                    list.add(newObs);
+                }
+            }
+        }
+        
+        // Last check, give up if not fixed
+        if(areListsComplete(separatedParameters, firstTimestamp, lastTimestamp))
+        {
+            List<WeatherObservation> retVal = new ArrayList<>();
+            for(String parameterName:separatedParameters.keySet())
+            {
+                retVal.addAll(separatedParameters.get(parameterName));
+            }
+            return retVal;
+        }
+        else
+        {
+            String errorMessage = "Cant' repair the weather data. Giving up now. "
+                    + "Either this algorithm needs improvement, or the dataset is too incomplete. "
+                    + "List sizes for the different parameters are: ";
+            for(String parameterName:separatedParameters.keySet())
+            {
+                errorMessage += parameterName + ": " + separatedParameters.get(parameterName).size() + "\n ";
+            }
+            throw new WeatherObservationListException(errorMessage);
+        }
+    }
+    
+    /**
+     * Similar to isHomogenousTimeseries, but adds extra restriction with regards to period
+     * @param separatedParameters
+     * @param firstTimestamp
+     * @param lastTimestamp
+     * @return 
+     */
+    private Boolean areListsComplete(Map<String, List<WeatherObservation>> separatedParameters, Date firstTimestamp, Date lastTimestamp)
+    {
+        Integer size = null;
+        for(String parameterName:separatedParameters.keySet())
+        {
+            List<WeatherObservation> currentList = separatedParameters.get(parameterName);
+            Collections.sort(currentList);
+            // Check for size
+            if(size == null)
+            {
+                size = currentList.size();
+            }
+            if(size != currentList.size())
+            {
+                return Boolean.FALSE;
+            }
+            // Check for period
+            if(!currentList.isEmpty())
+            {
+                if(currentList.get(0).getTimeMeasured().compareTo(firstTimestamp) != 0)
+                {
+                    return Boolean.FALSE;
+                }
+                if(lastTimestamp == null)
+                {
+                    lastTimestamp = currentList.get(currentList.size()-1).getTimeMeasured();
+                }
+                if(currentList.get(currentList.size()-1).getTimeMeasured().compareTo(lastTimestamp) != 0)
+                {
+                    return Boolean.FALSE;
+                }
+            }
+        }
+        return Boolean.TRUE;
     }
     
     public String dumpWeatherObservationList(List<WeatherObservation> list)

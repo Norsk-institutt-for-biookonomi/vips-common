@@ -46,6 +46,18 @@ public class WeatherObservation implements Comparable{
     }
     
     /**
+     * Constructs a new observation with same properties as original
+     * @param original 
+     */
+    public WeatherObservation(WeatherObservation original)
+    {
+        this.setElementMeasurementTypeId(original.getElementMeasurementTypeId());
+        this.setLogIntervalId(original.getLogIntervalId());
+        this.setTimeMeasured(original.getTimeMeasured());
+        this.setValue(original.getValue());
+    }
+    
+    /**
      * 
      * @param timeMeasured
      * @param elementMeasurementTypeId
@@ -59,18 +71,18 @@ public class WeatherObservation implements Comparable{
         this.value = value;
     }
         
-    public void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
+    public final void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssXXX", timezone="UTC")
     public Date getTimeMeasured() { return this.timeMeasured; }
     
-    public void setElementMeasurementTypeId(String elementMeasurementTypeId) { 
+    public final void setElementMeasurementTypeId(String elementMeasurementTypeId) { 
         this.elementMeasurementTypeId = elementMeasurementTypeId; 
     }
     public String getElementMeasurementTypeId() { 
         return this.elementMeasurementTypeId; 
     }
    
-    public void setLogIntervalId(Integer id) { this.logIntervalId = id.intValue(); }
+    public final void setLogIntervalId(Integer id) { this.logIntervalId = id.intValue(); }
     public Integer getLogIntervalId() { return this.logIntervalId; }
     
     /**
@@ -120,7 +132,7 @@ public class WeatherObservation implements Comparable{
     /**
      * @param value the value to set
      */
-    public void setValue(double value) {
+    public final void setValue(double value) {
         this.value = value;
     }
 }

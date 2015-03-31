@@ -224,6 +224,10 @@ public class WeatherUtilTest extends TestCase {
             result = wUtil.fixHourlyValuesForParameters(allData, paramNames, cal.getTime(),null);
             assertEquals(296*3,result.size());
             
+            // Testing sending only one parameter in
+            result = wUtil.fixHourlyValuesForParameters(allData, new HashSet(Arrays.asList("TM")), cal.getTime(),null);
+            assertEquals(295,result.size());
+            
         } catch (WeatherObservationListException ex) {
             fail(ex.getMessage());
         }
@@ -276,6 +280,28 @@ public class WeatherUtilTest extends TestCase {
         assertEquals(expSum, sumResults.get(0).getValue());
         assertEquals(expMin, minResults.get(0).getValue());
         assertEquals(expMax, maxResults.get(0).getValue());
+        
+        // Testing with weather data that is in DST transition (from winter to summer time)
+        allObservations = this.getObservations("/alnarp_dst_transition.json");
+        TM = new ArrayList<WeatherObservation>();
+        for(WeatherObservation obs:allObservations)
+        {
+            if(obs.getElementMeasurementTypeId().equals("TM"))
+                TM.add(obs);
+        }
+        timeZone = TimeZone.getTimeZone("Europe/Stockholm");
+        try {
+            avgResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_AVERAGE);
+            Collections.sort(avgResults);
+            for(WeatherObservation obs:avgResults)
+            {
+                System.out.println(obs.getTimeMeasured()+":" + obs.getValue());
+            }
+        } catch (WeatherObservationListException ex) {
+            fail(ex.getMessage());
+        } catch (InvalidAggregationTypeException ex) {
+            fail(ex.getMessage());
+        }
     }
     
     public void testCalculateLeafWetnessHourSeriesBestEffort()

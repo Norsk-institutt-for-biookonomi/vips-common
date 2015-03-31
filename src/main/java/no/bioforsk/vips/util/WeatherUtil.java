@@ -811,7 +811,7 @@ public class WeatherUtil {
                     + "List sizes for the different parameters are: ";
             for(String parameterName:separatedParameters.keySet())
             {
-                errorMessage += parameterName + ": " + separatedParameters.get(parameterName).size() + "\n ";
+                errorMessage += parameterName + "[Starts at " + separatedParameters.get(parameterName).get(0).getTimeMeasured() + "]: " + separatedParameters.get(parameterName).size() + "\n ";
             }
             throw new WeatherObservationListException(errorMessage);
         }

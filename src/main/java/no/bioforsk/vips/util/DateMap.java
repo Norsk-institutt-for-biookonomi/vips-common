@@ -365,6 +365,33 @@ public class DateMap {
     }
     
     /**
+     * 
+     * @param parameter
+     * @return The last date with value for this parameter, null if not set
+     */
+    public Date getLastDateWithParameterValue(String parameter)
+    {
+        ArrayList<Date> dates = new ArrayList(this.matrix.keySet());
+        if(dates.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            Collections.sort(dates);
+            Collections.reverse(dates);
+            for(Date date:dates)
+            {
+                if(this.getParamValueForDate(date, parameter) != null)
+                {
+                    return date;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
      * Get a list of all values for a parameter. The list is sorted by date.
      * @param parameter
      * @return 

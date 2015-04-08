@@ -20,6 +20,7 @@
 package no.bioforsk.vips.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
 /**
@@ -134,5 +135,33 @@ public class WeatherObservation implements Comparable{
      */
     public final void setValue(double value) {
         this.value = value;
+    }
+    
+    @JsonIgnore
+    public long getValiditySignature()
+    {
+        long result = 17;
+        result = result * this.getLogIntervalId();
+        result = result + this.getTimeMeasured().getTime();
+        for(char c:this.getElementMeasurementTypeId().toCharArray())
+        {
+            result = result * c;
+        }
+        return result;
+    }
+    
+    
+    /**
+     * Test if the provided WeatherObservation is for the same time, resolution and parameter
+     * @param other
+     * @return 
+     */
+    public boolean isDuplicate(WeatherObservation other)
+    {
+        if(other == null)
+        {
+            return false;
+        }
+        return this.getValiditySignature() == other.getValiditySignature();
     }
 }

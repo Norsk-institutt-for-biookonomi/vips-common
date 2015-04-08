@@ -709,6 +709,9 @@ public class WeatherUtil {
      */
     public List<WeatherObservation> fixHourlyValuesForParameters(List<WeatherObservation> mixedParameterList, Set parameterNames, Date firstTimestamp, Date lastTimestamp) throws WeatherObservationListException
     {
+        // Removing duplicates first 
+        mixedParameterList = this.removeDuplicateWeatherObservations(mixedParameterList);
+        
         Map<String, List<WeatherObservation>> separatedParameters = new HashMap<>();
         
         Date estimatedLastTimestamp = lastTimestamp;
@@ -815,6 +818,21 @@ public class WeatherUtil {
             }
             throw new WeatherObservationListException(errorMessage);
         }
+    }
+    
+    /**
+     * Checks for duplicates, attempts to tidy up. TODO: Criteria for selection??
+     * @param observations List with possible duplicates (same parameter, logInterval and timestamp)
+     * @return List with unique observations, unsorted
+     */
+    public List<WeatherObservation> removeDuplicateWeatherObservations(List<WeatherObservation> observations)
+    {
+        HashMap<Long,WeatherObservation> uniqueMap = new HashMap<>();
+        for(WeatherObservation observation:observations)
+        {
+            uniqueMap.put(observation.getValiditySignature(), observation);
+        }
+        return new ArrayList<WeatherObservation>(uniqueMap.values());
     }
     
     /**

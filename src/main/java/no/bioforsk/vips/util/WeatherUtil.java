@@ -975,4 +975,41 @@ public class WeatherUtil {
         }
         return true;
     }
+
+    /**
+     * Finds the last timestamp for which all parameters are present, and 
+     * removes all observations after that
+     * @param observations
+     * @return 
+     */
+    public List<WeatherObservation> truncateToLastCommonObservation(List<WeatherObservation> observations) {
+        // Find the latest date for each parameter
+        Map<String, Date> latestObservations = new HashMap<>();
+        for(WeatherObservation obs:observations)
+        {
+            Date latestDateForParameter = latestObservations.get(obs.getElementMeasurementTypeId());
+            latestDateForParameter = latestDateForParameter == null ? obs.getTimeMeasured() : 
+                    obs.getTimeMeasured().compareTo(latestDateForParameter) > 0 ? obs.getTimeMeasured() : latestDateForParameter;
+            latestObservations.put(obs.getElementMeasurementTypeId(), latestDateForParameter);
+        }
+        
+        // The earliest date is the latest common date
+        Date latestCommonDate = null;
+        for(Date date:latestObservations.values())
+        {
+            latestCommonDate = latestCommonDate == null ? date:
+                    date.compareTo(latestCommonDate) < 0 ? date : latestCommonDate;
+        }
+        // Then we filter out all the observations after the latestCommonDate
+        List<WeatherObservation> retVal = new ArrayList<>();
+        for(WeatherObservation obs:observations)
+        {
+            if(obs.getTimeMeasured().compareTo(latestCommonDate) <= 0)
+            {
+                retVal.add(obs);
+            }
+        }
+        
+        return retVal;
+    }
 }

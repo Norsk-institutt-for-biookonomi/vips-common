@@ -710,7 +710,7 @@ public class WeatherUtil {
     public List<WeatherObservation> fixHourlyValuesForParameters(List<WeatherObservation> mixedParameterList, Set parameterNames, Date firstTimestamp, Date lastTimestamp) throws WeatherObservationListException
     {
         // Removing duplicates first 
-        mixedParameterList = this.removeDuplicateWeatherObservations(mixedParameterList);
+        mixedParameterList = this.removeDuplicateWeatherObservations(mixedParameterList, null);
         
         Map<String, List<WeatherObservation>> separatedParameters = new HashMap<>();
         
@@ -823,16 +823,29 @@ public class WeatherUtil {
     /**
      * Checks for duplicates, attempts to tidy up. TODO: Criteria for selection??
      * @param observations List with possible duplicates (same parameter, logInterval and timestamp)
+     * @param maximumDuplicateRatio Between 0 and 1. 0 = No duplicates allowed. 1 = 100% duplicates. (Which is impossible) Default is 0.05 (5%)
      * @return List with unique observations, unsorted
      */
-    public List<WeatherObservation> removeDuplicateWeatherObservations(List<WeatherObservation> observations)
+    public List<WeatherObservation> removeDuplicateWeatherObservations(List<WeatherObservation> observations, Double maximumDuplicateRatio) throws WeatherObservationListException
     {
+        
+        if(maximumDuplicateRatio == null)
+        {
+            maximumDuplicateRatio = 0.05;
+        }
         HashMap<Long,WeatherObservation> uniqueMap = new HashMap<>();
         for(WeatherObservation observation:observations)
         {
             uniqueMap.put(observation.getValiditySignature(), observation);
         }
-        return new ArrayList<WeatherObservation>(uniqueMap.values());
+        List<WeatherObservation> retVal = new ArrayList<WeatherObservation>(uniqueMap.values());
+        Double numberOfDuplicates = new Double(observations.size() - retVal.size());
+        //System.out.println(numberOfDuplicates/observations.size());
+        if(numberOfDuplicates/observations.size() > maximumDuplicateRatio)
+        {
+            throw new WeatherObservationListException("Too many duplicates for " + observations.get(0).getElementMeasurementTypeId() + ": " + numberOfDuplicates + "(" + (numberOfDuplicates/observations.size()) + "%)");
+        }
+        return retVal;
     }
     
     /**

@@ -576,6 +576,40 @@ public class WeatherUtilTest extends TestCase {
         }
         
     }
+    
+    public void testRemoveDuplicateWeatherObservations()
+    {
+        System.out.println("testRemoveDuplicateWeatherObservations()");
+        List<WeatherObservation> faultySeries = this.getObservations("/weatherDataWithDuplicates.json");
+        
+        WeatherUtil instance = new WeatherUtil();
+        
+        try
+        {
+            List<WeatherObservation> result = instance.removeDuplicateWeatherObservations(faultySeries, null);
+            assertNotSame(faultySeries.size(), result.size());
+            // Checking tolerance
+            boolean errorThrown = false;
+            try
+            {
+                result = instance.removeDuplicateWeatherObservations(faultySeries, 0.02);
+            }
+            catch(WeatherObservationListException ex)
+            {
+                errorThrown = true;
+            }
+            if(!errorThrown)
+            {
+                fail("Should have detected too many duplicates, but didn't.");
+            }
+            
+            
+        }
+        catch(WeatherObservationListException ex)
+        {
+            fail(ex.getMessage());
+        }
+    }
 
     /**
      * Test of normalizeToExactDate method, of class WeatherUtil.
@@ -638,6 +672,7 @@ public class WeatherUtilTest extends TestCase {
             return null;
         }
     }
+    
     
     
 }

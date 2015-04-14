@@ -349,6 +349,29 @@ public class WeatherUtil {
     }
     
     /**
+     * Adjusts the date so that it is a Date with the same time (hours, minutes etc.) in the new timezone
+     * @param theDate
+     * @param timeZone
+     * @return 
+     */
+    public Date changeDateTimeZone(Date theDate, TimeZone oldTimeZone, TimeZone newTimeZone)
+    {
+        Calendar oldCal = Calendar.getInstance(oldTimeZone);
+        Calendar newCal = Calendar.getInstance(newTimeZone);
+        
+        oldCal.setTime(theDate);
+        newCal.set(oldCal.get(Calendar.YEAR), 
+                oldCal.get(Calendar.MONTH), 
+                oldCal.get(Calendar.DATE), 
+                oldCal.get(Calendar.HOUR_OF_DAY), 
+                oldCal.get(Calendar.MINUTE), 
+                oldCal.get(Calendar.SECOND)
+        );
+        newCal.set(Calendar.MILLISECOND, oldCal.get(Calendar.MILLISECOND));
+        return newCal.getTime();
+    }
+    
+    /**
      * Assuming that this is a midnight timestamp that has been skewed 
      * due to DST changes, the method attempts to return a correct midnight
      * time stamp in the requested time zone
@@ -404,6 +427,7 @@ public class WeatherUtil {
         Date startTime, lastBTTime;
         if(BT.size() > 0)
         {
+            Collections.sort(BT);
             lastBTTime = BT.get(BT.size()-1).getTimeMeasured();
             Calendar cal = Calendar.getInstance();
             cal.setTime(lastBTTime);
@@ -1023,6 +1047,76 @@ public class WeatherUtil {
             }
         }
         
+        return retVal;
+    }
+    
+    /**
+     * Finds the first and last timestamp for which all parameters are present, and 
+     * removes all observations before and after that, respectively
+     * @param observations
+     * @return 
+     */
+    public List<WeatherObservation> truncateToFirstAndLastCommonObservation(List<WeatherObservation> observations) {
+        // Find the earliest and latest date for each parameter
+        Map<String, Date> latestObservations = new HashMap<>();
+        Map<String, Date> earliestObservations = new HashMap<>();
+        for(WeatherObservation obs:observations)
+        {
+            Date latestDateForParameter = latestObservations.get(obs.getElementMeasurementTypeId());
+            latestDateForParameter = latestDateForParameter == null ? obs.getTimeMeasured() : 
+                    obs.getTimeMeasured().compareTo(latestDateForParameter) > 0 ? obs.getTimeMeasured() : latestDateForParameter;
+            latestObservations.put(obs.getElementMeasurementTypeId(), latestDateForParameter);
+            Date earliestDateForParameter = earliestObservations.get(obs.getElementMeasurementTypeId());
+            earliestDateForParameter = earliestDateForParameter == null ? obs.getTimeMeasured() :
+                    obs.getTimeMeasured().compareTo(earliestDateForParameter) < 0 ? obs.getTimeMeasured() : earliestDateForParameter;
+            earliestObservations.put(obs.getElementMeasurementTypeId(), earliestDateForParameter);
+        }
+        
+        // Finding first common date
+        // The latest date is the first common date
+        Date earliestCommonDate = null;
+        for(Date date:earliestObservations.values())
+        {
+            earliestCommonDate = earliestCommonDate == null ? date :
+                    date.compareTo(earliestCommonDate) > 0 ? date : earliestCommonDate;
+        }
+        
+        // Finding latest common date
+        // The earliest date is the latest common date
+        Date latestCommonDate = null;
+        for(Date date:latestObservations.values())
+        {
+            latestCommonDate = latestCommonDate == null ? date:
+                    date.compareTo(latestCommonDate) < 0 ? date : latestCommonDate;
+        }
+        // Then we filter out all the observations before the earliestCommonDate and after the latestCommonDate
+        List<WeatherObservation> retVal = new ArrayList<>();
+        for(WeatherObservation obs:observations)
+        {
+            if(obs.getTimeMeasured().compareTo(earliestCommonDate) >= 0 || obs.getTimeMeasured().compareTo(latestCommonDate) <= 0)
+            {
+                retVal.add(obs);
+            }
+        }
+        
+        return retVal;
+    }
+    
+    /**
+     * Extracts only the parameters that you want
+     * @param observations
+     * @param parameters
+     * @return 
+     */
+    public List<WeatherObservation> filterWeatherObservationsByParameter(List<WeatherObservation> observations, Set<String> parameters){
+        List<WeatherObservation> retVal = new ArrayList<WeatherObservation>();
+        for(WeatherObservation obs:observations)
+        {
+            if(parameters.contains(obs.getElementMeasurementTypeId()))
+            {
+                retVal.add(obs);
+            }
+        }
         return retVal;
     }
 }

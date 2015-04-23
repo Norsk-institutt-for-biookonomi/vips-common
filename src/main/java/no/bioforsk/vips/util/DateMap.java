@@ -19,12 +19,15 @@
 
 package no.bioforsk.vips.util;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +44,13 @@ public class DateMap {
 
     private final HashMap matrix;
     private final DecimalFormat decimalFormat;
+    private final HashSet allParamNames;
 
     /** Creates a new instance of DateMap */
     public DateMap()
     {
         this.matrix = new HashMap();
+        this.allParamNames = new HashSet();
         this.decimalFormat = new DecimalFormat("0.0");
     }
 
@@ -172,6 +177,7 @@ public class DateMap {
             this.matrix.put(date, valueSet);
         }
         valueSet.put(paramName, value);
+        this.allParamNames.add(paramName);
     }
 
     /**
@@ -426,6 +432,37 @@ public class DateMap {
         {
             Date date = i.next();
             buffer.append(this.getValuesForDate(date)).append("\n");
+        }
+        return buffer.toString();
+    }
+    
+    /**
+     * Outputs contents as CSV
+     * @return 
+     */
+    public String toCSV()
+    {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        // Get all date keys, sort them
+        ArrayList keys = new ArrayList(this.matrix.keySet());
+        Collections.sort(keys);
+        StringBuilder buffer = new StringBuilder();
+        List<String> paramNames = new ArrayList(this.allParamNames);
+        buffer.append("Timestamp");
+        for(String paramName:paramNames)
+        {
+            buffer.append(",").append(paramName);
+        }
+        buffer.append("\n");
+        for(Iterator<Date> i = keys.iterator();i.hasNext();)
+        {
+            Date date = i.next();
+            buffer.append(format.format(date));
+            for(String paramName:paramNames)
+            {
+                buffer.append(",").append(this.getParamValueForDate(date, paramName));
+            }
+            buffer.append("\n");
         }
         return buffer.toString();
     }

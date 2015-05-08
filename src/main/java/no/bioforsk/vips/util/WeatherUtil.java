@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import no.bioforsk.vips.entity.WeatherObservation;
@@ -100,6 +101,11 @@ public class WeatherUtil {
      */
     public List<WeatherObservation> calculateLeafWetnessHourSeriesSimple(List<WeatherObservation> temperature, List<WeatherObservation> rainfall, List<WeatherObservation> relativeHumidity) throws ConfigValidationException
     {
+        // Just to be sure!
+        Collections.sort(temperature);
+        Collections.sort(rainfall);
+        Collections.sort(relativeHumidity);
+        
         List<WeatherObservation> retVal = new ArrayList<WeatherObservation>();
         Iterator<WeatherObservation> humIt = relativeHumidity.iterator();
         WeatherObservation humObs;
@@ -121,6 +127,7 @@ public class WeatherUtil {
                         + "rainfall list has " + rainfall.size() + " elements, "
                         + "relative humidity list has " + relativeHumidity.size() + " elements.");
             }
+            //System.out.println("humObs timestamp=" + humObs.getTimeMeasured());
             if(humObs.getTimeMeasured().compareTo(tempObs.getTimeMeasured()) != 0 || humObs.getTimeMeasured().compareTo(rainObs.getTimeMeasured()) != 0)
             {
                 throw new ConfigValidationException("When calculating leaf wetness: "
@@ -342,6 +349,22 @@ public class WeatherUtil {
         Calendar cal = Calendar.getInstance(timeZone);
         cal.setTime(timeStamp);
         cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+        return cal.getTime();
+    }
+    
+    /**
+     * Slicing off minutes, seconds and milliseconds
+     * @param timeStamp
+     * @param timeZone
+     * @return 
+     */
+     public Date normalizeToExactHour(Date timeStamp, TimeZone timeZone)
+    {
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.setTime(timeStamp);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND,0);
         cal.set(Calendar.MILLISECOND,0);
@@ -638,11 +661,11 @@ public class WeatherUtil {
         //System.out.println("checkForAndFixHourlyTimeSeriesHoles " + obsList.get(0).getElementMeasurementTypeId() + ",start time= " + currentTime );
         for(int i=0;i<obsList.size();i++)
         {
-            /*
-            WeatherObservation debugObs = obsList.get(i);
-            if(debugObs.getElementMeasurementTypeId().equals("TM"))
+            
+            /*WeatherObservation debugObs = obsList.get(i);
+            if(debugObs.getElementMeasurementTypeId().equals("UM"))
             {
-                System.out.println(debugObs.getTimeMeasured() + ": " + debugObs.getValue());
+                System.out.println(debugObs.getTimeMeasured() + ": " + debugObs.getValue() + ", currentTime=" + currentTime);
             }*/
             
             int missingValues = 0;
@@ -651,10 +674,10 @@ public class WeatherUtil {
             {
                 missingValues++;
                 // We have a hole
-                //System.out.println("Hole found! At " + currentTime);
+                //System.out.println("Hole found! For " + obsList.get(i).getElementMeasurementTypeId() + " at " + currentTime);
                 
                 // Must advance time until we find a matching time
-                cal.add(Calendar.HOUR, 1);
+                cal.add(Calendar.HOUR_OF_DAY, 1);
                 currentTime = cal.getTime();
             }
             //System.out.println("Missing values=" + missingValues);
@@ -1115,6 +1138,190 @@ public class WeatherUtil {
             if(parameters.contains(obs.getElementMeasurementTypeId()))
             {
                 retVal.add(obs);
+            }
+        }
+        return retVal;
+    }
+    
+    /**
+     * 
+     * @param observations
+     * @param timeZone
+     * @param logintervalId
+     * @param typeOfAggregation
+     * @return
+     * @throws WeatherObservationListException
+     * @throws InvalidAggregationTypeException 
+     */
+    public List<WeatherObservation> getAggregateHourlyValues(List<WeatherObservation> observations, TimeZone timeZone, Integer logintervalId, Integer typeOfAggregation) throws WeatherObservationListException, InvalidAggregationTypeException{
+        if(observations == null || observations.isEmpty())
+        {
+            return null;
+        }
+        // First we organize the less-than-hourly values into one bucket per hour
+        Map<Date,Map> hourBucket = new HashMap<Date,Map>();
+        String expectedParameter = observations.get(0).getElementMeasurementTypeId();
+        Date lastDate = null;
+        for(WeatherObservation observation:observations)
+        {
+            if(!observation.getElementMeasurementTypeId().equals(expectedParameter))
+            {
+                throw new WeatherObservationListException("Found multiple parameters: " + observation.getElementMeasurementTypeId() + " and " + expectedParameter);
+            }
+            Date theDate = normalizeToExactHour(observation.getTimeMeasured(), timeZone);
+            lastDate = lastDate == null ? theDate : (lastDate.compareTo(theDate) < 0 ? theDate : lastDate);
+            Map<Date, Double> hourValuesForDate = hourBucket.get(theDate);
+            if(hourValuesForDate == null)
+            {
+                hourValuesForDate = new HashMap<Date,Double>();
+                hourBucket.put(theDate, hourValuesForDate);
+            }
+            
+            // Check for double entries
+            // TODO: Handle DST change with double entries at 03:00
+            Double possibleDuplicate = hourValuesForDate.get(observation.getTimeMeasured());
+            if(possibleDuplicate != null)
+            {
+                throw new WeatherObservationListException(
+                        "Found duplicate weatherObservations for parameter " +
+                        observation.getElementMeasurementTypeId() + " at time " +
+                        observation.getTimeMeasured()
+                );
+            }
+            hourValuesForDate.put(observation.getTimeMeasured(), observation.getValue());
+        }
+        
+        // Then we iterate the buckets, do the aggregation and create return values
+        List<WeatherObservation> aggregatedObservations = new ArrayList<>();
+        WeatherObservation templateObservation = observations.get(0);
+        Double aggregateValue;
+        for(Date anHour:hourBucket.keySet())
+        {
+            //System.out.println("date=" + aDay);
+            Map valuesForAnHour = hourBucket.get(anHour);
+            
+            switch(typeOfAggregation){
+                case WeatherUtil.AGGREGATION_TYPE_AVERAGE:
+                    aggregateValue = getAverage(valuesForAnHour.values()); break;
+                case WeatherUtil.AGGREGATION_TYPE_SUM:
+                    aggregateValue = getSum(valuesForAnHour.values()); break;
+                case WeatherUtil.AGGREGATION_TYPE_MINIMUM:
+                    aggregateValue = getMinimum(valuesForAnHour.values()); break;
+                case WeatherUtil.AGGREGATION_TYPE_MAXIMUM:
+                    aggregateValue = getMaximum(valuesForAnHour.values()); break;
+                default:
+                    throw new InvalidAggregationTypeException(
+                            "No aggregation method with id= " + typeOfAggregation  + " exists."
+                            );
+            }
+            WeatherObservation aggregatedObservation = new WeatherObservation();
+            aggregatedObservation.setElementMeasurementTypeId(templateObservation.getElementMeasurementTypeId());
+            aggregatedObservation.setLogIntervalId(WeatherObservation.LOG_INTERVAL_ID_1H);
+            aggregatedObservation.setTimeMeasured(anHour);
+            aggregatedObservation.setValue(aggregateValue);
+            aggregatedObservations.add(aggregatedObservation);
+        }
+        return aggregatedObservations;
+    }
+    
+    /**
+     * Adds the correct amount of time for the next time, given log interval
+     * Attempts to correct if starting point is a bit off
+     * @param startingPoint The timestamp to start with
+     * @param logIntervalId The log frequency (see VIPSCommon's WeatherObservation entity for details)
+     * @param timeZone The time zone
+     * @return 
+     */
+    public Date getNextLogTimestamp(Date startingPoint, Integer logIntervalId, TimeZone timeZone)
+    {
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.setTime(startingPoint);
+        
+        if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_15M))
+        {
+            cal.add(Calendar.MINUTE, 15);
+            cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) - (cal.get(Calendar.MINUTE) % 15));
+        }
+        else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_30M))
+        {
+            cal.add(Calendar.MINUTE, 30);
+            cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) - (cal.get(Calendar.MINUTE) % 30));
+        }
+        else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_1H))
+        {
+            cal.add(Calendar.HOUR_OF_DAY, 1);
+            cal.set(Calendar.MINUTE, 0);
+        }
+        else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_3H))
+        {
+            cal.add(Calendar.HOUR_OF_DAY, 3);
+            cal.set(Calendar.MINUTE, 0);
+        }
+        else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_6H))
+        {
+            cal.add(Calendar.HOUR_OF_DAY, 6);
+            cal.set(Calendar.MINUTE, 0);
+        }
+        else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_1D))
+        {
+            cal.add(Calendar.DATE,1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+        }
+        
+        return cal.getTime();
+    }
+    
+    public List<WeatherObservation> getIncrementalValuesFromAccumulated(List<WeatherObservation> accumulatedValues, TimeZone timeZone, Integer incrementalLogIntervalId)
+    {
+        List<WeatherObservation> retVal = new ArrayList<>();
+        // We always start on the whole hour
+        Calendar cal = Calendar.getInstance(timeZone);
+        Collections.sort(accumulatedValues);
+        Date nextIncrementalTimestamp = null;
+        Double lastAccumulatedValue = null;
+        for(WeatherObservation obs : accumulatedValues)
+        {
+            
+            //System.out.println("nextIncrementalTimestamp=" + nextIncrementalTimestamp + ", lastAccumulatedValue=" + lastAccumulatedValue);
+            if(lastAccumulatedValue != null)
+            {
+                if(nextIncrementalTimestamp.compareTo(obs.getTimeMeasured()) == 0)
+                {
+                    // Ensure that reset of [XX]ACC counter doesn't give negative values
+                    Double incrementalValue = Math.max(obs.getValue() - lastAccumulatedValue, 0.0);
+                    WeatherObservation incrementObs = new WeatherObservation();
+                    incrementObs.setElementMeasurementTypeId(obs.getElementMeasurementTypeId().replace("ACC", ""));
+                    incrementObs.setLogIntervalId(incrementalLogIntervalId);
+                    incrementObs.setTimeMeasured(obs.getTimeMeasured());
+                    incrementObs.setValue(incrementalValue);
+                    retVal.add(incrementObs);
+                    lastAccumulatedValue = obs.getValue();
+                    nextIncrementalTimestamp = this.getNextLogTimestamp(obs.getTimeMeasured(), incrementalLogIntervalId, timeZone);
+                }
+                // CASE: Hole in the raw data
+                else if(nextIncrementalTimestamp.compareTo(obs.getTimeMeasured()) < 0)
+                {
+                    nextIncrementalTimestamp = this.getNextLogTimestamp(obs.getTimeMeasured(), incrementalLogIntervalId, timeZone);
+                }
+            }
+            // We always start on the whole hour, and in case of daily values,
+            // on the hour = 00
+            else
+            {
+                cal.setTime(obs.getTimeMeasured());
+                if(
+                        cal.get(Calendar.MINUTE) == 0
+                        &&
+                            (!incrementalLogIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_1D)
+                            || cal.get(Calendar.HOUR_OF_DAY) == 0
+                            )
+                        )
+
+                {
+                    lastAccumulatedValue = obs.getValue();
+                    nextIncrementalTimestamp = this.getNextLogTimestamp(obs.getTimeMeasured(), incrementalLogIntervalId, timeZone);
+                }
             }
         }
         return retVal;

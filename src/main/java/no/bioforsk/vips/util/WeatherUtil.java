@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import no.bioforsk.vips.entity.WeatherObservation;
@@ -1326,4 +1325,6 @@ public class WeatherUtil {
         }
         return retVal;
     }
+    
+    
 }

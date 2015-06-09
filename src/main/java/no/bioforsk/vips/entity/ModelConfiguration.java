@@ -19,6 +19,8 @@
 
 package no.bioforsk.vips.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,5 +92,17 @@ public class ModelConfiguration {
         this.configParameters = configParameters;
     }
     
+    public String toJSON()
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        try
+        {
+            return mapper.writeValueAsString(this.configParameters);
+        }
+        catch(JsonProcessingException ex)
+        {
+            return ex.getClass().getName() + ": " + ex.getMessage();
+        }
+    }
        
 }

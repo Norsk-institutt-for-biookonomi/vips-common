@@ -30,7 +30,7 @@ import java.util.TimeZone;
  */
 public class SolarRadiationUtil {
     
-    public Double getSolarRadiationAtLocationAndTime(Double latitude, Double longitude, Date date, TimeZone timeZone)
+    public Double calculateSolarRadiationAtLocationAndTime(Double latitude, Double longitude, Date date, TimeZone timeZone)
     {
         // We must adjust the hour to reflect the deviation from the LSTM (Local Standard Time Meridian)
         Calendar cal = Calendar.getInstance(timeZone);

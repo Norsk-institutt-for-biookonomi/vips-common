@@ -145,9 +145,9 @@ public class SolarRadiationUtilTest extends TestCase {
     }
 
     /**
-     * Test of getSolarRadiationAtLocationAndTime method, of class SolarRadiationUtil.
+     * Test of calculateSolarRadiationAtLocationAndTime method, of class SolarRadiationUtil.
      */
-    public void testGetSolarRadiationAtLocationAndTime() {
+    public void testCalculateSolarRadiationAtLocationAndTime() {
         System.out.println("getSolarRadiationAtLocationAndTime");
         Double latitude = 59.660468;
         Double longitude = 10.781989;
@@ -157,7 +157,7 @@ public class SolarRadiationUtilTest extends TestCase {
         Date date = cal.getTime();
         SolarRadiationUtil instance = new SolarRadiationUtil();
         Double expResult = 0.9540516211907254;
-        Double result = instance.getSolarRadiationAtLocationAndTime(latitude, longitude, date, timeZone);
+        Double result = instance.calculateSolarRadiationAtLocationAndTime(latitude, longitude, date, timeZone);
         assertEquals(expResult, result);
         
         /*
@@ -169,7 +169,7 @@ public class SolarRadiationUtilTest extends TestCase {
         format.setTimeZone(timeZone);
         while(cal.get(Calendar.DAY_OF_YEAR) <= lastDayOfYear)
         {
-            String resultStr = String.valueOf(instance.getSolarRadiationAtLocationAndTime(latitude, longitude, date, timeZone) * 1000);
+            String resultStr = String.valueOf(instance.calculateSolarRadiationAtLocationAndTime(latitude, longitude, date, timeZone) * 1000);
             System.out.println(format.format(date) + ";" + resultStr.replace(".", ","));
             cal.add(Calendar.HOUR_OF_DAY, 1);
             date = cal.getTime();

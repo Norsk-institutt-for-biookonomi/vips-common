@@ -160,18 +160,19 @@ public class SolarRadiationUtilTest extends TestCase {
         Double result = instance.calculateSolarRadiationAtLocationAndTime(latitude, longitude, date, timeZone);
         assertEquals(expResult, result);
         
-        /*
+        
         // Output to file
-        cal.set(2015,Calendar.MARCH,1,0,0,0);
+        /*
+        cal.set(2015,Calendar.MARCH,1,1,0,0);
         date = cal.getTime();
-        int lastDayOfYear = 304; // Oct 31
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH");
+        int lastDay = 225; // Aug 13
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         format.setTimeZone(timeZone);
-        while(cal.get(Calendar.DAY_OF_YEAR) <= lastDayOfYear)
+        while(cal.get(Calendar.DAY_OF_YEAR) <= lastDay)
         {
             String resultStr = String.valueOf(instance.calculateSolarRadiationAtLocationAndTime(latitude, longitude, date, timeZone) * 1000);
             System.out.println(format.format(date) + ";" + resultStr.replace(".", ","));
-            cal.add(Calendar.HOUR_OF_DAY, 1);
+            cal.add(Calendar.HOUR, 1);
             date = cal.getTime();
         }*/
         
@@ -329,6 +330,62 @@ public class SolarRadiationUtilTest extends TestCase {
 
     }
     
+  public void testGetSunsetTimeAtDate() throws Exception
+  {
+        System.out.println("getSunsetTimeAtDate");
+        Double latitude = 59.660468;
+        Double longitude = 10.781989;
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Oslo");
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.set(2015, Calendar.SEPTEMBER, 8, 19, 48, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date date = cal.getTime();
+        SolarRadiationUtil instance = new SolarRadiationUtil();
+        Date expResult = date;
+        Date result = instance.getSunsetTimeAtDate(latitude, longitude, date, timeZone);
+        assertEquals(expResult, result);
+        
+        // Testing midnight sun and winter darkness up north
+        latitude = 75.0;
+        cal.set(2015, Calendar.JUNE, 23, 19, 3, 0);
+        expResult = null;
+        result = instance.getSunsetTimeAtDate(latitude, longitude, cal.getTime(), timeZone);
+        assertEquals(expResult, result);
+        
+        cal.set(2015, Calendar.DECEMBER, 23, 12, 16, 0);
+        expResult = cal.getTime();
+        result = instance.getSunsetTimeAtDate(latitude, longitude, cal.getTime(), timeZone);
+        assertEquals(expResult, result);
+        
+  }
   
+  public void testGetSunriseTimeAtDate() throws Exception
+  {
+        System.out.println("getSunriseTimeAtDate");
+        Double latitude = 59.660468;
+        Double longitude = 10.781989;
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Oslo");
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.set(2015, Calendar.SEPTEMBER, 8, 6, 40, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date date = cal.getTime();
+        SolarRadiationUtil instance = new SolarRadiationUtil();
+        Date expResult = date;
+        Date result = instance.getSunriseTimeAtDate(latitude, longitude, date, timeZone);
+        assertEquals(expResult, result);
+        
+        // Testing midnight sun and winter darkness up north
+        latitude = 69.0;
+        cal.set(2015, Calendar.JUNE, 23, 1,19, 0);
+        expResult = cal.getTime();
+        result = instance.getSunriseTimeAtDate(latitude, longitude, cal.getTime(), timeZone);
+        assertEquals(expResult, result);
+        
+        cal.set(2015, Calendar.DECEMBER, 23, 12, 16, 0);
+        expResult = cal.getTime();
+        result = instance.getSunriseTimeAtDate(latitude, longitude, cal.getTime(), timeZone);
+        assertEquals(expResult, result);
+        
+  }
     
 }

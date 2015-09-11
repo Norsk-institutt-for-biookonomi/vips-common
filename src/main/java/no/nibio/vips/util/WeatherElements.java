@@ -67,6 +67,10 @@ public class WeatherElements {
      */
     public static final String GLOBAL_RADIATION = "Q0";
     /**
+     * Immmediate calculated clear sky solar radiation (clear sky)
+     */
+    public static final String GLOBAL_RADIATION_CLEAR_SKY_CALCULATED = "Q0c";
+    /**
      * Leaf wetness (Minutes per hour)
      */
     public static final String LEAF_WETNESS = "BT";
@@ -74,6 +78,8 @@ public class WeatherElements {
      * Average wind speed (meters / second)
      */
     public static final String WIND_SPEED_2M = "FM2";
+    
+    
     
     public static final String FIXING_STRATEGY_INTERPOLATE = "INTERPOLATE";
     public static final String FIXING_STRATEGY_SET_ZERO = "SET_ZERO";

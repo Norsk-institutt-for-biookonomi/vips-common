@@ -19,9 +19,12 @@
 
 package no.nibio.vips.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+import no.nibio.vips.entity.WeatherObservation;
 
 /**
  * Helping with calculating stuff related to solar radiation
@@ -30,6 +33,58 @@ import java.util.TimeZone;
  */
 public class SolarRadiationUtil {
     
+    public List<WeatherObservation> getCalculatedSolarRadiation(Double latitude, Double longitude, Date timeStart, Date timeEnd, TimeZone timeZone, Integer logIntervalId)
+    {
+        Calendar cal = Calendar.getInstance(timeZone);
+        
+        Date currentTime = timeStart;
+        List<WeatherObservation> radiationValues = new ArrayList<>();
+        while(currentTime.compareTo(timeEnd) <= 0)
+        {
+            Double value = this.calculateSolarRadiationAtLocationAndTime(latitude, longitude, currentTime, timeZone);
+            WeatherObservation radiationValue = new WeatherObservation();
+            radiationValue.setLogIntervalId(logIntervalId);
+            radiationValue.setElementMeasurementTypeId(WeatherElements.GLOBAL_RADIATION_CLEAR_SKY_CALCULATED);
+            radiationValue.setTimeMeasured(currentTime);
+            radiationValue.setValue(value);
+            radiationValues.add(radiationValue);
+            cal.setTime(currentTime);
+            
+            if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_1H))
+            {
+                cal.add(Calendar.HOUR_OF_DAY, 1);
+            }
+            else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_30M))
+            {
+                cal.add(Calendar.MINUTE, 30);
+            }
+            else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_15M))
+            {
+                cal.add(Calendar.MINUTE, 15);
+            }
+            else if(logIntervalId.equals(WeatherObservation.LOG_INTERVAL_ID_10M))
+            {
+                cal.add(Calendar.MINUTE, 10);
+            }
+            else
+            {
+                cal.add(Calendar.HOUR_OF_DAY, 1);
+            }
+            
+            currentTime = cal.getTime();
+        }
+        
+        return radiationValues;
+    }
+    
+    /**
+     *  
+     * @param latitude
+     * @param longitude
+     * @param date
+     * @param timeZone
+     * @return 
+     */
     public Double calculateSolarRadiationAtLocationAndTime(Double latitude, Double longitude, Date date, TimeZone timeZone)
     {
         // We must adjust the hour to reflect the deviation from the LSTM (Local Standard Time Meridian)
@@ -46,6 +101,80 @@ public class SolarRadiationUtil {
         return this.getSolarRadiationAtLatitude(latitude, dayOfYear, hour);
         
     }
+    
+    /**
+     * Calculates the time of sunset for a given location and date. Does NOT 
+     * take into account local topography
+     * @param latitude
+     * @param longitude
+     * @param date
+     * @param timeZone
+     * @return 
+     */
+    public Date getSunsetTimeAtDate(Double latitude, Double longitude, Date date, TimeZone timeZone)
+    {
+        // We try a new approach: Getting sun hours and adjusting them
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.setTime(date);
+        Double sunHoursAfterMidday = this.getSunHoursFromMidday(latitude, cal.get(Calendar.DAY_OF_YEAR));
+        
+        Double solarTimeAdjustment = this.getSolarTimeAdjustment(longitude, date, timeZone);
+        
+        Double sunsetTime= 12 - (solarTimeAdjustment/60.0) + sunHoursAfterMidday;
+        if(sunsetTime > 24.0)
+        {
+            return null;
+        }
+        
+        Integer sunsetHour = new Double(Math.floor(sunsetTime)).intValue();
+        Integer sunsetMinute = new Double(Math.round((sunsetTime - sunsetHour) * 60.0)).intValue();
+        /*
+        System.out.println("sunHoursAfterMidday=" + sunHoursAfterMidday);
+        System.out.println("solarTimeAdjustment=" + solarTimeAdjustment);
+        System.out.println("sunSetTime=" + sunsetTime);
+        System.out.println("sunsetHour=" + sunsetHour + ", sunsetMinute= " + sunsetMinute
+        */
+        cal.set(Calendar.HOUR_OF_DAY, sunsetHour);
+        cal.set(Calendar.MINUTE, sunsetMinute);
+        return cal.getTime();
+    }
+    
+    /**
+     * Calculates the time of sunrise for a given location and date. Does NOT 
+     * take into account local topography
+     * @param latitude
+     * @param longitude
+     * @param date
+     * @param timeZone
+     * @return 
+     */
+    public Date getSunriseTimeAtDate(Double latitude, Double longitude, Date date, TimeZone timeZone)
+    {
+        Calendar cal = Calendar.getInstance(timeZone);
+        cal.setTime(date);
+        Double sunHoursBeforeMidday = this.getSunHoursFromMidday(latitude, cal.get(Calendar.DAY_OF_YEAR));
+        
+        Double solarTimeAdjustment = this.getSolarTimeAdjustment(longitude, date, timeZone);
+        
+        Double sunriseTime= 12 - (solarTimeAdjustment/60.0) - sunHoursBeforeMidday;
+        if(sunriseTime < 0)
+        {
+            return null;
+        }
+        
+        Integer sunsetHour = new Double(Math.floor(sunriseTime)).intValue();
+        Integer sunsetMinute = new Double(Math.round((sunriseTime - sunsetHour) * 60.0)).intValue();
+        /*
+        System.out.println("sunHoursAfterMidday=" + sunHoursAfterMidday);
+        System.out.println("solarTimeAdjustment=" + solarTimeAdjustment);
+        System.out.println("sunSetTime=" + sunsetTime);
+        System.out.println("sunsetHour=" + sunsetHour + ", sunsetMinute= " + sunsetMinute
+        */
+        cal.set(Calendar.HOUR_OF_DAY, sunsetHour);
+        cal.set(Calendar.MINUTE, sunsetMinute);
+        return cal.getTime();
+    }
+    
     
     /**
      * Returns the amount of time (in minutes) to add 

@@ -31,6 +31,7 @@ import java.util.Date;
  */
 public class WeatherObservation implements Comparable{
     
+    public final static Integer LOG_INTERVAL_ID_10M = 6;
     public final static Integer LOG_INTERVAL_ID_15M = 5;
     public final static Integer LOG_INTERVAL_ID_30M = 4;
     public final static Integer LOG_INTERVAL_ID_1H = 1;

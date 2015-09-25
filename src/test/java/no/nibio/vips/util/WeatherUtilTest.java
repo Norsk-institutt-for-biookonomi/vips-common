@@ -264,13 +264,13 @@ public class WeatherUtilTest extends TestCase {
         List<WeatherObservation> minResults = null;
         List<WeatherObservation> maxResults = null;
         try {
-            avgResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_AVERAGE);
+            avgResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_AVERAGE, 0);
             Collections.sort(avgResults);
-            sumResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_SUM);
+            sumResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_SUM, 0);
             Collections.sort(sumResults);
-            minResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_MINIMUM);
+            minResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_MINIMUM, 0);
             Collections.sort(minResults);
-            maxResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_MAXIMUM);
+            maxResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_MAXIMUM, 0);
             Collections.sort(maxResults);
             
         } catch (WeatherObservationListException ex)
@@ -295,7 +295,7 @@ public class WeatherUtilTest extends TestCase {
         }
         timeZone = TimeZone.getTimeZone("Europe/Stockholm");
         try {
-            avgResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_AVERAGE);
+            avgResults = instance.getAggregatedDailyValues(TM, timeZone,23,WeatherUtil.AGGREGATION_TYPE_AVERAGE, 0);
             Collections.sort(avgResults);
             for(WeatherObservation obs:avgResults)
             {

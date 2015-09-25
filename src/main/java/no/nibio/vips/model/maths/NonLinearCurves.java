@@ -82,5 +82,77 @@ public class NonLinearCurves {
     {
         return p1 * (Math.exp(p2 * (T-tMin)) - Math.exp((p2 * (tMax - tMin)) - p3 * (tMax-T)));
     }
+    
+    /**
+     * <p>Based on Baskerville et al (1969): Rapid estimation of heat accumulation
+     * from maximum and minimum temperatures. Ref Figure 1</p>
+     * <p>Formulas from Zalom et al 1983: Degree-days: The calculation and use
+     * of heat units in pest managemeng. Division of Agriculture and Natural resources,
+     * University of California. Leaflet 21373</p>
+     * @param Tmin minimum value of sine wave
+     * @param Tmax maximum value of sine wave
+     * @param Tl lower threshold of accumulation
+     * @param Tu upper threshold of accumulation
+     * @return 
+     */
+    public Double calculateSingleSineWaveWithCutoff(Double Tmin, Double Tmax, Double Tl, Double Tu)
+    {
+        // Case 1: Tmax and Tmin are both above Tl and Tu
+        if(Tu != null && Tmin >= Tu)
+        {
+            return Tu - Tl;
+        }
+        // Case 2: Tmax and Tmin are both below Tl and Tu
+        if(Tmax <= Tl)
+        {
+            return 0.0;
+        }
+        
+        Double m = (Tmax+Tmin)/2;
+        
+        // Case 3: Tmax and Tmin are between Tl and Tu
+        if(Tmin >= Tl && (Tu == null || Tmax <= Tu))
+        {
+            return m - Tl;
+        }
+        
+        Double alpha = (Tmax-Tmin)/2;
+        
+        Double theta_1 = Math.asin((Tl - m) / alpha);
+        
+        // Case 4: Tmin below Tl, Tmax below Tu
+        if(Tmin <= Tl && (Tu == null || Tmax <= Tu))
+        {
+            return (1/Math.PI) * (
+                    (m-Tl) * (Math.PI/2 - theta_1) 
+                    + alpha * Math.cos(theta_1)
+                    );
+        }
+        
+        Double theta_2 = Math.asin((Tu - m) / alpha);
+        
+        // Case 5: Tmin above Tl and Tmax above Tu
+        if(Tmin >= Tl && Tu != null && Tmax >= Tu)
+        {
+            return (1/Math.PI) * ( 
+                    (m-Tl)*(theta_2 + Math.PI/2) 
+                    + (Tu-Tl)*(Math.PI/2-theta_2) 
+                    - Math.acos(theta_2) 
+                    );
+        }
+        
+        // Case 6: Tmin below Tl, Tmax above Tu
+        if(Tmin <= Tl && Tu != null && Tmax >= Tu)
+        {
+            return (1/Math.PI) * ( 
+                      (m-Tl) * (theta_2 - theta_1)
+                      + alpha * (Math.cos(theta_1) - Math.cos(theta_2))
+                      + (Tu-Tl) * (Math.PI/2 - theta_2)
+                    );
+        }
+        
+        return null;
+        
+    }
 
 }

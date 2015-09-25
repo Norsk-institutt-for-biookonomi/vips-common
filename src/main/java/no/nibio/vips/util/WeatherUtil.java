@@ -207,15 +207,34 @@ public class WeatherUtil {
     }
     
     /**
-     * 
-     * @param observation hourly Values (logInterval 1h)
-     * @return aggregated daily values (logInterval 24h/1d) or NULL if no observations are given
+     * Aggregates daily values. No tolerance for duplicates
+     * @param observations
+     * @param timeZone
+     * @param minimumObservationsPerDay
+     * @param typeOfAggregation
+     * @return
+     * @throws WeatherObservationListException
+     * @throws InvalidAggregationTypeException 
      */
     public List<WeatherObservation> getAggregatedDailyValues(
-            List<WeatherObservation> observations, 
-            TimeZone timeZone, 
-            Integer minimumObservationsPerDay, 
-            Integer typeOfAggregation) 
+            List<WeatherObservation> observations, TimeZone timeZone, Integer minimumObservationsPerDay, Integer typeOfAggregation) 
+            throws WeatherObservationListException,
+            InvalidAggregationTypeException
+    {
+        return this.getAggregatedDailyValues(observations, timeZone, minimumObservationsPerDay, typeOfAggregation, 0);
+    }
+    
+    /**
+     * Aggregates daily values. Can be set to tolerate duplicates
+     * @param observations the value of observations
+     * @param timeZone the value of timeZone
+     * @param minimumObservationsPerDay the value of minimumObservationsPerDay
+     * @param typeOfAggregation the value of typeOfAggregation
+     * @param maxDuplicates the value of maxDuplicates
+     * @return the java.util.List<no.nibio.vips.entity.WeatherObservation>
+     */
+    public List<WeatherObservation> getAggregatedDailyValues(
+            List<WeatherObservation> observations, TimeZone timeZone, Integer minimumObservationsPerDay, Integer typeOfAggregation, Integer maxDuplicates) 
             throws WeatherObservationListException,
             InvalidAggregationTypeException
     {
@@ -227,6 +246,8 @@ public class WeatherUtil {
         Map<Date,Map> dateBucket = new HashMap<Date,Map>();
         String expectedParameter = observations.get(0).getElementMeasurementTypeId();
         Date lastDate = null;
+        Integer numberOfDuplicates = 0;
+        List<Date> duplicateTimestamps = new ArrayList<>();
         for(WeatherObservation observation:observations)
         {
             if(!observation.getElementMeasurementTypeId().equals(expectedParameter))
@@ -243,15 +264,25 @@ public class WeatherUtil {
             }
             
             // Check for double entries
+            // If found, we have no idea what to do with it. For now we discard it
             Double possibleDuplicate = hourValuesForDate.get(observation.getTimeMeasured());
             if(possibleDuplicate != null)
             {
-                throw new WeatherObservationListException(
-                        "Found duplicate weatherObservations for parameter " +
-                        observation.getElementMeasurementTypeId() + " at time " +
-                        observation.getTimeMeasured()
-                );
+                numberOfDuplicates++;
+                duplicateTimestamps.add(observation.getTimeMeasured());
+                if(numberOfDuplicates > maxDuplicates)
+                {
+                    String errorMessage =  "Found duplicate weatherObservations for parameter " +
+                            observation.getElementMeasurementTypeId() + " at time(s) ";
+                    for(Date duplicateTimestamp : duplicateTimestamps)
+                    {
+                        errorMessage += duplicateTimestamp.toString() + ", ";
+                    }
+                    throw new WeatherObservationListException(errorMessage);
+                }
+                continue;
             }
+            
             hourValuesForDate.put(observation.getTimeMeasured(), observation.getValue());
         }
         

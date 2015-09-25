@@ -141,7 +141,13 @@ public class SolarRadiationUtilTest extends TestCase {
         Double expResult = 7.9801135501740275;
         Double result = instance.getSunHoursFromMidday(latitude, dayOfYear);
         assertEquals(expResult, result);
-
+        
+        /*latitude = 46.242940;
+        dayOfYear = 117;
+        expResult = 13.5;
+        result = instance.getSunHoursFromMidday(latitude, dayOfYear);
+        assertEquals(expResult, result);
+        */
     }
 
     /**

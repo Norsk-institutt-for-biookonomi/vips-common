@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 
 /**
  *
- * @author treinar
+ * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class NonLinearCurvesTest extends TestCase {
     
@@ -151,6 +151,44 @@ public class NonLinearCurvesTest extends TestCase {
         Double expResult = 0.0;
         Double result = instance.calculateLogan(34.5, p1, p2, p3, tMin, tMax);
         assertEquals(expResult, result);
+        
+    }
+    
+    public void testCalculateSingleSineWaveWithCutoff()
+    {
+        System.out.println("calculateSingleSineWaveWithCutoff");
+        
+        NonLinearCurves instance = new NonLinearCurves();
+        
+        Double thresholdLower = 51.0;
+        Double thresholdUpper =200.0;
+        Double tMax, tMin;
+        
+        /*
+        First test case is from Baskerville 1968: Rapid estimation of heat accumulation
+        from  maximum and minimum temperatures
+        */
+        tMax = 117.0;
+        tMin = 47.0;
+        
+        Double expectedResult = 31.4081793305408;
+        Double result = instance.calculateSingleSineWaveWithCutoff(tMin, tMax, thresholdLower, thresholdUpper);
+        assertEquals(expectedResult, result);
+        
+        thresholdLower = 10.0;
+        thresholdUpper = null;
+        tMax = 10.7;
+        tMin = 0.1;
+        expectedResult = 0.07686062974895688;
+        result = instance.calculateSingleSineWaveWithCutoff(tMin, tMax, thresholdLower, thresholdUpper);
+        assertEquals(expectedResult, result);
+        
+        thresholdUpper = 31.0;
+        tMax=23.7;
+        tMin = 12.6;
+        expectedResult = 8.15;
+        result = instance.calculateSingleSineWaveWithCutoff(tMin, tMax, thresholdLower, thresholdUpper);
+        assertEquals(expectedResult, result,0.1);
         
     }
     

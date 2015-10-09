@@ -271,8 +271,8 @@ public class SolarRadiationUtil {
         if(hour > sunrise && hour < sunset)
         {
             double am = this.getAirMass(hour, dayOfYear, latitudeRad);
-            double x1 = Math.pow(0.7, am);
-            retVal = 1.353 * Math.pow(x1, 0.678);
+            //double x1 = Math.pow(0.7, am);
+            retVal = 1.353 * Math.pow(0.7, Math.pow(am, 0.678));
             
             if(retVal > 1.1)
             {
@@ -356,7 +356,8 @@ public class SolarRadiationUtil {
         Double hourAngle = Math.toRadians(15 * (hour - 12));
         Double elevation = Math.asin(Math.sin(declinationRad) * Math.sin(latitudeRad) + Math.cos(declinationRad) * Math.cos(latitudeRad) * Math.cos(hourAngle));
         Double zenithAngle = Math.toRadians(90.0) - elevation;
-        return 1 / (0.0001  + Math.cos(zenithAngle));
+        //return 1 / (0.0001  + Math.cos(zenithAngle));
+        return 1 / (Math.cos(zenithAngle)  + 0.50572 * Math.pow(96.07995 - Math.toDegrees(zenithAngle),-1.6364));
     }
 
 }

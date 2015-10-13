@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 NIBIO <http://www.nibio.no/>. 
+ * Copyright (c) 2015 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -19,10 +19,13 @@
 
 package no.nibio.vips.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * Represents a result
@@ -52,7 +55,7 @@ public class ResultImpl implements Result{
 
     @Override
     public Set<String> getKeys() {
-        return this.values.keySet();
+        return this.values != null ? this.values.keySet() : new HashSet<String>();
     }
 
     @Override
@@ -69,7 +72,8 @@ public class ResultImpl implements Result{
 
     @Override
     public Map<String, String> getAllValues() {
-        return this.values;
+        
+        return this.values != null ? this.values : new HashMap<String,String>();
     }
     
     @Override
@@ -97,4 +101,22 @@ public class ResultImpl implements Result{
         return this.warningStatus != null ? this.warningStatus: WARNING_STATUS_NO_WARNING;
     }
     
+    @Override
+    public String toString(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String retVal = "[" + format.format(resultValidTime) + "], WARNING_STATUS=" + this.getWarningStatus() + ", ";
+        if(this.getKeys() != null)
+        {
+            for(String key: this.getKeys())
+            {
+                String[] keyElements = key.split("\\.");
+                if(keyElements.length == 2)
+                {
+                    retVal += key + "=" + this.getValue(keyElements[0], keyElements[1]) + ", ";
+                }
+            }
+        }
+        return retVal;
+    }
 }

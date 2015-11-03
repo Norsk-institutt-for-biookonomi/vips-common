@@ -73,6 +73,26 @@ public class ServletUtil {
     }
     
     /**
+     * Attempts to get the most correct client IP, even when this app is 
+     * placed behind a reverse proxy
+     * @param request
+     * @return 
+     */
+    public static String getClientIP(HttpServletRequest request)
+    {
+        String XFF = request.getHeader("X-Forwarded-For");
+        if(XFF != null && ! XFF.isEmpty())
+        {
+            String[] IPs = XFF.split(",");
+            return IPs[0];
+        }
+        else
+        {
+            return request.getRemoteAddr();
+        }
+    }
+    
+    /**
      * Reconstructs the entire URL (including protocol) that was used for this request
      * TODO: Check for https (how to??)
      * @param request

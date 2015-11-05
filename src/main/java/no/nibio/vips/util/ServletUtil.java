@@ -20,6 +20,7 @@
 package no.nibio.vips.util;
 
 import java.util.Enumeration;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -131,5 +132,28 @@ public class ServletUtil {
         }
         catch(NullPointerException ex) {return null; }
         catch(NumberFormatException nfe) {return null;}
+    }
+    
+    /**
+     * Quickest way for caller to get a cookie
+     * @param request
+     * @param cookieName
+     * @return 
+     */
+    public static Cookie getCookie(HttpServletRequest request, String cookieName)
+    {
+        if(request.getCookies() == null)
+        {
+            return null;
+        }
+        
+        for(Cookie cookie:request.getCookies())
+        {
+            if(cookie.getName().equals(cookieName))
+            {
+                return cookie;
+            }
+        }
+        return null;
     }
 }

@@ -24,7 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @copyright 2013 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2015 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class ServletUtil {
@@ -37,7 +37,13 @@ public class ServletUtil {
     public static String getServerName(HttpServletRequest request)
     {
         // request.getServerName() is fallback if we're not behind a reverse proxy
-        return request.getHeader("X-Forwarded-Host") != null ? request.getHeader("X-Forwarded-Host") : request.getServerName();
+        String serverName = request.getHeader("X-Forwarded-Host") != null ? request.getHeader("X-Forwarded-Host") : request.getServerName();
+        // If several reverse proxies are involved, parse and get the first one.
+        if(serverName.contains(", "))
+        {
+            serverName = serverName.split(", ")[0];
+        }
+        return serverName;
     }
     
     /**

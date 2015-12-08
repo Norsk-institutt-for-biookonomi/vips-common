@@ -28,8 +28,7 @@ import java.util.Date;
 public interface Observation {
     
     public Date getTimeOfObservation();
-    public Double getLatitude();
-    public Double getLongitude();
+    public String getGeoinfo(); 
     public Double getObservedValue();
     public Integer getDenominator();
     public String getName();

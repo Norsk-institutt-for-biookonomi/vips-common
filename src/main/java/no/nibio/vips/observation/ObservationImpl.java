@@ -28,8 +28,7 @@ import java.util.Date;
 public class ObservationImpl implements Observation{
     
     private Date timeOfObservation;
-    private Double latitude;
-    private Double longitude;
+    private String geoInfo;
     private Double observedValue;
     private Integer denominator;
     private String name;
@@ -37,16 +36,6 @@ public class ObservationImpl implements Observation{
     @Override
     public Date getTimeOfObservation() {
         return this.timeOfObservation;
-    }
-
-    @Override
-    public Double getLatitude() {
-        return this.latitude;
-    }
-
-    @Override
-    public Double getLongitude() {
-        return this.longitude;
     }
 
     @Override
@@ -71,19 +60,7 @@ public class ObservationImpl implements Observation{
         this.timeOfObservation = timeOfObservation;
     }
 
-    /**
-     * @param latitude the latitude to set
-     */
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    /**
-     * @param longitude the longitude to set
-     */
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
+    
 
     /**
      * @param observedValue the observedValue to set
@@ -104,6 +81,15 @@ public class ObservationImpl implements Observation{
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getGeoinfo() {
+        return this.geoInfo;
+    }
+    
+    public void setGeoinfo(String geoInfo) {
+        this.geoInfo = geoInfo;
     }
 
 }

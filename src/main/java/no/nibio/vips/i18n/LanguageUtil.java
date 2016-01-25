@@ -29,6 +29,17 @@ import com.ibm.icu.util.ULocale;
  */
 public class LanguageUtil {
     
+    public static final ULocale[] AVAILABLE_LOCALES = {
+        new ULocale("en"),
+        new ULocale("nb"),
+        new ULocale("bs"),
+        new ULocale("hr"),
+        new ULocale("sr"),
+        new ULocale("fi"),
+        new ULocale("fr"),
+        new ULocale("de")
+    };
+    
     private static ULocale[] distinctLanguages;
 
     /**
@@ -40,8 +51,8 @@ public class LanguageUtil {
         
         if(distinctLanguages == null)
         {
-            Map<String, ULocale> localeBucket = new HashMap<String, ULocale>();
-            for(ULocale locale:ULocale.getAvailableLocales())
+            Map<String, ULocale> localeBucket = new HashMap<>();
+            for(ULocale locale:LanguageUtil.AVAILABLE_LOCALES)
             {
                 localeBucket.put(locale.getLanguage(), locale);
             }

@@ -27,10 +27,13 @@ import java.util.Date;
  */
 public interface Observation {
     
+    public final static Integer STATUS_TYPE_ID_PENDING = 1;
+    public final static Integer STATUS_TYPE_ID_REJECTED = 2;
+    public final static Integer STATUS_TYPE_ID_APPROVED = 3;
+    
     public Date getTimeOfObservation();
     public String getGeoinfo(); 
-    public Double getObservedValue();
-    public Integer getDenominator();
+    public String getObservationData();
     public String getName();
 
 }

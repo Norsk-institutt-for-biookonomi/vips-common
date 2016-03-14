@@ -29,8 +29,7 @@ public class ObservationImpl implements Observation{
     
     private Date timeOfObservation;
     private String geoInfo;
-    private Double observedValue;
-    private Integer denominator;
+    private String observationData;
     private String name;
 
     @Override
@@ -39,13 +38,8 @@ public class ObservationImpl implements Observation{
     }
 
     @Override
-    public Double getObservedValue() {
-        return this.observedValue;
-    }
-
-    @Override
-    public Integer getDenominator() {
-        return this.denominator;
+    public String getObservationData(){
+        return this.observationData;
     }
 
     @Override
@@ -60,22 +54,11 @@ public class ObservationImpl implements Observation{
         this.timeOfObservation = timeOfObservation;
     }
 
+    public void setObservationData(String observationData){
+        this.observationData = observationData;
+    }
+
     
-
-    /**
-     * @param observedValue the observedValue to set
-     */
-    public void setObservedValue(Double observedValue) {
-        this.observedValue = observedValue;
-    }
-
-    /**
-     * @param denominator the denominator to set
-     */
-    public void setDenominator(Integer denominator) {
-        this.denominator = denominator;
-    }
-
     /**
      * @param name the name to set
      */

@@ -79,10 +79,16 @@ public class WeatherElements {
      */
     public static final String WIND_SPEED_2M = "FM2";
     
+    public static final String POTENTIAL_EVAPORATION = "EPP";
+    
     
     
     public static final String FIXING_STRATEGY_INTERPOLATE = "INTERPOLATE";
     public static final String FIXING_STRATEGY_SET_ZERO = "SET_ZERO";
     
+    public static String getNormalDataParameter(String parameterName)
+    {
+        return parameterName + "_NORMAL";
+    }
     
 }

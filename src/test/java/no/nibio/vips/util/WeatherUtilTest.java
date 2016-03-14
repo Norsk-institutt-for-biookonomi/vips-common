@@ -614,6 +614,38 @@ public class WeatherUtilTest extends TestCase {
             fail(ex.getMessage());
         }
     }
+    
+public void testGetLastObservations()
+{
+    System.out.println("testGetLastObservations");
+    List<WeatherObservation> obs = this.getObservations("/weatherDataNotFaulty.json");
+    WeatherUtil instance = new WeatherUtil();
+    List<WeatherObservation> result = instance.getLastObservations(obs, "Q0", 5);
+    assertEquals(5, result.size());
+    Collections.sort(result);
+    WeatherObservation last = result.get(result.size()-1);
+    //2014-08-03T12:00:00+02:00
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Oslo"));
+    cal.set(2014, Calendar.AUGUST, 3, 12, 0, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    assertEquals(cal.getTime(), last.getTimeMeasured());
+}
+
+public void testGetFirstObservations()
+{
+    System.out.println("testGetLastObservations");
+    List<WeatherObservation> obs = this.getObservations("/weatherDataNotFaulty.json");
+    WeatherUtil instance = new WeatherUtil();
+    List<WeatherObservation> result = instance.getFirstObservations(obs, "Q0", 5);
+    assertEquals(5, result.size());
+    Collections.sort(result);
+    WeatherObservation last = result.get(result.size()-1);
+    //2014-08-01T15:00:00+02:00
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Oslo"));
+    cal.set(2014, Calendar.AUGUST, 1, 15, 0, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    assertEquals(cal.getTime(), last.getTimeMeasured());
+}
 
     /**
      * Test of normalizeToExactDate method, of class WeatherUtil.

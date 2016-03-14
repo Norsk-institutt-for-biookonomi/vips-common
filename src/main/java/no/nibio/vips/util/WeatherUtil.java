@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TimeZone;
 import no.nibio.vips.entity.WeatherObservation;
@@ -44,6 +45,7 @@ public class WeatherUtil {
     public final static int AGGREGATION_TYPE_SUM = 2;
     public final static int AGGREGATION_TYPE_MINIMUM = 3;
     public final static int AGGREGATION_TYPE_MAXIMUM = 4;
+    public final static int AGGREGATION_TYPE_SUM_GLOBAL_RADIATION = 5;
 
     /**
      * Ensures that hourly values at the end of series that exceed
@@ -318,6 +320,8 @@ public class WeatherUtil {
                     aggregateValue = getMinimum(hourValuesForADay.values()); break;
                 case WeatherUtil.AGGREGATION_TYPE_MAXIMUM:
                     aggregateValue = getMaximum(hourValuesForADay.values()); break;
+                case WeatherUtil.AGGREGATION_TYPE_SUM_GLOBAL_RADIATION:
+                    aggregateValue = getSum(hourValuesForADay.values()) * 0.0036; break;
                 default:
                     throw new InvalidAggregationTypeException(
                             "No aggregation method with id= " + typeOfAggregation  + " exists."
@@ -333,12 +337,23 @@ public class WeatherUtil {
         return aggregatedObservations;
     }
     
-    private Double getAverage(Collection<Double> values)
+    public List<Double> getObservationValues(List<WeatherObservation> observations)
+    {
+        List<Double> values = new ArrayList<>();
+        for(WeatherObservation obs:observations)
+        {
+            values.add(obs.getValue());
+        }
+        
+        return values;
+    }
+    
+    public Double getAverage(Collection<Double> values)
     {
         return this.getSum(values)/values.size();
     }
 
-    private Double getSum(Collection<Double> values)
+    public Double getSum(Collection<Double> values)
     {
        Double sum = 0d;
         for(Double value:values)
@@ -348,7 +363,7 @@ public class WeatherUtil {
         return sum;
     }
     
-    private Double getMinimum(Collection<Double> values)
+    public Double getMinimum(Collection<Double> values)
     {
         Double minimum = null;
         for(Double value:values)
@@ -358,7 +373,7 @@ public class WeatherUtil {
         return minimum;
     }
     
-    private Double getMaximum(Collection<Double> values)
+    public Double getMaximum(Collection<Double> values)
     {
         Double maximum = null;
         for(Double value:values)
@@ -1357,5 +1372,46 @@ public class WeatherUtil {
         return retVal;
     }
     
+    /**
+     * Mining in list, picking the numberOfObservations last observations of the requested weatherElement
+     * @param allObservations
+     * @param weatherElement
+     * @param numberOfObservations
+     * @return 
+     */
+    public List<WeatherObservation> getLastObservations(List<WeatherObservation> allObservations, String weatherElement, int numberOfObservations)
+    {
+        PriorityQueue<WeatherObservation> lastObs = new PriorityQueue<>();
+        for(WeatherObservation obs:allObservations)
+        {
+            if(obs.getElementMeasurementTypeId().equals(weatherElement))
+            {
+                lastObs.add(obs);
+                if(lastObs.size() > numberOfObservations)
+                {
+                    lastObs.poll();
+                }
+            }
+        }
+        return new ArrayList(lastObs);
+    }
     
+    public List<WeatherObservation> getFirstObservations(List<WeatherObservation> allObservations, String weatherElement, int numberOfObservations)
+    {
+        PriorityQueue<WeatherObservation> firstObs =  new PriorityQueue<>(numberOfObservations, Collections.reverseOrder());
+        for(WeatherObservation obs:allObservations)
+        {
+            if(obs.getElementMeasurementTypeId().equals(weatherElement))
+            {
+                firstObs.add(obs);
+                if(firstObs.size() > numberOfObservations)
+                {
+                    firstObs.poll();
+                }
+            }
+        }
+        List<WeatherObservation> retVal = new ArrayList(firstObs);
+        Collections.sort(retVal);
+        return retVal;
+    }
 }

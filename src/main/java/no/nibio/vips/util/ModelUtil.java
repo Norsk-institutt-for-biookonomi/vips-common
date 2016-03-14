@@ -98,7 +98,7 @@ public class ModelUtil {
                     tagText += " style=\"float:" + attrVal + "\"";
                 }
             }
-            tagText += "/>";
+            tagText += " class=\"img-responsive\"/>";
             if(filenameAttributeFound)
             {
                 tm.appendReplacement(transformedText,tagText);

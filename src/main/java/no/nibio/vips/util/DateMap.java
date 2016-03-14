@@ -202,7 +202,7 @@ public class DateMap {
      * @param date
      * @return
      */
-    public Set getValueLabelsForDate(Date date)
+    public Set<String> getValueLabelsForDate(Date date)
     {
         try
         {

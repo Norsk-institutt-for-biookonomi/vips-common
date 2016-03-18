@@ -30,14 +30,15 @@ import com.ibm.icu.util.ULocale;
 public class LanguageUtil {
     
     public static final ULocale[] AVAILABLE_LOCALES = {
-        new ULocale("en"),
-        new ULocale("nb"),
-        new ULocale("bs"),
-        new ULocale("hr"),
-        new ULocale("sr"),
-        new ULocale("fi"),
-        new ULocale("fr"),
-        new ULocale("de")
+        new ULocale("en"), // English
+        new ULocale("nb"), // Norwegian bokmål
+        new ULocale("bs"), // Bosnian
+        new ULocale("hr"), // Croatian
+        new ULocale("sr"), // Serbian
+        new ULocale("fi"), // Finnish
+        new ULocale("fr"), // French
+        new ULocale("de"), // German
+        new ULocale("lv") // Latvian
     };
     
     private static ULocale[] distinctLanguages;

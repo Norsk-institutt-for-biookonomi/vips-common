@@ -912,6 +912,43 @@ public class WeatherUtil {
         }
     }
     
+    public List<WeatherObservation> fillHourlyHolesBruteForce(List<WeatherObservation> shitIn, Integer typeOfParameter, Date startDate, Date endDate)
+    {
+        Calendar cal = Calendar.getInstance();
+        Collections.sort(shitIn);
+        List<WeatherObservation> shitOut = new ArrayList<>();
+        for(Integer i=0;i< shitIn.size();i++){
+            WeatherObservation currentObs = shitIn.get(i);
+            if(! currentObs.getTimeMeasured().after(startDate))
+            {
+                continue;
+            }
+            shitOut.add(currentObs);
+            cal.setTime(currentObs.getTimeMeasured());
+            cal.add(Calendar.HOUR_OF_DAY, 1);
+            Date currentTime = cal.getTime();
+            Date nextObsTimeMeasured = i+1 < shitIn.size() ? shitIn.get(i+1).getTimeMeasured() : endDate;
+            while(currentTime.before(nextObsTimeMeasured))
+            {
+                
+                WeatherObservation fakeObs = new WeatherObservation(currentObs);
+                fakeObs.setTimeMeasured(currentTime);
+                // Make sure we don't add any extra e.g. for rain
+                if(typeOfParameter == WeatherUtil.AGGREGATION_TYPE_SUM)
+                {
+                    fakeObs.setValue(0.0);
+                }
+                shitOut.add(fakeObs);
+                cal.setTime(currentTime);
+                cal.add(Calendar.HOUR_OF_DAY, 1);
+                currentTime = cal.getTime();
+            }
+            
+        }
+        
+        return shitOut;
+    }
+    
     /**
      * Checks for duplicates, attempts to tidy up. TODO: Criteria for selection??
      * @param observations List with possible duplicates (same parameter, logInterval and timestamp)

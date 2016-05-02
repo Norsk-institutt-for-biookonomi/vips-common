@@ -75,4 +75,9 @@ public class ObservationImpl implements Observation{
         this.geoInfo = geoInfo;
     }
 
+    @Override
+    public int compareTo(Object t) {
+        return this.getTimeOfObservation().compareTo(((Observation)t).getTimeOfObservation());
+    }
+
 }

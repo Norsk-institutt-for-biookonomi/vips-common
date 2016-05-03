@@ -25,7 +25,7 @@ import java.util.Date;
  * @copyright 2015 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
-public interface Observation {
+public interface Observation extends Comparable {
     
     public final static Integer STATUS_TYPE_ID_PENDING = 1;
     public final static Integer STATUS_TYPE_ID_REJECTED = 2;

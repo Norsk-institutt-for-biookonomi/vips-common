@@ -698,6 +698,7 @@ public class WeatherUtil {
         {
             return obsList;
         }
+        //System.out.println("Number of observations before fix = " + obsList.size());
         // First we sort the list
         Collections.sort(obsList);
         Date currentTime = obsList.get(0).getTimeMeasured();
@@ -758,6 +759,7 @@ public class WeatherUtil {
                                 WeatherObservation.LOG_INTERVAL_ID_1H,
                                 calculatedValue
                         );
+                        //System.out.println(calculatedObservation);
                         cal2.add(Calendar.HOUR_OF_DAY, 1);
                         calculatedValues.add(calculatedObservation);
                     }
@@ -785,6 +787,7 @@ public class WeatherUtil {
             cal.add(Calendar.HOUR, 1);
             currentTime = cal.getTime();
         }
+        //System.out.println("Number of observations after fix = " + obsList.size());
         return obsList;
     }
     

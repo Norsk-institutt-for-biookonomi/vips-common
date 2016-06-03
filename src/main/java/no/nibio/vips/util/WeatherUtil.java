@@ -1454,4 +1454,26 @@ public class WeatherUtil {
         Collections.sort(retVal);
         return retVal;
     }
+
+    public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHolesMultiParameter(List<WeatherObservation> observations) throws WeatherObservationListException{
+        List<WeatherObservation> retVal = new ArrayList<>();
+        Map<String,List<WeatherObservation>> obsMap = new HashMap<>();
+        for(WeatherObservation obs:observations)
+        {
+            List<WeatherObservation> elementObs = obsMap.get(obs.getElementMeasurementTypeId());
+            if(elementObs == null)
+            {
+                elementObs = new ArrayList<>();
+                obsMap.put(obs.getElementMeasurementTypeId(), elementObs);
+            }
+            
+            elementObs.add( obs);
+        }
+        for(String elm:obsMap.keySet())
+        {
+            retVal.addAll(this.checkForAndFixHourlyTimeSeriesHoles(obsMap.get(elm)));
+        }
+        //System.out.println("fixed elements=" + retVal.size());
+        return retVal;
+    }
 }

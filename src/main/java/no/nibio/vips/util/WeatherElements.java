@@ -75,6 +75,10 @@ public class WeatherElements {
      */
     public static final String LEAF_WETNESS = "BT";
     /**
+     * Leaf wetness at ground level (Minutes per hour)
+     */
+    public static final String LEAF_WETNESS_GROUND_LEVEL = "BTg";
+    /**
      * Average wind speed (meters / second)
      */
     public static final String WIND_SPEED_2M = "FM2";

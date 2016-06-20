@@ -482,7 +482,14 @@ public class WeatherUtil {
      * @param UM Relative humidity (average, %)
      * @return 
      */
-    public List<WeatherObservation> calculateLeafWetnessHourSeriesBestEffort(List<WeatherObservation> BT, List<WeatherObservation> TM, List<WeatherObservation> RR, List<WeatherObservation> Q0, List<WeatherObservation> FM2, List<WeatherObservation> UM) throws ConfigValidationException {
+    public List<WeatherObservation> calculateLeafWetnessHourSeriesBestEffort(
+            List<WeatherObservation> BT, 
+            List<WeatherObservation> TM, 
+            List<WeatherObservation> RR, 
+            List<WeatherObservation> Q0, 
+            List<WeatherObservation> FM2, 
+            List<WeatherObservation> UM
+    ) throws ConfigValidationException {
         // If BT is same length as TM, return BT unmodified
         if(BT.size() == TM.size())
         {
@@ -1475,5 +1482,25 @@ public class WeatherUtil {
         }
         //System.out.println("fixed elements=" + retVal.size());
         return retVal;
+    }
+    
+    /**
+     * Simple renaming method. Modifies the given list and returns it
+     * @param observations
+     * @param oldName
+     * @param newName
+     * @return 
+     */
+    public List<WeatherObservation> renameParameter(List<WeatherObservation> observations, String oldName, String newName)
+    {
+        for(WeatherObservation obs : observations)
+        {
+            if(obs.getElementMeasurementTypeId().equals(oldName))
+            {
+                obs.setElementMeasurementTypeId(newName);
+            }
+        }
+        
+        return observations;
     }
 }

@@ -131,8 +131,60 @@ public class DateMap {
         {
             return (Integer) this.getParamValueForDate(date, paramName);
         }
-        catch(NullPointerException ex) {return null; }
-        catch(ClassCastException npe) {return null;}
+        catch(NullPointerException | ClassCastException ex) {return null; }
+    }
+    
+    /**
+     * Set a parameter value of type Long for a given date
+     * @param date
+     * @param paramName
+     * @param value 
+     */
+    public void setParamLongValueForDate(Date date, String paramName, Long value)
+    {
+        this.setParamValueForDate(date, paramName, value);
+    }
+    
+    /**
+     * 
+     * @param date
+     * @param paramName
+     * @return a parameter value of type Long for a given date
+     */
+    public Long getParamLongValueForDate(Date date, String paramName)
+    {
+        try
+        {
+            return (Long) this.getParamValueForDate(date, paramName);
+        }
+        catch(NullPointerException | ClassCastException ex) {return null; }
+    }
+    
+    /**
+     * Set a parameter value of type Date for a given date
+     * @param date
+     * @param paramName
+     * @param value 
+     */
+    public void setParamDateValueForDate(Date date, String paramName, Date value)
+    {
+        this.setParamLongValueForDate(date, paramName, value.getTime());
+    }
+    
+    /**
+     * 
+     * @param date
+     * @param paramName
+     * @return a parameter value of type Date for a given date
+     */
+    public Date getParamDateValueForDate(Date date, String paramName)
+    {
+        try
+        {
+            Long dateVal = this.getParamLongValueForDate(date, paramName);
+            return new Date(dateVal);
+        }
+        catch(NullPointerException | ClassCastException ex) {return null; }
     }
 
     /**

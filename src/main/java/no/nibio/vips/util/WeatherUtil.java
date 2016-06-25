@@ -520,7 +520,9 @@ public class WeatherUtil {
         // If all parameters are complete, we can use Nærstad's algorithm. Otherwise, if we only have UM,
         // we must resort to Trapman's algorithm
         List<WeatherObservation> calculatedBT;
-        if(TM.size() == RR.size() && TM.size() == Q0.size() && TM.size() == FM2.size() && TM.size() == UM.size())
+        if(     TM != null && RR != null && Q0 != null && FM2 != null && UM != null
+                && TM.size() == RR.size() && TM.size() == Q0.size() && TM.size() == FM2.size() && TM.size() == UM.size()
+                )
         {
             // The algorithm uses the first hour of input values as "startup"
             // So if we have some leaf wetness, we can provide the first hour.
@@ -552,7 +554,9 @@ public class WeatherUtil {
                 calculatedBT.addAll(this.calculateLeafWetnessHourSeriesNaerstad(TM, RR, Q0, FM2, UM, null));
             }
         }
-        else if(TM.size() == RR.size() && TM.size() == UM.size())
+        else if( TM != null && RR != null && UM != null
+                && TM.size() == RR.size() && TM.size() == UM.size()
+                )
         {
             /*
             System.out.println("Trapman BT: startTime=" + startTime);

@@ -1507,4 +1507,16 @@ public class WeatherUtil {
         
         return observations;
     }
+    
+    /**
+     * Useful for conversion of e.g. solar radiation values
+     * @param joulePerSquareCentimeter
+     * @return 
+     */
+    public Double calculateAverageHourWattsPerSquareMeterFromJoulePerSquareCentimeter(Double joulePerSquareCentimeter)
+    {
+        // There are s10 000 square centimeters in a square meter
+        // Joule is watts * seconds so average output is hourly joule / 3600 seconds
+        return joulePerSquareCentimeter * 10000 / 3600;
+    }
 }

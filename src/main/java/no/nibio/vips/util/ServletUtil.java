@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 NIBIO <http://www.nibio.no/>. 
+ * Copyright (c) 2016 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -19,12 +19,16 @@
 
 package no.nibio.vips.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @copyright 2015 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2016 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class ServletUtil {
@@ -161,5 +165,25 @@ public class ServletUtil {
             }
         }
         return null;
+    }
+    
+    /**
+     * Removes the given parameters from a query string
+     * @param parametersToRemove
+     * @return 
+     */
+    public static String getCleanedQueryString(String servletPathWithQueryString, String parameterToRemove)
+    {
+        List<String> whatsLeft;
+        String servletPath = servletPathWithQueryString.split("\\?").length > 1 ? 
+                servletPathWithQueryString.split("\\?")[0] 
+                : ""; 
+        whatsLeft = (servletPathWithQueryString.split("\\?").length > 1 ?
+                Arrays.asList(servletPathWithQueryString.split("\\?")[1].split("&")) :
+                new ArrayList<String>())
+            .stream().filter(
+                paramStr ->  ! paramStr.contains(parameterToRemove)
+            ).collect(Collectors.toList());
+        return servletPath + (!whatsLeft.isEmpty() ? "?" + String.join("&", whatsLeft) : "");
     }
 }

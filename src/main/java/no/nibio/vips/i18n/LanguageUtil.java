@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 NIBIO <http://www.nibio.no/>. 
+ * Copyright (c) 2016 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -19,47 +19,40 @@
 
 package no.nibio.vips.i18n;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.ibm.icu.util.ULocale;
+import java.util.Arrays;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
 
 /**
- * @copyright 2014 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2016 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class LanguageUtil {
     
-    public static final ULocale[] AVAILABLE_LOCALES = {
-        new ULocale("en"), // English
-        new ULocale("nb"), // Norwegian bokmål
-        new ULocale("bs"), // Bosnian
-        new ULocale("hr"), // Croatian
-        new ULocale("sr"), // Serbian
-        new ULocale("fi"), // Finnish
-        new ULocale("fr"), // French
-        new ULocale("de"), // German
-        new ULocale("lv") // Latvian
-    };
-    
-    private static ULocale[] distinctLanguages;
+    private static List<ULocale> distinctLanguages;
 
     /**
      * 
      * @return All available locales with distinct languages
+     * 
      */
-    public static ULocale[] getAvailableLocalesWithDistinctLanguage()
+    public static List<ULocale> getAvailableLocalesWithDistinctLanguage()
     {
-        
         if(distinctLanguages == null)
         {
-            Map<String, ULocale> localeBucket = new HashMap<>();
-            for(ULocale locale:LanguageUtil.AVAILABLE_LOCALES)
-            {
-                localeBucket.put(locale.getLanguage(), locale);
-            }
-            distinctLanguages = localeBucket.values().toArray(new ULocale[0]);
+            String[] availableLanguages;
+        try{
+            availableLanguages = System.getProperty("no.nibio.vips.logic.AVAILABLE_LANGUAGES").split(",");
         }
-        
+        catch(NullPointerException ex){
+            availableLanguages = new String[1];
+            availableLanguages[0] = "en";
+        }
+        distinctLanguages = Arrays.asList(availableLanguages).stream()
+                .map(lang -> new ULocale(lang))
+                .collect(toList());
+        }
         return distinctLanguages;
     }
 }

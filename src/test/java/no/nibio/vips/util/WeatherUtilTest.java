@@ -647,6 +647,18 @@ public void testGetFirstObservations()
     assertEquals(cal.getTime(), last.getTimeMeasured());
 }
 
+public void testGetFahrenheitFromCelciusAndViceVersa()
+{
+    System.out.println("testGetFahrenheitFromCelciusAndViceVersa");
+    WeatherUtil instance = new WeatherUtil();
+    Double expResult = 50.0;
+    Double result = instance.getFahrenheitFromCelcius(10.0);
+    assertEquals(expResult, result);
+    expResult = 10.0;
+    result = instance.getCelciusFromFahrenheit(instance.getFahrenheitFromCelcius(10.0));
+    assertEquals(expResult, result);
+}
+
     /**
      * Test of normalizeToExactDate method, of class WeatherUtil.
      *

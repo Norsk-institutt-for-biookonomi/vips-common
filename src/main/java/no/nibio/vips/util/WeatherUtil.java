@@ -1519,4 +1519,26 @@ public class WeatherUtil {
         // Joule is watts * seconds so average output is hourly joule / 3600 seconds
         return joulePerSquareCentimeter * 10000 / 3600;
     }
+    
+    /**
+     * Convert from Fahrenheit to Celcius
+     * 
+     * @param fahrenheitTemp
+     * @return 
+     */
+    public Double getCelciusFromFahrenheit(Double fahrenheitTemp)
+    {
+        return (fahrenheitTemp - 32) / 1.8;
+    }
+    
+    /**
+     * Convert from Celcius to Fahrenheit
+     * 
+     * @param celciusTemp
+     * @return 
+     */
+    public Double getFahrenheitFromCelcius(Double celciusTemp)
+    {
+        return (celciusTemp * 1.8) + 32;
+    }
 }

@@ -19,9 +19,25 @@
 
 package no.nibio.vips.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static java.util.stream.Collectors.toList;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.validator.UrlValidator;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 
 /**
  * Static convenience methods for common web-related tasks.
@@ -107,5 +123,52 @@ public final class WebUtil {
           target = ""; 
       //return text.replaceAll("(.*://[^<>[:space:]]+[[:alnum:]/])", "<a href=\"$1\">$1</a>");
       return text.replaceAll("(\\A|\\s)((http|https|ftp|mailto):\\S+)(\\s|\\z)", "$1<a href=\"$2\" target=\"" + target + "\">$2</a>$4");
+  }
+  
+  /**
+   * 
+   * @param URL
+   * @param queryParams
+   * @param arrayQueryParams
+   * @return
+   * @throws IOException 
+   */
+  public static String getOutputFromPostRequest(String URL, Map<String,String> queryParams, Map<String, String[]> arrayQueryParams) throws IOException
+  {
+    CloseableHttpClient client = HttpClients.createDefault();
+    String output = "";
+    try
+    {
+        HttpPost post = new HttpPost(URL);
+        post.setHeader("User-Agent", "VIPS");
+        // Getting the 
+        List<BasicNameValuePair> params = queryParams.keySet().stream().map(
+                        key -> new BasicNameValuePair(key, queryParams.get(key))
+                )
+                .collect(toList());
+        
+        arrayQueryParams.keySet().stream().forEach((key) -> {
+            Arrays.asList(arrayQueryParams.get(key)).stream().forEach(value -> params.add(new BasicNameValuePair(key, value)));
+            
+        });
+        
+        post.setEntity(new UrlEncodedFormEntity(params));
+        
+        
+        HttpResponse response = client.execute(post);
+        BufferedReader rd = new BufferedReader(
+            new InputStreamReader(response.getEntity().getContent())
+        );
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+              output += line + "\n";
+        }
+    }
+    catch (UnsupportedEncodingException ex) {
+        Logger.getLogger(WebUtil.class.getName()).log(Level.SEVERE, null, ex);
+    }      finally{
+        client.close();
+    }
+    return output;
   }
 }

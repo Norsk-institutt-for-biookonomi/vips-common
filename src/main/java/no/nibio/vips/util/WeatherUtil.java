@@ -693,6 +693,18 @@ public class WeatherUtil {
 
         return LE;
     }
+    
+    /**
+     * USpest.org's leaf wetness values range from 0 to 10. Based on explanation from
+     * Len Coop, associate director of IPPC and documentation found here: http://uspest.org/wea/weanew.html#LWDOC
+     * ... we simplify this to denote all USPest.org values > 2 to be considered wet hours
+     * @param value
+     * @return 
+     */
+    public Double getLeafWetnessValueFromUSPest(Double value)
+    {
+        return value >= 2.0 ? 60.0 : 0.0;
+    }
 
     /**
      * Fixes by 
@@ -1540,5 +1552,25 @@ public class WeatherUtil {
     public Double getFahrenheitFromCelcius(Double celciusTemp)
     {
         return (celciusTemp * 1.8) + 32;
+    }
+    
+    /**
+     * Convert from inches to mm
+     * @param inches
+     * @return 
+     */
+    public Double getMillimetersFromInches(Double inches)
+    {
+        return inches * 25.4;
+    }
+    
+    /**
+     * Convert from mm to inches
+     * @param millimeters
+     * @return 
+     */
+    public Double getInchesFromMillimeters(Double millimeters)
+    {
+        return millimeters / 25.4;
     }
 }

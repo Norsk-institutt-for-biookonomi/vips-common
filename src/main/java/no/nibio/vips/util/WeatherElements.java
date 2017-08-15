@@ -21,7 +21,7 @@ package no.nibio.vips.util;
 
 /**
  * (Probably) temporary definitions of weather elements
- * @copyright 2013 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2017 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class WeatherElements {
@@ -82,7 +82,7 @@ public class WeatherElements {
      * Average wind speed (meters / second)
      */
     public static final String WIND_SPEED_2M = "FM2";
-    
+      
     public static final String POTENTIAL_EVAPORATION = "EPP";
     
     

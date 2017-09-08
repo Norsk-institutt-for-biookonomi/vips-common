@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 NIBIO <http://www.nibio.no/>. 
+ * Copyright (c) 2017 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 
 package no.nibio.vips.entity;
 
+import com.vividsolutions.jts.geom.Geometry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,33 +30,28 @@ import java.util.TimeZone;
 
 /**
  * Represents a result
- * @copyright 2013 <a href="http://www.nibio.no">NIBIO</a>
+ * @copyright 2013-2017 <a href="http://www.nibio.no">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class ResultImpl implements Result{
-    private Date resultValidTime;
-    private Set<String> keys;
+    private Date validTimeStart, validTimeEnd;
+    private Geometry validGeometry;
     private Map<String, String> values;
     private Integer warningStatus;
 
     @Override
-    public void setResultValidTime(Date time) {
-        this.resultValidTime = time;
+    public void setValidTimeStart(Date time) {
+        this.validTimeStart = time;
     }
 
     @Override
-    public Date getResultValidTime() {
-        return this.resultValidTime;
-    }
-
-    @Override
-    public void setKeys(Set<String> keys) {
-        this.keys = keys;
+    public Date getValidTimeStart() {
+        return this.validTimeStart;
     }
 
     @Override
     public Set<String> getKeys() {
-        return this.values != null ? this.values.keySet() : new HashSet<String>();
+        return this.values != null ? this.values.keySet() : new HashSet<>();
     }
 
     @Override
@@ -73,7 +69,7 @@ public class ResultImpl implements Result{
     @Override
     public Map<String, String> getAllValues() {
         
-        return this.values != null ? this.values : new HashMap<String,String>();
+        return this.values != null ? this.values : new HashMap<>();
     }
     
     @Override
@@ -88,7 +84,7 @@ public class ResultImpl implements Result{
      */
     @Override
     public int compareTo(Object t) {
-        return this.getResultValidTime().compareTo(((Result) t).getResultValidTime());
+        return this.getValidTimeStart().compareTo(((Result) t).getValidTimeStart());
     }
 
     @Override
@@ -105,7 +101,7 @@ public class ResultImpl implements Result{
     public String toString(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String retVal = "[" + format.format(resultValidTime) + "], WARNING_STATUS=" + this.getWarningStatus() + ", ";
+        String retVal = "[" + format.format(validTimeStart) + "], WARNING_STATUS=" + this.getWarningStatus() + ", ";
         if(this.getKeys() != null)
         {
             for(String key: this.getKeys())
@@ -118,5 +114,37 @@ public class ResultImpl implements Result{
             }
         }
         return retVal;
+    }
+
+    /**
+     * @return the validTimeEnd
+     */
+    @Override
+    public Date getValidTimeEnd() {
+        return validTimeEnd != null ? this.validTimeEnd : this.validTimeStart;
+    }
+
+    /**
+     * @param validTimeEnd the validTimeEnd to set
+     */
+    @Override
+    public void setValidTimeEnd(Date validTimeEnd) {
+        this.validTimeEnd = validTimeEnd;
+    }
+
+    /**
+     * @return the validGeometry
+     */
+    @Override
+    public Geometry getValidGeometry() {
+        return validGeometry;
+    }
+
+    /**
+     * @param validGeometry the validGeometry to set
+     */
+    @Override
+    public void setValidGeometry(Geometry validGeometry) {
+        this.validGeometry = validGeometry;
     }
 }

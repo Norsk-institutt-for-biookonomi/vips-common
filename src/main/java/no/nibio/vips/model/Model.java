@@ -19,9 +19,9 @@
 
 package no.nibio.vips.model;
 
-import no.nibio.vips.entity.Result;
 import java.util.List;
 import no.nibio.vips.entity.ModelConfiguration;
+import no.nibio.vips.entity.Result;
 
 /**
  * All models must implement this interface

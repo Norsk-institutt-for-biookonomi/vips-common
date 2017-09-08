@@ -27,11 +27,11 @@ import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import no.nibio.vips.entity.ModelConfiguration;
+import no.nibio.vips.entity.MultiPointWeatherObservationList;
 import no.nibio.vips.entity.WeatherObservation;
 import no.nibio.vips.model.ConfigValidationException;
 
@@ -97,5 +97,35 @@ public class WeatherDataFileReader {
             ex.printStackTrace();
             throw new ConfigValidationException(ex.getMessage());
         } 
+    }
+    
+    /**
+     * 
+     * 
+     * @param weatherDataFileName filename and path on classpath
+     * @param modelId 10 chars ID of model
+     * @return A Model Configuration with weather data. Can be filled with other configuration data
+     * @throws ConfigValidationException 
+     */
+    public ModelConfiguration getModelConfigurationWithMultiPointWeatherObservationList(String weatherDataFileName, String modelId) throws ConfigValidationException
+    {
+        try {
+            ModelConfiguration config = new ModelConfiguration();
+            config.setModelId(modelId);
+            BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
+            JsonFactory f = new MappingJsonFactory();
+            JsonParser jp = f.createParser(inputStream);
+            JsonNode all = jp.readValueAsTree();
+            List<WeatherObservation> observations = new ArrayList<>();
+            ObjectMapper mapper = new ObjectMapper();
+            List<MultiPointWeatherObservationList> theList = mapper.convertValue(all, new TypeReference<List<MultiPointWeatherObservationList>>(){});
+            config.setConfigParameter("multiPointWeatherObservations", theList);
+
+            return config;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new ConfigValidationException(ex.getMessage());
+        } 
+        
     }
 }

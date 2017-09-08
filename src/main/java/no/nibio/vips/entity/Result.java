@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.vividsolutions.jts.geom.Geometry;
 
 
 /**
@@ -40,11 +41,16 @@ public interface Result extends Comparable{
     public final static Integer WARNING_STATUS_HIGH_RISK = 4;
 
     /* Time for which these results are valid */
-    public void setResultValidTime(Date time);
-    public Date getResultValidTime();
+    public void setValidTimeStart(Date time);
+    public Date getValidTimeStart();
+    public void setValidTimeEnd(Date time);
+    public Date getValidTimeEnd();
+    
+    // Spatial validity
+    public void setValidGeometry(Geometry geometry);
+    public Geometry getValidGeometry();
     
     /* The result parameters in this Result object */
-    public void setKeys(Set<String> keys);
     public Set<String> getKeys();
     
     /* Setting and getting values */

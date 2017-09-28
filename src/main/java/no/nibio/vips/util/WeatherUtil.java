@@ -1555,6 +1555,16 @@ public class WeatherUtil {
     }
     
     /**
+     * 
+     * @param kelvinTemp
+     * @return 
+     */
+    public double getCelciusFromKelvin(Double kelvinTemp)
+    {
+        return kelvinTemp - 273.15;
+    }
+    
+    /**
      * Convert from inches to mm
      * @param inches
      * @return 

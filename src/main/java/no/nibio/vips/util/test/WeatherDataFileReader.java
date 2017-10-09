@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import no.nibio.vips.entity.ModelConfiguration;
-import no.nibio.vips.entity.MultiPointWeatherObservationList;
+import no.nibio.vips.entity.PointWeatherObservationList;
 import no.nibio.vips.entity.WeatherObservation;
 import no.nibio.vips.model.ConfigValidationException;
 
@@ -118,7 +118,7 @@ public class WeatherDataFileReader {
             JsonNode all = jp.readValueAsTree();
             List<WeatherObservation> observations = new ArrayList<>();
             ObjectMapper mapper = new ObjectMapper();
-            List<MultiPointWeatherObservationList> theList = mapper.convertValue(all, new TypeReference<List<MultiPointWeatherObservationList>>(){});
+            List<PointWeatherObservationList> theList = mapper.convertValue(all, new TypeReference<List<PointWeatherObservationList>>(){});
             config.setConfigParameter("multiPointWeatherObservations", theList);
 
             return config;

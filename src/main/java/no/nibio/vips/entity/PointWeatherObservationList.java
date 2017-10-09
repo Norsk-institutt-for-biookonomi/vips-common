@@ -21,20 +21,20 @@ package no.nibio.vips.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vividsolutions.jts.geom.Coordinate;
 import java.util.List;
-import no.nibio.vips.gis.SimpleWGS84Coordinate;
 
 /**
  * @copyright 2017 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
-public class MultiPointWeatherObservationList {
-    private SimpleWGS84Coordinate coordinate;
+public class PointWeatherObservationList {
+    private Coordinate coordinate;
     private List<WeatherObservation> observations;
     
     @JsonCreator
-    public MultiPointWeatherObservationList(
-            @JsonProperty("coordinate") SimpleWGS84Coordinate coordinate, 
+    public PointWeatherObservationList(
+            @JsonProperty("coordinate") Coordinate coordinate, 
             @JsonProperty("observations") List<WeatherObservation> observations
     )
     {
@@ -45,14 +45,14 @@ public class MultiPointWeatherObservationList {
     /**
      * @return the coordinate
      */
-    public SimpleWGS84Coordinate getCoordinate() {
+    public Coordinate getCoordinate() {
         return coordinate;
     }
 
     /**
      * @param coordinate the coordinate to set
      */
-    public void setCoordinate(SimpleWGS84Coordinate coordinate) {
+    public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
 
@@ -70,4 +70,18 @@ public class MultiPointWeatherObservationList {
         this.observations = observations;
     }
     
+    @Override
+    public String toString()
+    {
+        String retVal = this.getClass().getName() + ":" + this.getCoordinate() + "\n";
+        if(this.getObservations() != null)
+        {
+            //retVal += "Observations: \n" + this.getObservations().stream().sorted().map(obs->obs.toString()).collect(Collectors.joining("\n"));
+        }
+        else
+        {
+            retVal += "No observations";
+        }
+        return retVal;
+    }
 }

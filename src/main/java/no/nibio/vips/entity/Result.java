@@ -51,6 +51,7 @@ public interface Result extends Comparable{
     public Geometry getValidGeometry();
     
     /* The result parameters in this Result object */
+    public void setKeys(Set<String> keys); // Don't remove this! It's here to trick Jackson/Objectmapper!
     public Set<String> getKeys();
     
     /* Setting and getting values */

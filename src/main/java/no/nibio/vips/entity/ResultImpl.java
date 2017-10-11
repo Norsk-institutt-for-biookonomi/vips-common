@@ -48,6 +48,12 @@ public class ResultImpl implements Result{
     public Date getValidTimeStart() {
         return this.validTimeStart;
     }
+    
+    @Override
+    public void setKeys(Set<String> keys) {
+        // Don't remove this!
+        // This is just here to trick Jackson/Objectmapper!
+    }
 
     @Override
     public Set<String> getKeys() {

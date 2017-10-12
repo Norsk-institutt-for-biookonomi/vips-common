@@ -116,7 +116,6 @@ public class WeatherDataFileReader {
             JsonFactory f = new MappingJsonFactory();
             JsonParser jp = f.createParser(inputStream);
             JsonNode all = jp.readValueAsTree();
-            List<WeatherObservation> observations = new ArrayList<>();
             ObjectMapper mapper = new ObjectMapper();
             List<PointWeatherObservationList> theList = mapper.convertValue(all, new TypeReference<List<PointWeatherObservationList>>(){});
             config.setConfigParameter("multiPointWeatherObservations", theList);

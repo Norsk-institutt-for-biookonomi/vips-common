@@ -19,6 +19,7 @@
 		<module name="javax.servlet.api" export="false"/>
                 <module name="org.apache.commons.io" export="false"/>
                 <module name="org.apache.commons.codec" export="false"/>
+		<module name="com.vividsolutions.jts" export="false"/>
     </dependencies>
     
 </module>

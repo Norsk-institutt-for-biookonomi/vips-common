@@ -21,6 +21,7 @@ package no.nibio.vips.util.test;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
@@ -115,9 +116,18 @@ public class WeatherDataFileReader {
             BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
             JsonFactory f = new MappingJsonFactory();
             JsonParser jp = f.createParser(inputStream);
-            JsonNode all = jp.readValueAsTree();
             ObjectMapper mapper = new ObjectMapper();
-            List<PointWeatherObservationList> theList = mapper.convertValue(all, new TypeReference<List<PointWeatherObservationList>>(){});
+            List<PointWeatherObservationList> theList = new ArrayList<>();
+            jp.nextToken(); // Jumping past the START_ARRAY
+            while(jp.nextToken() != JsonToken.END_ARRAY)
+            {
+                PointWeatherObservationList list = jp.readValueAs(PointWeatherObservationList.class);
+                theList.add(list);
+                //System.out.println(jp.toString());
+            }
+            //JsonNode all = jp.readValueAsTree();
+            
+            //List<PointWeatherObservationList> theList = mapper.convertValue(all, new TypeReference<List<PointWeatherObservationList>>(){});
             config.setConfigParameter("multiPointWeatherObservations", theList);
 
             return config;

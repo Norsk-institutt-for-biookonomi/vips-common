@@ -36,7 +36,7 @@ public class WeatherObservation implements Comparable{
     public final static Integer LOG_INTERVAL_ID_30M = 4;
     public final static Integer LOG_INTERVAL_ID_1H = 1;
     public final static Integer LOG_INTERVAL_ID_3H = 3;
-    public final static Integer LOG_INTERVAL_ID_6H = 6;
+    public final static Integer LOG_INTERVAL_ID_6H = 7;
     public final static Integer LOG_INTERVAL_ID_1D = 2;
 
     private String elementMeasurementTypeId;

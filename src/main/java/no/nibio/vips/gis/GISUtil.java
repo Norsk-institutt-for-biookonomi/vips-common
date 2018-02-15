@@ -23,10 +23,22 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.measure.Measure;
+import javax.measure.quantity.Area;
+import javax.measure.unit.SI;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 import org.wololo.geojson.Feature;
 import org.wololo.geojson.FeatureCollection;
 import org.wololo.geojson.GeoJSONFactory;
@@ -164,4 +176,78 @@ public class GISUtil {
         return gf.createPoint(coordinate);
     }
 
+    /**
+     * Calculate distance between two points, courtesy of <a href="http://www.movable-type.co.uk/scripts/latlong.html">this page</a>. Explanation:
+     * <pre>
+     * This uses the "haversine" formula to calculate the great-circle distance between two points - 
+     * that is, the shortest distance over the earth's surface, giving an 'as-the-crow-flies distance between the points (ignoring any hills, of course!).
+        Haversine formula:
+                a = sin²(?lat/2) + cos(lat1).cos(lat2).sin²(?long/2)
+                c = 2.atan2(?a, ?(1?a))
+                d = R.c
+        where R is earth?s radius (mean radius = 6,371km);
+        Note that angles need to be in radians to pass to trig functions!
+     * </pre>
+     * @param coord1
+     * @param coord2
+     * @return distance in kilometers
+     */
+    public Double getDistance(Coordinate coord1, Coordinate coord2)
+    {
+        Integer R = 6371; // km
+        Double dLat = Math.toRadians(coord2.y - coord1.y);
+        Double dLon = Math.toRadians(coord2.x - coord1.x);
+        Double lat1 = Math.toRadians(coord1.y);
+        Double lat2 = Math.toRadians(coord2.y);
+
+        Double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        Double d = R * c;
+        
+        return d;
+    }
+    
+    /**
+     * 
+     * @param p
+     * @return Area in square meters
+     */
+    public Measure<Double, Area> calcArea(Polygon p) {
+        Point centroid = p.getCentroid();
+        try {
+          String code = "AUTO:42003," + centroid.getX() + "," + centroid.getY();
+          CoordinateReferenceSystem auto = CRS.decode(code);
+
+          MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, auto);
+
+          Polygon projed = (Polygon) JTS.transform(p, transform);
+          return Measure.valueOf(projed.getArea(), SI.SQUARE_METRE);
+        } catch (MismatchedDimensionException | TransformException | FactoryException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        return Measure.valueOf(0.0, SI.SQUARE_METRE);
+    }
+    
+    /**
+     * Create a polygon with the given bounds
+     * @param north
+     * @param south
+     * @param east
+     * @param west
+     * @return 
+     */
+    public Polygon createRectangleFromBounds(Double north, Double south, Double east, Double west)
+    {
+        GeometryFactory gf = new GeometryFactory(new PrecisionModel(), 4326);
+        Coordinate[] coords = {
+            new Coordinate(west, south),
+                new Coordinate(west,north),
+                new Coordinate(east,north),
+                new Coordinate(east,south),
+                new Coordinate(west,south)
+        };
+        return gf.createPolygon(coords);
+    }
 }

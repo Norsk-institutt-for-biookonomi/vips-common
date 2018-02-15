@@ -91,6 +91,16 @@
 	<artifactId>icu4j</artifactId>
 	<version>52.1</version>
 </dependency>
+<dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-api</artifactId>
+            <version>17.2</version>
+        </dependency>
+        <dependency>
+        <groupId>org.geotools</groupId>
+        <artifactId>gt-epsg-hsql</artifactId>
+        <version>17.2</version>
+    </dependency>
   <dependency>
     <groupId>org.renjin</groupId>
     <artifactId>renjin-script-engine</artifactId>
@@ -162,6 +172,7 @@
           </execution>
         </executions>
     </plugin>
+ 
     </plugins>
   </build>
 </project>

@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Geometry;
 
 
@@ -31,7 +32,8 @@ import com.vividsolutions.jts.geom.Geometry;
  * @copyright 2013 {@link http://www.nibio.no NIBIO}
  * @author Tor-Einar Skog <tor-einar.skog@hyper.no>
  */
-@JsonDeserialize(as=ResultImpl.class)
+@JsonDeserialize(using=ResultDeserializer.class)
+@JsonSerialize(using=ResultSerializer.class)
 public interface Result extends Comparable{
     
     public final static Integer WARNING_STATUS_NO_WARNING = 0;

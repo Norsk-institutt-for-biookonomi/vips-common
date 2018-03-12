@@ -19,6 +19,7 @@
 
 package no.nibio.vips.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Geometry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +34,7 @@ import java.util.TimeZone;
  * @copyright 2013-2017 <a href="http://www.nibio.no">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
+@JsonSerialize(using=ResultSerializer.class)
 public class ResultImpl implements Result{
     private Date validTimeStart, validTimeEnd;
     private Geometry validGeometry;

@@ -32,6 +32,10 @@ public class PointWeatherObservationList {
     private Coordinate coordinate;
     private List<WeatherObservation> observations;
     
+    public PointWeatherObservationList(){
+        
+    }
+    
     @JsonCreator
     public PointWeatherObservationList(
             @JsonProperty("coordinate") Coordinate coordinate, 

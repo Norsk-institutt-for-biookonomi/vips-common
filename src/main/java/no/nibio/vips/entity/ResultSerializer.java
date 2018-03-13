@@ -61,7 +61,11 @@ class ResultSerializer extends StdSerializer<ResultImpl>{
                 : t.getValidGeometry().getGeometryType().equals("LineString") ? objectMapper.writeValueAsString((LineString) t.getValidGeometry())
                 :t.getValidGeometry().getGeometryType().equals("Polygon") ? objectMapper.writeValueAsString((Polygon) t.getValidGeometry())
                 : "null";
-        jg.writeStringField("validGeometry", geoJSON);
+        
+        //jg.writeObjectField("validGeometry", t.getValidGeometry());
+        //System.out.println(geoJSON);
+        jg.writeRaw(",\"validGeometry\":" + geoJSON);
+        //
         jg.writeNumberField("warningStatus", t.getWarningStatus());
         jg.writeStringField("allValues", this.objectMapper.writeValueAsString(t.getAllValues()));
         jg.writeStringField("keys", this.objectMapper.writeValueAsString(t.getKeys()));

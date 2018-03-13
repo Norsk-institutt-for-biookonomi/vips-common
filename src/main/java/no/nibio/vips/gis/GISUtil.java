@@ -52,6 +52,8 @@ import org.wololo.jts2geojson.GeoJSONWriter;
  */
 public class GISUtil {
     
+    public static Integer DEFAULT_SRID = 4326;
+    
     /**
      * Calculates the coordinates of a nearby destination
      * @param origin WGS84 where to start from

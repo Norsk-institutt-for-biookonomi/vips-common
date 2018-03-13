@@ -33,6 +33,7 @@ import com.vividsolutions.jts.geom.Polygon;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+import no.nibio.vips.gis.GISUtil;
 
 /**
  * @copyright 2018 <a href="http://www.nibio.no/">NIBIO</a>
@@ -53,7 +54,9 @@ public class ResultDeserializer extends StdDeserializer<Result>{
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JtsModule());
         Result r = new ResultImpl();
+        //System.out.println(jp.getText());
         JsonNode node = jp.getCodec().readTree(jp);
+        //System.out.println(node);
         r.setValidTimeStart(objectMapper.convertValue(node.get("validTimeStart"), Date.class));
         r.setValidTimeEnd(objectMapper.convertValue(node.get("validTimeEnd"), Date.class));
         if(node.get("allValues") != null)
@@ -63,6 +66,7 @@ public class ResultDeserializer extends StdDeserializer<Result>{
         r.setWarningStatus(node.get("warningStatus").asInt());
         JsonNode geomNode = node.get("validGeometry");
         Geometry validGeometry = null;
+        //System.out.println(geomNode);
         if(geomNode != null && geomNode.get("type") != null)
         {
             switch(geomNode.get("type").asText()){
@@ -78,8 +82,14 @@ public class ResultDeserializer extends StdDeserializer<Result>{
                 default:
                     validGeometry = null;
             }
+            if(validGeometry.getSRID() <= 0)
+            {
+                validGeometry.setSRID(GISUtil.DEFAULT_SRID);
+            }
         }
+        
         r.setValidGeometry(validGeometry);
+        //System.out.println(r.getValidGeometry());
         return r;
     }
 

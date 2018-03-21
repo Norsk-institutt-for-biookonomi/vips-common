@@ -20,6 +20,7 @@
                 <module name="org.apache.commons.io" export="false"/>
                 <module name="org.apache.commons.codec" export="false"/>
 		<module name="com.vividsolutions.jts" export="false"/>
+		<module name="com.bedatadriven.jackson.datatype.jts.JtsModule" export="false"/>
     </dependencies>
     
 </module>

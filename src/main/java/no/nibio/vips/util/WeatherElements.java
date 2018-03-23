@@ -79,10 +79,22 @@ public class WeatherElements {
      */
     public static final String LEAF_WETNESS_GROUND_LEVEL = "BTg";
     /**
-     * Average wind speed (meters / second)
+     * Average wind speed (meters / second) for the last 60 minutes, measured at 2 meter height
      */
-    public static final String WIND_SPEED_2M = "FM2";
-      
+    public static final String WIND_SPEED_2M = "FM2";    
+    /**
+     * Average wind speed (meters / second) for the last 60 minutes, measured at 10 meter height
+     */
+    public static final String WIND_SPEED_10M = "FM";
+    /**
+     * Average wind speed (meters / second) for the last 10 minutes, measured at 2 meter height
+     */
+    public static final String WIND_SPEED_10MIN_2M = "FF2";
+    /**
+     * Average wind speed (meters / second) for the last 10 minutes, measured at 10 meter height
+     */
+    public static final String WIND_SPEED_10MIN_10M = "FF";
+          
     public static final String POTENTIAL_EVAPORATION = "EPP";
     
     

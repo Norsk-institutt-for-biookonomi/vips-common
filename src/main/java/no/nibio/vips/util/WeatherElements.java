@@ -94,7 +94,9 @@ public class WeatherElements {
      * Average wind speed (meters / second) for the last 10 minutes, measured at 10 meter height
      */
     public static final String WIND_SPEED_10MIN_10M = "FF";
-          
+    /**
+     * Potential evapotranspiration by the Penman equation
+     */
     public static final String POTENTIAL_EVAPORATION = "EPP";
     
     

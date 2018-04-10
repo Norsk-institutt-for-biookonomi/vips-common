@@ -38,81 +38,133 @@ public class XDate extends java.util.Date{
         this.setTime(date.getTime());
     }
     
+    /**
+     * Move this date one year forward
+     */
     public void add1Year()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.YEAR, 1);
-        this.setTime(cal.getTime().getTime());
+        this.addYears(1);
     }
     
+    /**
+     * Move this date one week forward
+     */
     public void add1Week()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.WEEK_OF_YEAR, 1);
-        this.setTime(cal.getTime().getTime());
+        this.addWeeks(1);
     }
     
+    /**
+     * Move this date one day forward
+     */
     public void add1Day()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.DATE, 1);
-        this.setTime(cal.getTime().getTime());
+        this.addDays(1);
     }
     
+    /**
+     * Move this date one hour forward
+     */
     public void add1Hour()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.HOUR_OF_DAY, 1);
-        this.setTime(cal.getTime().getTime());
+        this.addHours(1);
     }
     
+    /**
+     * Move this date one year back
+     */
     public void subtract1Year()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.YEAR, -1);
-        this.setTime(cal.getTime().getTime());
+        this.addYears(-1);
     }
     
+    /**
+     * Move this date one week back
+     */
     public void subtract1Week()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.WEEK_OF_YEAR, -1);
-        this.setTime(cal.getTime().getTime());
+        this.addWeeks(-1);
     }
     
+    /**
+     * Move this date one day back
+     */
     public void subtract1Day()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.DATE, -1);
-        this.setTime(cal.getTime().getTime());
+        this.addDays(-1);
     }
     
+    /**
+     * Move this date one hour back
+     */
     public void subtract1Hour()
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(this);
-        cal.add(Calendar.HOUR_OF_DAY, -1);
-        this.setTime(cal.getTime().getTime());
+        this.addHours(-1);
     }
     
+    /**
+     * 
+     * @return Yesterday at same time
+     */
     public Date getYesterday(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(this);
-        cal.add(Calendar.HOUR_OF_DAY, -1);
+        cal.add(Calendar.DATE, -1);
         return cal.getTime();
     }
     
+    /**
+     * 
+     * @return Tomorrow at same time
+     */
     public Date getTomorrow(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(this);
-        cal.add(Calendar.HOUR_OF_DAY, +1);
+        cal.add(Calendar.DATE, +1);
         return cal.getTime();
+    }
+    
+    /**
+     * Move this date a number of hours forward (negative numbers move backwards)
+     * @param hours 
+     */
+    public void addHours(Integer hours){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this);
+        cal.add(Calendar.HOUR_OF_DAY, hours);
+        this.setTime(cal.getTime().getTime());
+    }
+    
+    /**
+     * Move this date a number of days forward (negative numbers move backwards)
+     * @param days 
+     */
+    public void addDays(Integer days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this);
+        cal.add(Calendar.DATE, days);
+        this.setTime(cal.getTime().getTime());
+    }
+    
+    /**
+     * Move this date a number of weeks forward (negative numbers move backwards)
+     * @param weeks 
+     */
+    public void addWeeks(Integer weeks){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this);
+        cal.add(Calendar.WEEK_OF_YEAR, weeks);
+        this.setTime(cal.getTime().getTime());
+    }
+    
+    /**
+     * Move this date a number of years forward (negative numbers move backwards)
+     * @param years 
+     */
+    public void addYears(Integer years){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this);
+        cal.add(Calendar.YEAR, years);
+        this.setTime(cal.getTime().getTime());
     }
 }

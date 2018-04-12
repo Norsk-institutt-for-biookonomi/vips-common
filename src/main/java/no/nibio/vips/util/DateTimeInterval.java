@@ -56,7 +56,7 @@ public class DateTimeInterval {
      */
     public static Date getLastEndDate(List<DateTimeInterval> intervals)
     {
-        OptionalLong max = intervals.stream().mapToLong(i->i.getEnd().getTime()).max();
+        OptionalLong max = intervals.stream().filter(i -> i != null).mapToLong(i -> i.getEnd().getTime()).max();
         return max.isPresent() ? new Date(max.getAsLong()) : null;
     }
     
@@ -67,7 +67,7 @@ public class DateTimeInterval {
      */
     public static Date getFirstStartDate(List<DateTimeInterval> intervals)
     {
-        OptionalLong min = intervals.stream().mapToLong(i->i.getStart().getTime()).min();
+        OptionalLong min = intervals.stream().filter(i -> i != null).mapToLong(i->i.getStart().getTime()).min();
         return min.isPresent() ? new Date(min.getAsLong()) : null;
     }
     

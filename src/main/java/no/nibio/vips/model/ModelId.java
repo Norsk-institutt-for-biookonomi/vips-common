@@ -39,7 +39,16 @@ public class ModelId {
         this.setId(theId);
     }
 
-    private void setId(String theId) {
+    private void setId(String theId){
+        theId = theId.trim();
+        if(theId.length() < 10)
+        {
+            theId = theId + new String(new char[10-theId.length()]).replace("\0", "X");
+        }
+        else if(theId.length() > 10)
+        {
+            theId = theId.substring(0, 10);
+        }
         this.id = theId.toCharArray();
     }
     

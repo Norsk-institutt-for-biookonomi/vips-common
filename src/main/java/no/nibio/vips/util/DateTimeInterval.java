@@ -21,6 +21,7 @@ package no.nibio.vips.util;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalLong;
 
 /**
@@ -69,6 +70,12 @@ public class DateTimeInterval {
     {
         OptionalLong min = intervals.stream().filter(i -> i != null).mapToLong(i->i.getStart().getTime()).min();
         return min.isPresent() ? new Date(min.getAsLong()) : null;
+    }
+    
+    public static Boolean isDateInIntervals(Date aDate, List<DateTimeInterval> intervals)
+    {
+        Optional<DateTimeInterval> interval = intervals.stream().filter(i -> i != null && i.isDateInInterval(aDate)).findFirst();
+        return interval.isPresent();
     }
     
     /**

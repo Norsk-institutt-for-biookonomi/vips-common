@@ -252,4 +252,19 @@ public class GISUtil {
         };
         return gf.createPolygon(coords);
     }
+    
+    public Coordinate convertCoordinate(Coordinate coordinate, String fromProjection, String toProjection)
+    {
+        try
+        {
+            CoordinateReferenceSystem fromCRS = CRS.decode(fromProjection);
+            CoordinateReferenceSystem toCRS = CRS.decode(toProjection);
+            MathTransform transform = CRS.findMathTransform(fromCRS, toCRS, true);
+            return (Coordinate) JTS.transform(coordinate, new Coordinate(), transform);
+        }
+        catch(FactoryException | TransformException ex)
+        {
+            return null;
+        }
+    }
 }

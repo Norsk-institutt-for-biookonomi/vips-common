@@ -19,8 +19,10 @@
 
 package no.nibio.vips.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Adding some utils to the java.util.Date class!
@@ -28,13 +30,17 @@ import java.util.Date;
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class XDate extends java.util.Date{
+        
+    private SimpleDateFormat ISOUTCFormat;
     
     public XDate(){
         super();
+        ISOUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+        ISOUTCFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
     public XDate(Date date)
     {
-        super();
+        this();
         this.setTime(date.getTime());
     }
     
@@ -166,5 +172,14 @@ public class XDate extends java.util.Date{
         cal.setTime(this);
         cal.add(Calendar.YEAR, years);
         this.setTime(cal.getTime().getTime());
+    }
+    
+    /**
+     * TODO Check that this actually returns an ISO compliant string
+     * @return 
+     */
+    public String getISOUTCFormat()
+    {
+        return this.ISOUTCFormat.format(this);
     }
 }

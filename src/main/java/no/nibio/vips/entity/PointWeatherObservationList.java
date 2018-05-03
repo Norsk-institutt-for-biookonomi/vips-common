@@ -31,6 +31,7 @@ import java.util.List;
 public class PointWeatherObservationList {
     private Coordinate coordinate;
     private List<WeatherObservation> observations;
+    private String timeZone;
     
     public PointWeatherObservationList(){
         
@@ -39,11 +40,13 @@ public class PointWeatherObservationList {
     @JsonCreator
     public PointWeatherObservationList(
             @JsonProperty("coordinate") Coordinate coordinate, 
-            @JsonProperty("observations") List<WeatherObservation> observations
+            @JsonProperty("observations") List<WeatherObservation> observations,
+            @JsonProperty("timeZone") String timeZone
     )
     {
         this.coordinate = coordinate;
         this.observations = observations;
+        this.timeZone = timeZone;
     }
 
     /**
@@ -87,5 +90,19 @@ public class PointWeatherObservationList {
             retVal += "No observations";
         }
         return retVal;
+    }
+
+    /**
+     * @return the timeZone
+     */
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    /**
+     * @param timeZone the timeZone to set
+     */
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 }

@@ -717,6 +717,21 @@ public class WeatherUtil {
      * @return 
      */
     public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHoles(List<WeatherObservation> obsList) throws WeatherObservationListException {
+        return this.checkForAndFixHourlyTimeSeriesHoles(obsList, 3);
+    }
+    
+    /**
+     * Fixes by 
+     * <ul>
+     * <li>Simple interpolation for continuous parameters (temperature, humidity)</li>
+     * <li>Setting values to 0 for non continuous parameters (rainfall)</li>
+     * </ul>
+     * Maximum number of missing values in hole: maximumMissingValues (hours)
+     * @param obsList list of observations of same type (parameter)
+     * @param maximumMissingValues 
+     * @return 
+     */
+    public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHoles(List<WeatherObservation> obsList, Integer maximumMissingValues) throws WeatherObservationListException {
         if(obsList == null || obsList.isEmpty())
         {
             return obsList;
@@ -750,7 +765,7 @@ public class WeatherUtil {
                 currentTime = cal.getTime();
             }
             //System.out.println("Missing values=" + missingValues);
-            if(missingValues > 3)
+            if(missingValues > maximumMissingValues)
             {
                 throw new WeatherObservationListException("More than three missing values for "
                         + "parameter " + obsList.get(0).getElementMeasurementTypeId() 
@@ -938,6 +953,15 @@ public class WeatherUtil {
         }
     }
     
+    /**
+     * This method simply copies values from last actual obs into holes
+     * Except for aggregation values like precip, which is set to 0.0
+     * @param shitIn
+     * @param typeOfParameter
+     * @param startDate
+     * @param endDate
+     * @return 
+     */
     public List<WeatherObservation> fillHourlyHolesBruteForce(List<WeatherObservation> shitIn, Integer typeOfParameter, Date startDate, Date endDate)
     {
         Calendar cal = Calendar.getInstance();
@@ -1479,6 +1503,10 @@ public class WeatherUtil {
     }
 
     public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHolesMultiParameter(List<WeatherObservation> observations) throws WeatherObservationListException{
+        return this.checkForAndFixHourlyTimeSeriesHolesMultiParameter(observations, 3);
+    }
+    
+    public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHolesMultiParameter(List<WeatherObservation> observations, Integer maximumMissingValues) throws WeatherObservationListException{
         List<WeatherObservation> retVal = new ArrayList<>();
         Map<String,List<WeatherObservation>> obsMap = new HashMap<>();
         for(WeatherObservation obs:observations)
@@ -1494,7 +1522,7 @@ public class WeatherUtil {
         }
         for(String elm:obsMap.keySet())
         {
-            retVal.addAll(this.checkForAndFixHourlyTimeSeriesHoles(obsMap.get(elm)));
+            retVal.addAll(this.checkForAndFixHourlyTimeSeriesHoles(obsMap.get(elm), maximumMissingValues));
         }
         //System.out.println("fixed elements=" + retVal.size());
         return retVal;

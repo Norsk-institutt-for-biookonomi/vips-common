@@ -32,16 +32,24 @@ import java.util.TimeZone;
 public class XDate extends java.util.Date{
         
     private SimpleDateFormat ISOUTCFormat;
+    private TimeZone timeZone;
     
     public XDate(){
         super();
+        this.timeZone = TimeZone.getDefault();
         ISOUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
         ISOUTCFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        
     }
     public XDate(Date date)
     {
-        this();
+        this(date, TimeZone.getDefault());
+    }
+    public XDate(Date date, TimeZone timeZone)
+    {
+        super();
         this.setTime(date.getTime());
+        this.timeZone = timeZone;
     }
     
     /**
@@ -113,7 +121,7 @@ public class XDate extends java.util.Date{
      * @return Yesterday at same time
      */
     public Date getYesterday(){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(this.timeZone);
         cal.setTime(this);
         cal.add(Calendar.DATE, -1);
         return cal.getTime();
@@ -124,7 +132,7 @@ public class XDate extends java.util.Date{
      * @return Tomorrow at same time
      */
     public Date getTomorrow(){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(this.timeZone);
         cal.setTime(this);
         cal.add(Calendar.DATE, +1);
         return cal.getTime();
@@ -135,7 +143,7 @@ public class XDate extends java.util.Date{
      * @param hours 
      */
     public void addHours(Integer hours){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(this.timeZone);
         cal.setTime(this);
         cal.add(Calendar.HOUR_OF_DAY, hours);
         this.setTime(cal.getTime().getTime());
@@ -146,7 +154,7 @@ public class XDate extends java.util.Date{
      * @param days 
      */
     public void addDays(Integer days){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(this.timeZone);
         cal.setTime(this);
         cal.add(Calendar.DATE, days);
         this.setTime(cal.getTime().getTime());
@@ -157,7 +165,7 @@ public class XDate extends java.util.Date{
      * @param weeks 
      */
     public void addWeeks(Integer weeks){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(this.timeZone);
         cal.setTime(this);
         cal.add(Calendar.WEEK_OF_YEAR, weeks);
         this.setTime(cal.getTime().getTime());
@@ -168,7 +176,7 @@ public class XDate extends java.util.Date{
      * @param years 
      */
     public void addYears(Integer years){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(this.timeZone);
         cal.setTime(this);
         cal.add(Calendar.YEAR, years);
         this.setTime(cal.getTime().getTime());

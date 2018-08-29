@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @copyright 2017 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2018 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class DateUtil {
@@ -58,5 +58,41 @@ public class DateUtil {
         }
         retVal += toDOY;
         return retVal;
+    }
+    
+    public Date getClosestFutureWholeHour(Date timeStamp)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(timeStamp);
+        
+        // If we're already at whole hour, change nothing
+        if(cal.get(Calendar.MINUTE) == 0 && cal.get(Calendar.SECOND) == 0 && cal.get(Calendar.MILLISECOND) == 0)
+        {
+            return timeStamp;
+        }
+        
+        cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+    
+    public Date getClosestPastWholeHour(Date timeStamp)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(timeStamp);
+        
+        // If we're already at whole hour, change nothing
+        if(cal.get(Calendar.MINUTE) == 0 && cal.get(Calendar.SECOND) == 0 && cal.get(Calendar.MILLISECOND) == 0)
+        {
+            return timeStamp;
+        }
+        
+        cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) - 1);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }

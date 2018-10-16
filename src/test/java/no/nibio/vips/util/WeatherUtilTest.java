@@ -337,6 +337,7 @@ public class WeatherUtilTest extends TestCase {
         
         // Trying "Best effort"
         List<WeatherObservation> BTtest = BT.size() > 1 ? new ArrayList(BT.subList(0, BT.size()/2)) : new ArrayList(BT);
+        List<WeatherObservation> BTtest2 = BT.size() > 1 ? new ArrayList(BT.subList(BT.size()/2, BT.size())) : new ArrayList(BT);
         System.out.println("BTtest.size=" + BTtest.size());
         System.out.println("BT.size=" + BT.size());
         
@@ -344,7 +345,9 @@ public class WeatherUtilTest extends TestCase {
         try {
             // Naerstad should be called now
             List<WeatherObservation> result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
+            //result.stream().forEach(o->System.out.println(o));
             System.out.println("result.size=" + result.size());
+            //System.out.println("TM last time is " + TM.get(TM.size()-1).getTimeMeasured() + ", result last timestamp is " + result.get(result.size()-1).getTimeMeasured());
             // Test 1 // Result have same length as input data
             assertEquals(TM.size(), result.size());
             // Starts with same timestamp
@@ -359,13 +362,18 @@ public class WeatherUtilTest extends TestCase {
                 System.out.println(calc.getElementMeasurementTypeId() + " [" +calc.getTimeMeasured() + "]: " + calc.getValue() + " | " + (orig != null ? orig.getValue():"NULL"));
             }*/
             
+            // Testing with last half of BT as input
+            result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest2, TM, RR, Q0, FM2, UM);
+            assertEquals(TM.size(), result.size());
+            
             // Testing Nærstad with completely empty BT as input
-            BTtest = new ArrayList<WeatherObservation>();
+            BTtest = new ArrayList<>();
             result = instance.calculateLeafWetnessHourSeriesBestEffort(BTtest, TM, RR, Q0, FM2, UM);
             System.out.println("result.size=" + result.size());
             // Test 1 // Result have same length as input data
             assertEquals(TM.size(), result.size());
             // Starts with same timestamp
+            result.stream().forEach(o->System.out.println(o));
             assertEquals(TM.get(0).getTimeMeasured(), result.get(0).getTimeMeasured());
             // Ends with same timestamp
             assertEquals(TM.get(TM.size()-1).getTimeMeasured(), result.get(TM.size()-1).getTimeMeasured());

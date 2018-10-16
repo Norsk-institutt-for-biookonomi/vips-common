@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TimeZone;
@@ -472,7 +473,7 @@ public class WeatherUtil {
      * <li>Nærstad's leaf wetness calculation algorithm</li>
      * <li>Trapman's simple leaf wetness calculation algorithm</li>
      * </ol>
-     * <p>Requires that at least TM, RR, and UM are complete. And that all lists are sorted!</p>
+     * <p>Requires that at least TM, RR, and UM are complete.</p>
      * 
      * @param BT Leaf wetness (minutes/hour)
      * @param TM Mean temperature (hourly mean, degrees Celcius)
@@ -490,18 +491,69 @@ public class WeatherUtil {
             List<WeatherObservation> FM2, 
             List<WeatherObservation> UM
     ) throws ConfigValidationException {
+        
+        Collections.sort(BT);
+        Collections.sort(TM);
+        Collections.sort(RR);
+        Collections.sort(Q0);
+        Collections.sort(FM2);
+        Collections.sort(UM);
+        
+        
         // If BT is same length as TM, return BT unmodified
         if(BT.size() == TM.size())
         {
             return BT;
         }
         
+        // Checks all holes except missing BT at the end of the period
+        List<Date[]> periodsWithMissingBT = new ArrayList<>();
+        Integer BTCounter = 0;
+        for(int i=0; i< TM.size() && BTCounter < BT.size();i++)
+        {
+            
+            if(BT.get(BTCounter).getTimeMeasured().after(TM.get(i).getTimeMeasured()))
+            {
+                Date[] period = new Date[2];
+                period[0] = TM.get(i).getTimeMeasured();
+                period[1] = new XDate(BT.get(BTCounter).getTimeMeasured()).get1HourBefore();
+                //System.out.println("Found missing BT at beginning. Period = " + period[0] + " - " + period[1]);
+                periodsWithMissingBT.add(period);
+                // Fast forward to parallell timestamps
+                while(BT.get(BTCounter).getTimeMeasured().after(TM.get(i).getTimeMeasured()) && i < TM.size())
+                {
+                    i++;
+                }
+            }
+            BTCounter++;
+        }
+        // Check if there's a gap at the end of the BT array
+        if(BT.size() > 0 && BT.get(BT.size()-1).getTimeMeasured().before(TM.get(TM.size()-1).getTimeMeasured()))
+        {
+            //System.out.println("Found gap at end");
+            Date[] period = new Date[2];
+            period[0] = new XDate(BT.get(BT.size()-1).getTimeMeasured()).get1HourAfter();
+            period[1] = TM.get(TM.size()-1).getTimeMeasured();
+            periodsWithMissingBT.add(period);
+        }
+        // Check if the BT array is completely empty
+        if(BT.isEmpty())
+        {
+            //System.out.println("Found empty BT list");
+            Date[] period = new Date[2];
+            period[0] = TM.get(0).getTimeMeasured();
+            period[1] = TM.get(TM.size()-1).getTimeMeasured();
+            periodsWithMissingBT.add(period);
+        }
+        
+        
         // Possible TODO: Validate that TM==RR==UM
         // First: Find time and index for when to start calculating
         
-        Date startTime, lastBTTime;
+        /**Date startTime, lastBTTime;
         if(BT.size() > 0)
         {
+            System.out.println("Measured BT is present. Starts at: " + BT.get(0).getTimeMeasured());
             Collections.sort(BT);
             lastBTTime = BT.get(BT.size()-1).getTimeMeasured();
             Calendar cal = Calendar.getInstance();
@@ -513,74 +565,76 @@ public class WeatherUtil {
         {
             startTime = TM.get(0).getTimeMeasured();
             lastBTTime = null;
-        }
+        }*/
         
-        
-        
-        // If all parameters are complete, we can use Nærstad's algorithm. Otherwise, if we only have UM,
-        // we must resort to Trapman's algorithm
-        List<WeatherObservation> calculatedBT;
-        if(     TM != null && RR != null && Q0 != null && FM2 != null && UM != null
-                && TM.size() == RR.size() && TM.size() == Q0.size() && TM.size() == FM2.size() && TM.size() == UM.size()
-                )
+        for(Date[] period:periodsWithMissingBT)
         {
-            // The algorithm uses the first hour of input values as "startup"
-            // So if we have some leaf wetness, we can provide the first hour.
-            if(BT.size() > 0)
+            // If all parameters are complete, we can use Nærstad's algorithm. Otherwise, if we only have UM,
+            // we must resort to Trapman's algorithm
+            List<WeatherObservation> calculatedBT = null;
+            if(     TM != null && RR != null && Q0 != null && FM2 != null && UM != null
+                    && TM.size() == RR.size() && TM.size() == Q0.size() && TM.size() == FM2.size() && TM.size() == UM.size()
+                    )
             {
-                //System.out.println("Nærstad BT with BT measured values: startTime=" + startTime);
-                //System.out.println("Last BT timestamp = " + BT.get(BT.size()-1).getTimeMeasured());
-                calculatedBT = this.calculateLeafWetnessHourSeriesNaerstad(
-                        this.getWeatherObservationsInPeriod(TM, lastBTTime, null),
-                        this.getWeatherObservationsInPeriod(RR, lastBTTime, null),
-                        this.getWeatherObservationsInPeriod(Q0, lastBTTime, null),
-                        this.getWeatherObservationsInPeriod(FM2, lastBTTime, null),
-                        this.getWeatherObservationsInPeriod(UM, lastBTTime, null),
-                        BT.get(BT.size()-1)
+                // The algorithm uses the first hour of input values as "startup"
+                // So if we have some leaf wetness, we can provide the first hour.
+                // Otherwise, create a "dry" hour
+                Date lastHourBeforePeriod = new XDate(period[0]).get1HourBefore();
+                Optional<WeatherObservation> lastBTBeforePeriod = BT.stream().filter(o->o.getTimeMeasured().equals(lastHourBeforePeriod)).findFirst();
+                calculatedBT = new ArrayList<>();
+                if(!lastBTBeforePeriod.isPresent())
+                {
+                    calculatedBT.add(new WeatherObservation(
+                                                    period[0],
+                                                    WeatherElements.LEAF_WETNESS,
+                                                    WeatherObservation.LOG_INTERVAL_ID_1H,
+                                                    0d
+                                                    )
+                    );
+                }
+                
+                
+                calculatedBT.addAll(this.calculateLeafWetnessHourSeriesNaerstad(
+                            this.getWeatherObservationsInPeriod(TM, lastHourBeforePeriod, period[1]),
+                            this.getWeatherObservationsInPeriod(RR, lastHourBeforePeriod, period[1]),
+                            this.getWeatherObservationsInPeriod(Q0, lastHourBeforePeriod, period[1]),
+                            this.getWeatherObservationsInPeriod(FM2, lastHourBeforePeriod, period[1]),
+                            this.getWeatherObservationsInPeriod(UM, lastHourBeforePeriod, period[1]),
+                            lastBTBeforePeriod.isPresent() ? lastBTBeforePeriod.get() : calculatedBT.get(0) 
+                        )
+                );
+                
+            }
+            else if( TM != null && RR != null && UM != null
+                    && TM.size() == RR.size() && TM.size() == UM.size()
+                    )
+            {
+                /*
+                System.out.println("Trapman BT: startTime=" + startTime);
+                if(BT.size() > 0)
+                {
+                    System.out.println("Last BT timestamp = " + BT.get(BT.size()-1).getTimeMeasured());
+                }
+                */
+                calculatedBT = this.calculateLeafWetnessHourSeriesSimple(
+                        this.getWeatherObservationsInPeriod(TM, period[0], period[1]),
+                        this.getWeatherObservationsInPeriod(RR, period[0], period[1]),
+                        this.getWeatherObservationsInPeriod(UM, period[0], period[1])
                 );
             }
-            // Otherwise, we have to create a dry hour as the first hour
             else
             {
-                //System.out.println("Nærstad BT without BT measured values: startTime=" + startTime);
-                WeatherObservation emptyObs = new WeatherObservation(
-                                                startTime,
-                                                WeatherElements.LEAF_WETNESS,
-                                                WeatherObservation.LOG_INTERVAL_ID_1H,
-                                                0d
-                                                );
-                calculatedBT = new ArrayList<>();
-                calculatedBT.add(emptyObs);
-                calculatedBT.addAll(this.calculateLeafWetnessHourSeriesNaerstad(TM, RR, Q0, FM2, UM, null));
+                throw new ConfigValidationException("Missing weather data. Number of _found_ observations per parameter (deviating number indicates missing data for that parameter): "
+                        + "TM=" + TM.size()
+                        + ",RR=" + RR.size()
+                        + ",UM=" + UM.size()
+                );
             }
+            //System.out.println("First new obs timestamp = " + calculatedBT.get(0).getTimeMeasured());
+            BT.addAll(calculatedBT);
         }
-        else if( TM != null && RR != null && UM != null
-                && TM.size() == RR.size() && TM.size() == UM.size()
-                )
-        {
-            /*
-            System.out.println("Trapman BT: startTime=" + startTime);
-            if(BT.size() > 0)
-            {
-                System.out.println("Last BT timestamp = " + BT.get(BT.size()-1).getTimeMeasured());
-            }
-            */
-            calculatedBT = this.calculateLeafWetnessHourSeriesSimple(
-                    this.getWeatherObservationsInPeriod(TM, startTime, null),
-                    this.getWeatherObservationsInPeriod(RR, startTime, null),
-                    this.getWeatherObservationsInPeriod(UM, startTime, null)
-            );
-        }
-        else
-        {
-            throw new ConfigValidationException("Missing weather data. Number of _found_ observations per parameter (deviating number indicates missing data for that parameter): "
-                    + "TM=" + TM.size()
-                    + ",RR=" + RR.size()
-                    + ",UM=" + UM.size()
-            );
-        }
-        //System.out.println("First new obs timestamp = " + calculatedBT.get(0).getTimeMeasured());
-        BT.addAll(calculatedBT);
+        
+        
         return BT;
     }
     
@@ -944,6 +998,7 @@ public class WeatherUtil {
         {
             String errorMessage = "Cant' repair the weather data. Giving up now. "
                     + "Either this algorithm needs improvement, or the dataset is too incomplete. "
+                    + "Expected first timestamp: " + firstTimestamp + ", expected last timestamp: " + lastTimestamp + ". "
                     + "List sizes for the different parameters are: ";
             for(String parameterName:separatedParameters.keySet())
             {
@@ -1013,10 +1068,9 @@ public class WeatherUtil {
             maximumDuplicateRatio = 0.05;
         }
         HashMap<Long,WeatherObservation> uniqueMap = new HashMap<>();
-        for(WeatherObservation observation:observations)
-        {
+        observations.forEach((observation) -> {
             uniqueMap.put(observation.getValiditySignature(), observation);
-        }
+        });
         List<WeatherObservation> retVal = new ArrayList<>(uniqueMap.values());
         Double numberOfDuplicates = new Double(observations.size() - retVal.size());
         //System.out.println(numberOfDuplicates/observations.size());

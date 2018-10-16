@@ -21,8 +21,10 @@ package no.nibio.vips.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import junit.framework.TestCase;
+import no.nibio.vips.entity.WeatherObservation;
 
 /**
  *
@@ -420,5 +422,5 @@ public class SolarRadiationUtilTest extends TestCase {
         assertEquals(expResult, result);
         
   }
-    
+
 }

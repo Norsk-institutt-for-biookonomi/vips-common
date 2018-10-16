@@ -35,21 +35,21 @@ public class XDate extends java.util.Date{
     private TimeZone timeZone;
     
     public XDate(){
-        super();
-        this.timeZone = TimeZone.getDefault();
-        ISOUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-        ISOUTCFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        
+        this(new Date());
     }
+    
     public XDate(Date date)
     {
         this(date, TimeZone.getDefault());
     }
+    
     public XDate(Date date, TimeZone timeZone)
     {
         super();
         this.setTime(date.getTime());
         this.timeZone = timeZone;
+        ISOUTCFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+        ISOUTCFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
     
     /**
@@ -114,6 +114,20 @@ public class XDate extends java.util.Date{
     public void subtract1Hour()
     {
         this.addHours(-1);
+    }
+    
+    public Date get1HourAfter(){
+        Calendar cal = Calendar.getInstance(this.timeZone);
+        cal.setTime(this);
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        return cal.getTime();
+    }
+    
+    public Date get1HourBefore(){
+        Calendar cal = Calendar.getInstance(this.timeZone);
+        cal.setTime(this);
+        cal.add(Calendar.HOUR_OF_DAY, -1);
+        return cal.getTime();
     }
     
     /**

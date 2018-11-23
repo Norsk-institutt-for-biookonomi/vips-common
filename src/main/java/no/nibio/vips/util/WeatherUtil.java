@@ -821,7 +821,7 @@ public class WeatherUtil {
             //System.out.println("Missing values=" + missingValues);
             if(missingValues > maximumMissingValues)
             {
-                throw new WeatherObservationListException("More than three missing values for "
+                throw new WeatherObservationListException("More than " + maximumMissingValues + " missing values for "
                         + "parameter " + obsList.get(0).getElementMeasurementTypeId() 
                         + " between " + obsList.get(i-1).getTimeMeasured() + " and "
                         + obsList.get(i).getTimeMeasured() + ". Can't fix this!");

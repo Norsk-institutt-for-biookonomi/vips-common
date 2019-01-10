@@ -492,12 +492,12 @@ public class WeatherUtil {
             List<WeatherObservation> UM
     ) throws ConfigValidationException {
         
-        Collections.sort(BT);
-        Collections.sort(TM);
-        Collections.sort(RR);
-        Collections.sort(Q0);
-        Collections.sort(FM2);
-        Collections.sort(UM);
+        if(BT  != null) Collections.sort(BT);
+        if(TM  != null) Collections.sort(TM);
+        if(RR  != null) Collections.sort(RR);
+        if(Q0  != null) Collections.sort(Q0);
+        if(FM2 != null) Collections.sort(FM2);
+        if(UM  != null) Collections.sort(UM);
         
         
         // If BT is same length as TM, return BT unmodified

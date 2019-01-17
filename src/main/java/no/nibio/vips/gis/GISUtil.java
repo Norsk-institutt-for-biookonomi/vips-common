@@ -267,4 +267,26 @@ public class GISUtil {
             return null;
         }
     }
+    
+    public Point getJtsPointFromString(String lonlatCoordinate) throws LonLatStringFormatException
+    {
+        String[] xy = lonlatCoordinate.split(",");
+        if(xy.length != 2)
+        {
+            throw new LonLatStringFormatException("Coordinate string must contain [lon,lat], which is not the case here: " + lonlatCoordinate);
+        }
+        try
+        {
+            Double x = Double.valueOf(xy[0]);
+            Double y = Double.valueOf(xy[1]);
+            com.vividsolutions.jts.geom.Coordinate jtsCoordinate = new com.vividsolutions.jts.geom.Coordinate();
+            jtsCoordinate.x = x;
+            jtsCoordinate.y = y;
+            return createPointWGS84(jtsCoordinate);
+        }
+        catch(NumberFormatException ex)
+        {
+            throw new LonLatStringFormatException(ex.getMessage());
+        }
+    }
 }

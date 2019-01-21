@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -790,7 +791,7 @@ public class WeatherUtil {
         {
             return obsList;
         }
-        //System.out.println("Number of observations before fix = " + obsList.size());
+        //System.out.println("WeatherUtil().checkForAndFixHourlyTimeSeriesHoles: Number of observations before fix = " + obsList.size());
         // First we sort the list
         Collections.sort(obsList);
         Date currentTime = obsList.get(0).getTimeMeasured();
@@ -889,12 +890,25 @@ public class WeatherUtil {
     }
     
     /**
+     * Default is 3
+     * @param mixedParameterList
+     * @param parameterNames
+     * @param firstTimestamp
+     * @param lastTimestamp
+     * @return
+     * @throws WeatherObservationListException 
+     */
+    public List<WeatherObservation> fixHourlyValuesForParameters(List<WeatherObservation> mixedParameterList, Set<String> parameterNames, Date firstTimestamp, Date lastTimestamp) throws WeatherObservationListException
+    {
+        return this.fixHourlyValuesForParameters(mixedParameterList, parameterNames, firstTimestamp, lastTimestamp, 3);
+    }
+    /**
      * Attempts to return a list with complete series in same period for different parameters
      * @param mixedParameterList
      * @param parameterNames 
      * @return 
      */
-    public List<WeatherObservation> fixHourlyValuesForParameters(List<WeatherObservation> mixedParameterList, Set parameterNames, Date firstTimestamp, Date lastTimestamp) throws WeatherObservationListException
+    public List<WeatherObservation> fixHourlyValuesForParameters(List<WeatherObservation> mixedParameterList, Set<String> parameterNames, Date firstTimestamp, Date lastTimestamp, Integer maximumMissingValues) throws WeatherObservationListException
     {
         // Removing duplicates first 
         mixedParameterList = this.removeDuplicateWeatherObservations(mixedParameterList, null);
@@ -933,13 +947,11 @@ public class WeatherUtil {
         // Filling holes
         for(String parameterName:separatedParameters.keySet())
         {
-            separatedParameters.put(parameterName,this.checkForAndFixHourlyTimeSeriesHoles(separatedParameters.get(parameterName)));
+            separatedParameters.put(parameterName,this.checkForAndFixHourlyTimeSeriesHoles(separatedParameters.get(parameterName),maximumMissingValues));
         }
         // Comparing stuff, trying to fix if not fixed
         // For precipitation, set artificial values to 0
         // For all other values, set to same as copying value
-        // Maximum number of missing values at beginning or end: 3
-        Integer maxMissing = 3;
         if(!areListsComplete(separatedParameters, firstTimestamp, lastTimestamp))
         {
             Calendar cal = Calendar.getInstance();
@@ -951,7 +963,7 @@ public class WeatherUtil {
                 //System.out.println("First = " + list.get(0).getTimeMeasured());
                 //System.out.println("Last = " + list.get(list.size()-1).getTimeMeasured());
                 Integer counter = 0;
-                while(list.get(0).getTimeMeasured().compareTo(firstTimestamp) != 0 && counter++ < maxMissing)
+                while(list.get(0).getTimeMeasured().compareTo(firstTimestamp) != 0 && counter++ < maximumMissingValues)
                 {
                     cal.setTime(list.get(0).getTimeMeasured());
                     cal.add(Calendar.HOUR_OF_DAY, -1);
@@ -967,7 +979,7 @@ public class WeatherUtil {
                 }
 
                 counter = 0;
-                while(list.get(list.size()-1).getTimeMeasured().compareTo(lastTimestamp) != 0 && counter++ < maxMissing)
+                while(list.get(list.size()-1).getTimeMeasured().compareTo(lastTimestamp) != 0 && counter++ < maximumMissingValues)
                 {
                     cal.setTime(list.get(list.size()-1).getTimeMeasured());
                     cal.add(Calendar.HOUR_OF_DAY, 1);
@@ -1327,6 +1339,18 @@ public class WeatherUtil {
             }
         }
         return retVal;
+    }
+    
+    /**
+     * Extracts only the parameter that you want
+     * @param observations
+     * @param parameters
+     * @return 
+     */
+    public List<WeatherObservation> filterWeatherObservationsByParameter(List<WeatherObservation> observations, String parameter){
+        Set<String> parameters = new HashSet<>();
+        parameters.add(parameter);
+        return this.filterWeatherObservationsByParameter(observations, parameters);
     }
     
     /**

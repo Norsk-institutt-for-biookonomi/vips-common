@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 NIBIO <http://www.nibio.no/>. 
+ * Copyright (c) 2019 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -19,10 +19,6 @@
 
 package no.nibio.vips.util;
 
-import no.nibio.vips.util.WeatherElements;
-import no.nibio.vips.util.WeatherObservationListException;
-import no.nibio.vips.util.InvalidAggregationTypeException;
-import no.nibio.vips.util.WeatherUtil;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;

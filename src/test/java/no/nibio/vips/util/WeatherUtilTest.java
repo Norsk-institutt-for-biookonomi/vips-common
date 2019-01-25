@@ -327,7 +327,7 @@ public class WeatherUtilTest extends TestCase {
                 Q0.add(obs);
             else if(obs.getElementMeasurementTypeId().equals(WeatherElements.PRECIPITATION))
                 RR.add(obs);
-            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.LEAF_WETNESS))
+            else if(obs.getElementMeasurementTypeId().equals(WeatherElements.LEAF_WETNESS_DURATION))
                 BT.add(obs);
         }
         

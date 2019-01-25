@@ -141,7 +141,7 @@ public class WeatherUtil {
             }
             
             WeatherObservation leafWetness = new WeatherObservation();
-            leafWetness.setElementMeasurementTypeId(WeatherElements.LEAF_WETNESS);
+            leafWetness.setElementMeasurementTypeId(WeatherElements.LEAF_WETNESS_DURATION);
             leafWetness.setLogIntervalId(WeatherObservation.LOG_INTERVAL_ID_1H);
             leafWetness.setTimeMeasured(humObs.getTimeMeasured());
             leafWetness.setValue(this.calculateLeafWetnessHourSimple(tempObs.getValue(), rainObs.getValue(), humObs.getValue()));
@@ -587,7 +587,7 @@ public class WeatherUtil {
                 {
                     calculatedBT.add(new WeatherObservation(
                                                     period[0],
-                                                    WeatherElements.LEAF_WETNESS,
+                                                    WeatherElements.LEAF_WETNESS_DURATION,
                                                     WeatherObservation.LOG_INTERVAL_ID_1H,
                                                     0d
                                                     )
@@ -698,7 +698,7 @@ public class WeatherUtil {
         {
             WeatherObservation calculatedLeafWetness = new WeatherObservation(
                     temperature.get(i).getTimeMeasured(),
-                    WeatherElements.LEAF_WETNESS,
+                    WeatherElements.LEAF_WETNESS_DURATION,
                     WeatherObservation.LOG_INTERVAL_ID_1H,
                     (double) this.calculateLeafWetnessNaerstad(lastLatentHeatFlux, precedingLeafWetnessValue, precipitation.get(i).getValue())
             );

@@ -43,13 +43,16 @@ public class WeatherElements {
      */
     public static final String TEMPERATURE_INSTANTANEOUS = "TT";
     /**
-     * Soil temperature at 5cm, mean
+     * Soil temperatures at various depths
      */
     public static final String SOIL_TEMPERATURE_5CM_MEAN ="TJM5";
-    /**
-     * Soil temperature at 10cm, mean
-     */
     public static final String SOIL_TEMPERATURE_10CM_MEAN ="TJM10";
+    public static final String SOIL_TEMPERATURE_25CM_MEAN ="TJM25";
+    public static final String SOIL_TEMPERATURE_50CM_MEAN ="TJM50";
+    /**
+     * Dew point temperature (Celcius)
+     */
+    public static final String DEW_POINT_TEMPERATURE = "TD";
     /**
      * Aggregated rainfall (millimeters)
      */
@@ -73,11 +76,22 @@ public class WeatherElements {
     /**
      * Leaf wetness (Minutes per hour)
      */
-    public static final String LEAF_WETNESS = "BT";
+    public static final String LEAF_WETNESS_DURATION = "BT";
     /**
      * Leaf wetness at ground level (Minutes per hour)
      */
-    public static final String LEAF_WETNESS_GROUND_LEVEL = "BTg";
+    public static final String LEAF_WETNESS_DURATION_GROUND_LEVEL = "BTg";
+    /**
+     * Soil water content at various depths
+     */
+    public static final String SOIL_WATER_CONTENT_5CM = "VAN5";
+    public static final String SOIL_WATER_CONTENT_10CM = "VAN10";
+    public static final String SOIL_WATER_CONTENT_25CM = "VAN25";
+    public static final String SOIL_WATER_CONTENT_50CM = "VAN50";
+    /**
+     * Soil conductivity at various depths
+     */
+    public static final String SOIL_CONDUCTIVITY_5CM = "LEJ5";
     /**
      * Average wind speed (meters / second) for the last 60 minutes, measured at 2 meter height
      */

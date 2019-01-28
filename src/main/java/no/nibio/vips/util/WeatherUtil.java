@@ -787,25 +787,25 @@ public class WeatherUtil {
      * @return 
      */
     public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHoles(List<WeatherObservation> obsList, Integer maximumMissingValues) throws WeatherObservationListException {
+        boolean DEBUG = false;
+        
         if(obsList == null || obsList.isEmpty())
         {
             return obsList;
         }
-        //System.out.println("WeatherUtil().checkForAndFixHourlyTimeSeriesHoles: Number of observations before fix = " + obsList.size());
+        if(DEBUG) System.out.println("WeatherUtil().checkForAndFixHourlyTimeSeriesHoles: Number of observations before fix = " + obsList.size());
         // First we sort the list
         Collections.sort(obsList);
         Date currentTime = obsList.get(0).getTimeMeasured();
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
-        //System.out.println("checkForAndFixHourlyTimeSeriesHoles " + obsList.get(0).getElementMeasurementTypeId() + ",start time= " + currentTime );
+        if(DEBUG) System.out.println("checkForAndFixHourlyTimeSeriesHoles " + obsList.get(0).getElementMeasurementTypeId() + ",start time= " + currentTime );
         for(int i=0;i<obsList.size();i++)
         {
             
-            /*WeatherObservation debugObs = obsList.get(i);
-            if(debugObs.getElementMeasurementTypeId().equals("UM"))
-            {
-                System.out.println(debugObs.getTimeMeasured() + ": " + debugObs.getValue() + ", currentTime=" + currentTime);
-            }*/
+            WeatherObservation debugObs = obsList.get(i);
+
+            if(DEBUG && debugObs.getElementMeasurementTypeId().equals("UM")) System.out.println(debugObs.getTimeMeasured() + ": " + debugObs.getValue() + ", currentTime=" + currentTime);
             
             int missingValues = 0;
             while(obsList.get(i).getTimeMeasured().compareTo(currentTime) != 0 
@@ -813,7 +813,7 @@ public class WeatherUtil {
             {
                 missingValues++;
                 // We have a hole
-                //System.out.println("Hole found! For " + obsList.get(i).getElementMeasurementTypeId() + " at " + currentTime);
+                if(DEBUG) System.out.println("Hole found! For " + obsList.get(i).getElementMeasurementTypeId() + " at " + currentTime + ", missingValues = " + missingValues);
                 
                 // Must advance time until we find a matching time
                 cal.add(Calendar.HOUR_OF_DAY, 1);
@@ -880,7 +880,7 @@ public class WeatherUtil {
             cal.add(Calendar.HOUR, 1);
             currentTime = cal.getTime();
         }
-        //System.out.println("Number of observations after fix = " + obsList.size());
+        if(DEBUG) System.out.println("Number of observations after fix = " + obsList.size());
         return obsList;
     }
     

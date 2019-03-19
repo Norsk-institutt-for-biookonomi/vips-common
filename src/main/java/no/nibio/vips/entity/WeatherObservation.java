@@ -19,9 +19,11 @@
 
 package no.nibio.vips.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
+import javax.json.bind.annotation.JsonbDateFormat;
+import javax.json.bind.annotation.JsonbTransient;
+
 
 /**
  * Data object that represents a weather observation. Could be measured (historical
@@ -76,7 +78,8 @@ public class WeatherObservation implements Comparable{
         
     public final void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
     
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssXXX", timezone="UTC") // Java >= 7
+    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssXXX", timezone="UTC") // Java >= 7
+    @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ssXXX")
     public Date getTimeMeasured() { return this.timeMeasured; }
     
     public final void setElementMeasurementTypeId(String elementMeasurementTypeId) { 
@@ -140,7 +143,8 @@ public class WeatherObservation implements Comparable{
         this.value = value;
     }
     
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonbTransient
     public long getValiditySignature()
     {
         long result = 17;

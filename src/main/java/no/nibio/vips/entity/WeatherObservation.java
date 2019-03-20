@@ -20,6 +20,7 @@
 package no.nibio.vips.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.json.bind.annotation.JsonbTransient;
@@ -143,8 +144,9 @@ public class WeatherObservation implements Comparable{
         this.value = value;
     }
     
-    //@JsonIgnore
-    @JsonbTransient
+    
+    //@JsonbTransient
+    @JsonIgnore
     public long getValiditySignature()
     {
         long result = 17;

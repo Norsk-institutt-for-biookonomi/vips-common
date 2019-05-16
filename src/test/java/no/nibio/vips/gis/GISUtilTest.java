@@ -18,9 +18,6 @@
  */
 package no.nibio.vips.gis;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +154,7 @@ public class GISUtilTest extends TestCase {
         System.out.println("JSON=" + json);
         GISUtil instance = new GISUtil();
         //List<Geometry> expResult = null;
-        List<com.vividsolutions.jts.geom.Geometry> geometries = instance.getGeometriesFromGeoJSON(json);
+        List<org.locationtech.jts.geom.Geometry> geometries = instance.getGeometriesFromGeoJSON(json);
         Map<String, Object> properties = new HashMap<>();
         properties.put("observationId", 12);
         String result = instance.getGeoJSONFromGeometries(geometries, properties);

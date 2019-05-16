@@ -19,22 +19,17 @@
 
 package no.nibio.vips.gis;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.PrecisionModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.measure.Measure;
-import javax.measure.quantity.Area;
-import javax.measure.unit.SI;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
@@ -214,7 +209,8 @@ public class GISUtil {
      * 
      * @param p
      * @return Area in square meters
-     */
+     * Used only by MetnoThreddsDataparser, which is obsolete anyway
+     *
     public Measure<Double, Area> calcArea(Polygon p) {
         Point centroid = p.getCentroid();
         try {
@@ -230,7 +226,7 @@ public class GISUtil {
           e.printStackTrace();
         }
         return Measure.valueOf(0.0, SI.SQUARE_METRE);
-    }
+    }*/
     
     /**
      * Create a polygon with the given bounds
@@ -279,7 +275,7 @@ public class GISUtil {
         {
             Double x = Double.valueOf(xy[0]);
             Double y = Double.valueOf(xy[1]);
-            com.vividsolutions.jts.geom.Coordinate jtsCoordinate = new com.vividsolutions.jts.geom.Coordinate();
+            org.locationtech.jts.geom.Coordinate jtsCoordinate = new org.locationtech.jts.geom.Coordinate();
             jtsCoordinate.x = x;
             jtsCoordinate.y = y;
             return createPointWGS84(jtsCoordinate);

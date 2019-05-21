@@ -30,6 +30,7 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import java.io.IOException;
+import no.nibio.vips.gis.GISUtil;
 
 /**
  * Ref http://www.baeldung.com/jackson-custom-serialization
@@ -39,8 +40,10 @@ import java.io.IOException;
 class ResultSerializer extends StdSerializer<ResultImpl>{
     ObjectMapper objectMapper;
     GeometryFactory gf;
+    GISUtil gisUtil;
     public ResultSerializer() {
         this(null);
+        this.gisUtil = new GISUtil();
     }
    
     public ResultSerializer(Class<ResultImpl> t) {
@@ -52,12 +55,11 @@ class ResultSerializer extends StdSerializer<ResultImpl>{
     
     @Override
     public void serialize(ResultImpl t, JsonGenerator jg, SerializerProvider sp) throws IOException {
-        
         jg.writeStartObject();
         jg.writeStringField("validTimeStart", this.objectMapper.writeValueAsString(t.getValidTimeStart()).replaceAll("\"", ""));
         jg.writeStringField("validTimeEnd", this.objectMapper.writeValueAsString(t.getValidTimeEnd()).replaceAll("\"", ""));
         String geoJSON = t.getValidGeometry() == null ? "null" 
-                : t.getValidGeometry().getGeometryType().equals("Point") ? objectMapper.writeValueAsString((Point) t.getValidGeometry())
+                : t.getValidGeometry().getGeometryType().equals("Point") ? objectMapper.writeValueAsString(this.gisUtil.getVividPoint((Point) t.getValidGeometry()))
                 : t.getValidGeometry().getGeometryType().equals("LineString") ? objectMapper.writeValueAsString((LineString) t.getValidGeometry())
                 :t.getValidGeometry().getGeometryType().equals("Polygon") ? objectMapper.writeValueAsString((Polygon) t.getValidGeometry())
                 : "null";
@@ -71,5 +73,7 @@ class ResultSerializer extends StdSerializer<ResultImpl>{
         jg.writeStringField("keys", this.objectMapper.writeValueAsString(t.getKeys()));
         jg.writeEndObject();
     }
+    
+    
 
 }

@@ -285,4 +285,26 @@ public class GISUtil {
             throw new LonLatStringFormatException(ex.getMessage());
         }
     }
+    
+    public com.vividsolutions.jts.geom.Point getVividPoint(org.locationtech.jts.geom.Point locationTechPoint)
+    {
+        com.vividsolutions.jts.geom.Coordinate vividCoordinate = new com.vividsolutions.jts.geom.Coordinate(
+                locationTechPoint.getCoordinate().x, 
+                locationTechPoint.getCoordinate().y, 
+                locationTechPoint.getCoordinate().z
+        );
+        com.vividsolutions.jts.geom.Point vividPoint = new com.vividsolutions.jts.geom.GeometryFactory().createPoint(vividCoordinate);
+        return vividPoint;
+    }
+    
+    public org.locationtech.jts.geom.Point getLocationTechPoint(com.vividsolutions.jts.geom.Point vividPoint)
+    {
+        org.locationtech.jts.geom.Coordinate locationTechCoordinate = new org.locationtech.jts.geom.Coordinate(
+                vividPoint.getCoordinate().x, 
+                vividPoint.getCoordinate().y, 
+                vividPoint.getCoordinate().z
+        );
+        org.locationtech.jts.geom.Point locationTechPoint = new org.locationtech.jts.geom.GeometryFactory().createPoint(locationTechCoordinate);
+        return locationTechPoint;
+    }
 }

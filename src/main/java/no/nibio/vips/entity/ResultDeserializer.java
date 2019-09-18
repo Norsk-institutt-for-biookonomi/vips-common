@@ -26,10 +26,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Polygon;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
@@ -41,8 +40,10 @@ import no.nibio.vips.gis.GISUtil;
  */
 public class ResultDeserializer extends StdDeserializer<Result>{
 
+    GISUtil gisUtil;
     public ResultDeserializer(){
         this(null);
+        this.gisUtil = new GISUtil();
     }
     
     public ResultDeserializer(Class<?>vc){
@@ -71,7 +72,7 @@ public class ResultDeserializer extends StdDeserializer<Result>{
         {
             switch(geomNode.get("type").asText()){
                 case "Point":
-                    validGeometry = objectMapper.convertValue(geomNode, Point.class);
+                    validGeometry = this.gisUtil.getLocationTechPoint(objectMapper.convertValue(geomNode, com.vividsolutions.jts.geom.Point.class));
                     break;
                 case "Polygon":
                     validGeometry = objectMapper.convertValue(geomNode, Polygon.class);

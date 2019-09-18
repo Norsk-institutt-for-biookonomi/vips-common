@@ -20,7 +20,7 @@
 package no.nibio.vips.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;

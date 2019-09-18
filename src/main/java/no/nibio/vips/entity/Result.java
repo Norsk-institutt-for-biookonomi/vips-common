@@ -24,14 +24,15 @@ import java.util.Map;
 import java.util.Set;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 
 /**
  * Represents a result from a model run
- * @copyright 2013 {@link http://www.nibio.no NIBIO}
- * @author Tor-Einar Skog <tor-einar.skog@hyper.no>
+ * @copyright 2013-2019 {@link http://www.nibio.no NIBIO}
+ * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
+//@JsonbTypeAdapter(value = ResultJsonbAdapter.class) 
 @JsonDeserialize(using=ResultDeserializer.class)
 @JsonSerialize(using=ResultSerializer.class)
 public interface Result extends Comparable{

@@ -21,7 +21,8 @@ package no.nibio.vips.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vividsolutions.jts.geom.Coordinate;
+//import org.locationtech.jts.geom.Coordinate;
+import no.nibio.vips.gis.CoordinateProxy;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class PointWeatherObservationList {
-    private Coordinate coordinate;
+    private CoordinateProxy coordinate;
     private List<WeatherObservation> observations;
     private String timeZone;
     
@@ -39,7 +40,7 @@ public class PointWeatherObservationList {
     
     @JsonCreator
     public PointWeatherObservationList(
-            @JsonProperty("coordinate") Coordinate coordinate, 
+            @JsonProperty("coordinate") CoordinateProxy coordinate, 
             @JsonProperty("observations") List<WeatherObservation> observations,
             @JsonProperty("timeZone") String timeZone
     )
@@ -52,14 +53,14 @@ public class PointWeatherObservationList {
     /**
      * @return the coordinate
      */
-    public Coordinate getCoordinate() {
+    public CoordinateProxy getCoordinate() {
         return coordinate;
     }
 
     /**
      * @param coordinate the coordinate to set
      */
-    public void setCoordinate(Coordinate coordinate) {
+    public void setCoordinate(CoordinateProxy coordinate) {
         this.coordinate = coordinate;
     }
 

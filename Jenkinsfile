@@ -7,11 +7,10 @@ node {
             checkout scm
 
         stage 'Test'
-            sh """
-            mvn test
-            """
+            sh 'mvn test'
 
         stage 'Build'
+            sh 'mvn install -DskipTests=true'
             
     }
 

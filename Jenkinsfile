@@ -1,17 +1,15 @@
-#!groovy
-
 node {
 
     try {
-        stage 'Checkout'
+        stage('Checkout'){
             checkout scm
-
-        stage 'Test'
+        }
+        stage('Test'){
             sh 'mvn test'
-
-        stage 'Build'
+        }
+        stage('Build'){
             sh 'mvn install -DskipTests=true'
-            
+        }
     }
 
     catch (err) {

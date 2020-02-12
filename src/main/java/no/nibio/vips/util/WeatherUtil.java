@@ -228,8 +228,16 @@ public class WeatherUtil {
         return this.getAggregatedDailyValues(observations, timeZone, minimumObservationsPerDay, typeOfAggregation, 0);
     }
     
+    public List<WeatherObservation> getAggregatedDailyValues(
+            List<WeatherObservation> observations, TimeZone timeZone, Integer minimumObservationsPerDay, Integer typeOfAggregation, Integer maxDuplicates) 
+            throws WeatherObservationListException,
+            InvalidAggregationTypeException
+    {
+        return this.getAggregatedDailyValues(observations, timeZone, minimumObservationsPerDay, typeOfAggregation, maxDuplicates, false);
+    }
+    
     /**
-     * Aggregates daily values. Can be set to tolerate duplicates
+     * Aggregates daily values. Can be set to tolerate duplicates and to ignore errors
      * @param observations the value of observations
      * @param timeZone the value of timeZone
      * @param minimumObservationsPerDay the value of minimumObservationsPerDay
@@ -238,7 +246,7 @@ public class WeatherUtil {
      * @return the java.util.List<no.nibio.vips.entity.WeatherObservation>
      */
     public List<WeatherObservation> getAggregatedDailyValues(
-            List<WeatherObservation> observations, TimeZone timeZone, Integer minimumObservationsPerDay, Integer typeOfAggregation, Integer maxDuplicates) 
+            List<WeatherObservation> observations, TimeZone timeZone, Integer minimumObservationsPerDay, Integer typeOfAggregation, Integer maxDuplicates, Boolean skipDaysWithTooFewObservations) 
             throws WeatherObservationListException,
             InvalidAggregationTypeException
     {
@@ -298,20 +306,23 @@ public class WeatherUtil {
         {
             //System.out.println("date=" + aDay);
             Map hourValuesForADay = dateBucket.get(aDay);
-            // We accept less than minimum values for the last day (we don't throw an error)
-            if(hourValuesForADay.size() < minimumObservationsPerDay && aDay.compareTo(lastDate) < 0)
+            
+            if(hourValuesForADay.size() < minimumObservationsPerDay)
             {
-                throw new WeatherObservationListException(
+                // We accept less than minimum values for the last day (we don't throw an error)
+                if(skipDaysWithTooFewObservations || aDay.compareTo(lastDate) == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    throw new WeatherObservationListException(
                         "Too few observations to aggregate for parameter " +
                         templateObservation.getElementMeasurementTypeId() +
                         " at date " + aDay +". Found " + hourValuesForADay.size() +
                         ", expected minimum " + minimumObservationsPerDay
                         );
-            }
-            // If last day and too few values: Skip it
-            else if(hourValuesForADay.size() < minimumObservationsPerDay)
-            {
-                continue;
+                }
             }
             switch(typeOfAggregation){
                 case WeatherUtil.AGGREGATION_TYPE_AVERAGE:

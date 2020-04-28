@@ -19,12 +19,16 @@
 
 package no.nibio.vips.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import no.nibio.vips.entity.WeatherObservation;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
@@ -115,4 +119,30 @@ public class ModelUtil {
         return Base64.encodeBase64String(bytes);
     }
 
+    /**
+     * This solves the problem of the model not knowing if the ModelConfiguration
+     * contains a halfway serialized List of WeatherObservation (typically LinkedHashMap) 
+     * OR a List of actual WeatherObservations.
+     * @param unknownClassList
+     * @return 
+     */
+    public List<WeatherObservation> extractWeatherObservationList(Object unknownClassList)
+    {
+        try
+        {
+            // These are real WeatherObservation classes
+            List<WeatherObservation> obsList = (List<WeatherObservation>) unknownClassList;
+            if(obsList != null && obsList.size() > 0)
+            {
+                WeatherObservation o = obsList.get(0);
+            }
+            return obsList;
+        }
+        catch(ClassCastException ex)
+        {
+            // These are semi serialized, tell ObjectMapper/Jackson how to do it
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.convertValue(unknownClassList, new TypeReference<List<WeatherObservation>>(){});
+        }
+    }
 }

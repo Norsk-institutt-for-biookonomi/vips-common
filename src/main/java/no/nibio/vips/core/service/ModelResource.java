@@ -27,6 +27,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import no.nibio.vips.entity.ModelConfiguration;
+import no.nibio.vips.ipmdecisions.IPMDecisionsModelConfiguration;
 
 /**
  * Interface for the ModelResource. Implemented by ModelResourceImpl
@@ -175,5 +176,9 @@ public interface ModelResource {
     @Produces("application/json")
     public Response runModel(@PathParam("modelId") String modelId, ModelConfiguration config);
     
-    
+    @POST
+    @Path("models/{modelId}/run/ipmd")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response runModelForIPMDecisions(@PathParam("modelId") String modelId, IPMDecisionsModelConfiguration config);
 }

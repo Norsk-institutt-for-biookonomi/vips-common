@@ -107,11 +107,6 @@
         <artifactId>gt-epsg-hsql</artifactId>
         <version>20.3</version>
     </dependency>
-  <dependency>
-    <groupId>org.renjin</groupId>
-    <artifactId>renjin-script-engine</artifactId>
-    <version>RELEASE</version>
-  </dependency>
   
 <dependency>
   <groupId>com.bedatadriven</groupId>

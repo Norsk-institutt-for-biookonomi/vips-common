@@ -100,18 +100,13 @@
 <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-api</artifactId>
-            <version>20.3</version>
-        </dependency>
-        <dependency>
+            <version>20.5</version>
+</dependency>
+<dependency>
         <groupId>org.geotools</groupId>
         <artifactId>gt-epsg-hsql</artifactId>
-        <version>20.3</version>
+        <version>20.5</version>
     </dependency>
-  <dependency>
-    <groupId>org.renjin</groupId>
-    <artifactId>renjin-script-engine</artifactId>
-    <version>RELEASE</version>
-  </dependency>
       <dependency>
             <groupId>com.kjetland</groupId>
             <artifactId>mbknor-jackson-jsonschema_2.13</artifactId>
@@ -139,19 +134,32 @@
     <artifactId>unit-ri</artifactId>
     <version>1.0.3</version>
 </dependency>
-
+<dependency>
+    <groupId>org.renjin</groupId>
+    <artifactId>renjin-script-engine</artifactId>
+    <version>RELEASE</version>
+  </dependency>
 </dependencies>
 <repositories>
-  <repository>
+    <repository>
     <id>bedatadriven</id>
     <name>bedatadriven public repo</name>
     <url>https://nexus.bedatadriven.com/content/groups/public/</url>
   </repository>
-  <repository>
+    <repository>
       <id>osgeo</id>
-      <name>OSGEO</name>
-      <url>https://download.osgeo.org/webdav/geotools/</url>
-  </repository>
+      <name>OSGeo Release Repository</name>
+      <url>https://repo.osgeo.org/repository/release/</url>
+      <snapshots><enabled>false</enabled></snapshots>
+      <releases><enabled>true</enabled></releases>
+    </repository>
+    <repository>
+      <id>osgeo-snapshot</id>
+      <name>OSGeo Snapshot Repository</name>
+      <url>https://repo.osgeo.org/repository/snapshot/</url>
+      <snapshots><enabled>true</enabled></snapshots>
+      <releases><enabled>false</enabled></releases>
+    </repository>
     <repository>
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>

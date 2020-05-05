@@ -107,7 +107,11 @@
         <artifactId>gt-epsg-hsql</artifactId>
         <version>20.5</version>
     </dependency>
-  
+      <dependency>
+            <groupId>com.kjetland</groupId>
+            <artifactId>mbknor-jackson-jsonschema_2.13</artifactId>
+            <version>1.0.36</version>
+        </dependency>
 <dependency>
   <groupId>com.bedatadriven</groupId>
   <artifactId>jackson-datatype-jts</artifactId>

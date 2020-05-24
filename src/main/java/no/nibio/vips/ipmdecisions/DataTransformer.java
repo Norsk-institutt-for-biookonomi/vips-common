@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import net.ipmdecisions.model.entity.LocationResult;
 import net.ipmdecisions.model.entity.ModelOutput;
 import net.ipmdecisions.weather.entity.LocationWeatherData;

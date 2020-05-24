@@ -36,9 +36,13 @@ public class IPMDecisionsWeatherUtil {
     );
     
     private final Map<Integer, String> IPMToVIPS = Map.of(
+            1001,WeatherElements.TEMPERATURE_MEAN, // TM (Actually TT...)
             1002,WeatherElements.TEMPERATURE_MEAN, // TM
             2001, WeatherElements.PRECIPITATION, // RR
+            3001, WeatherElements.RELATIVE_HUMIDITY_MEAN, // UU/UM
             3002, WeatherElements.RELATIVE_HUMIDITY_MEAN, // UM
+            4002, WeatherElements.WIND_SPEED_2M, // FM2/FF2
+            4003, WeatherElements.WIND_SPEED_2M, // FM2/FF2
             5001, WeatherElements.GLOBAL_RADIATION, // Q0
             3101, WeatherElements.LEAF_WETNESS_DURATION // BT
     );

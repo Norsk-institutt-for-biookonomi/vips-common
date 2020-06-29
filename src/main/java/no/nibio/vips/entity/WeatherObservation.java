@@ -24,17 +24,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.json.bind.annotation.JsonbDateFormat;
-import javax.json.bind.annotation.JsonbTransient;
 
 
 /**
  * Data object that represents a weather observation. Could be measured (historical
  * and forecasted (future).
- * @copyright 2013 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2020 <a href="http://www.nibio.no/">NIBIO</a>
  * @author  Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class WeatherObservation implements Comparable{
     
+    public final static Integer LOG_INTERVAL_ID_1M = 8;
     public final static Integer LOG_INTERVAL_ID_10M = 6;
     public final static Integer LOG_INTERVAL_ID_15M = 5;
     public final static Integer LOG_INTERVAL_ID_30M = 4;

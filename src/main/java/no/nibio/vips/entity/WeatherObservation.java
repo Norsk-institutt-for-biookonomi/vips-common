@@ -46,7 +46,7 @@ public class WeatherObservation implements Comparable{
     private String elementMeasurementTypeId;
     private Integer logIntervalId;
     private Date timeMeasured;
-    private double value;
+    private Double value;
    
     /** Creates a new instance of WeatherObservation */
     public WeatherObservation() {
@@ -134,14 +134,14 @@ public class WeatherObservation implements Comparable{
     /**
      * @return the value
      */
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 
     /**
      * @param value the value to set
      */
-    public final void setValue(double value) {
+    public final void setValue(Double value) {
         this.value = value;
     }
     

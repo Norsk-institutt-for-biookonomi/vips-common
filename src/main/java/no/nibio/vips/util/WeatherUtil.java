@@ -702,7 +702,7 @@ public class WeatherUtil {
                 wind2m.get(0).getValue(), 
                 globalRadiation.get(0).getValue()
         );
-        Integer precedingLeafWetnessValue = precedingLeafWetness != null ?  (int) precedingLeafWetness.getValue() : 0;
+        Integer precedingLeafWetnessValue = precedingLeafWetness != null ?  precedingLeafWetness.getValue().intValue() : 0;
         // Iterating list with index (instead of using Iterator pattern) has 
         // performance gains on very long lists
         for(int i=1;i<temperature.size();i++)

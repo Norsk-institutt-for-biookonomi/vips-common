@@ -28,6 +28,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import no.nibio.vips.entity.ModelRunRequest;
+import no.nibio.vips.ipmdecisions.IPMDecisionsModelConfiguration;
 
 /**
  * Interface for the ManagerResource. Implemented by ManagerResourceImpl
@@ -63,6 +64,12 @@ public interface ManagerResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response runModel(@PathParam("modelId") String modelId, ModelRunRequest request);
+    
+    @POST
+    @Path("models/{modelId}/run/ipmd")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response runModelForIPMDecisions(@PathParam("modelId") String modelId, IPMDecisionsModelConfiguration config);
     
     /**
      * Lists all models available in this instance, using default language (English)

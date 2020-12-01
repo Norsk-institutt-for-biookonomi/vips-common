@@ -19,12 +19,15 @@
 
 package no.nibio.vips.ipmdecisions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.ipmdecisions.model.entity.LocationResult;
 import net.ipmdecisions.model.entity.ModelOutput;
@@ -32,8 +35,11 @@ import net.ipmdecisions.weather.entity.LocationWeatherData;
 import net.ipmdecisions.weather.entity.WeatherData;
 import no.nibio.vips.entity.Result;
 import no.nibio.vips.entity.WeatherObservation;
+import no.nibio.vips.observation.Observation;
+import no.nibio.vips.observation.ObservationImpl;
 
 /**
+ * Util methods to transform data between IPM Decisions and VIPS formats
  * @copyright 2020 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
@@ -115,15 +121,43 @@ public class DataTransformer {
             // Using the ordering in the resultParameters
             for(int i=0;i<retVal.getResultParameters().length;i++)
             {
-                data[row.intValue()][i] = VIPSResultParameters[i].equals("WARNING_STATUS") ? 
-                        r.getWarningStatus()
-                        : VIPSResultParameters[i] != null ? 
-                            Double.valueOf(r.getAllValues().get(VIPSResultParameters[i]))
-                            : null;
+                data[row.intValue()][i] = null;
+                if(VIPSResultParameters[i].equals("WARNING_STATUS"))
+                {
+                    data[row.intValue()][i] = r.getWarningStatus().doubleValue();
+                }
+                else if(VIPSResultParameters[i] != null)
+                {
+                    if(r.getAllValues().get(VIPSResultParameters[i]) != null)
+                    {
+                        data[row.intValue()][i] = Double.valueOf(r.getAllValues().get(VIPSResultParameters[i]));
+                    }
+                }
             }
         } 
         locationResult.setData(data);
         retVal.addLocationResult(locationResult);
+        return retVal;
+    }
+
+    public List<Observation> getVIPSPestObservations(List<Map> fieldObservations, List<Map> fieldObservationQuantifications) {
+        List<Observation> retVal = new ArrayList<>();
+        ObjectMapper om = new ObjectMapper();
+        for(int i=0;i<fieldObservations.size();i++)
+        {
+            Map fieldObservation = fieldObservations.get(i);
+            ObservationImpl VIPSObs = new ObservationImpl();
+            VIPSObs.setGeoinfo(fieldObservation.get("location").toString());
+            try
+            {
+                VIPSObs.setObservationData(om.writeValueAsString(fieldObservationQuantifications.get(i)));
+            }catch(JsonProcessingException ex)
+            {
+                ex.printStackTrace();
+            }
+            VIPSObs.setTimeOfObservation(om.convertValue(fieldObservation.get("time"), Date.class));
+            retVal.add(VIPSObs);
+        }
         return retVal;
     }
 }

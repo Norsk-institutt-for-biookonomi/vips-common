@@ -83,7 +83,7 @@ public class DataTransformer {
         // b) check all possible result parameters
         Collections.sort(VIPSResults);
         Set<String> resultParameters = new HashSet<>();
-        resultParameters.add("WARNING_STATUS");
+        //resultParameters.add("WARNING_STATUS");
         Long minSecondsBetween = null;
         Long lastTime = null;
         for(Result r:VIPSResults)
@@ -113,20 +113,18 @@ public class DataTransformer {
         retVal.setTimeEnd(VIPSResults.get(VIPSResults.size()-1).getValidTimeStart().toInstant());
         LocationResult locationResult = new LocationResult();
         Long rows = 1 + (retVal.getTimeEnd().getEpochSecond() - retVal.getTimeStart().getEpochSecond()) / retVal.getInterval();
-        Double[][] data = new Double[rows.intValue()][retVal.getResultParameters().length]; // TODO Set correct dimensions
+        Double[][] data = new Double[rows.intValue()][retVal.getResultParameters().length]; 
+        Integer[] warningStatus = new Integer[rows.intValue()];
         for(Result r:VIPSResults)
         {
             // Calculate which row, based on 
             Long row = (r.getValidTimeStart().getTime()/1000 - retVal.getTimeStart().getEpochSecond()) / retVal.getInterval();
+            warningStatus[row.intValue()] = r.getWarningStatus();
             // Using the ordering in the resultParameters
             for(int i=0;i<retVal.getResultParameters().length;i++)
             {
                 data[row.intValue()][i] = null;
-                if(VIPSResultParameters[i].equals("WARNING_STATUS"))
-                {
-                    data[row.intValue()][i] = r.getWarningStatus().doubleValue();
-                }
-                else if(VIPSResultParameters[i] != null)
+                if(VIPSResultParameters[i] != null)
                 {
                     if(r.getAllValues().get(VIPSResultParameters[i]) != null)
                     {
@@ -135,6 +133,7 @@ public class DataTransformer {
                 }
             }
         } 
+        locationResult.setWarningStatus(warningStatus);
         locationResult.setData(data);
         retVal.addLocationResult(locationResult);
         return retVal;

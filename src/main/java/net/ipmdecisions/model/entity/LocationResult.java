@@ -28,12 +28,14 @@ public class LocationResult {
     private Double latitude;
     private Double altitude;
     private Double[][] data;
+    private Integer[] warningStatus;
     
     public LocationResult(Double longitude, Double latitude, Double altitude, int rows, int columns){
         this.longitude = longitude;
         this.latitude = latitude;
         this.altitude = altitude;
         this.data = new Double[rows][columns];
+        this.warningStatus = new Integer[rows];
     }
     
     public LocationResult(){
@@ -149,5 +151,19 @@ public class LocationResult {
      */
     public void setAltitude(Double altitude) {
         this.altitude = altitude;
+    }
+
+    /**
+     * @return the warningStatus
+     */
+    public Integer[] getWarningStatus() {
+        return warningStatus;
+    }
+
+    /**
+     * @param warningStatus the warningStatus to set
+     */
+    public void setWarningStatus(Integer[] warningStatus) {
+        this.warningStatus = warningStatus;
     }
 }

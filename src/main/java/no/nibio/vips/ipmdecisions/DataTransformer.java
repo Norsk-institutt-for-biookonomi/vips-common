@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import net.ipmdecisions.model.entity.LocationResult;
 import net.ipmdecisions.model.entity.ModelOutput;
 import net.ipmdecisions.weather.entity.LocationWeatherData;
@@ -45,10 +46,25 @@ import no.nibio.vips.observation.ObservationImpl;
  */
 public class DataTransformer {
     
-    public List<WeatherObservation> getVIPSWeatherData(WeatherData IPMWeatherData)
+    public List<WeatherObservation> getVIPSWeatherData(WeatherData IPMWeatherData) throws DataTransformerException
     {
-        List<WeatherObservation> retVal = new ArrayList<>();
         IPMDecisionsWeatherUtil ipmUtil = new IPMDecisionsWeatherUtil();
+        // Input check: Are we able to transform all the parameters?
+        List<Integer> missingParamCodes = new ArrayList<>();
+        for(Integer paramCode: IPMWeatherData.getWeatherParameters())
+        {
+            if(ipmUtil.getVIPSParameterId(paramCode) == null)
+            {
+                missingParamCodes.add(paramCode);
+            }
+        }
+        if(missingParamCodes.size() > 0)
+        {
+            String paramStr = missingParamCodes.stream().map(p->String.valueOf(p)).collect(Collectors.joining(","));
+            throw new DataTransformerException("Could not find matching internal parameter codes for: " + paramStr);
+        }
+        
+        List<WeatherObservation> retVal = new ArrayList<>();
         Integer logIntervalId = IPMWeatherData.getInterval().equals(3600) ? WeatherObservation.LOG_INTERVAL_ID_1H
                 : WeatherObservation.LOG_INTERVAL_ID_1D;
         LocationWeatherData oneLocation = IPMWeatherData.getLocationWeatherData().get(0);

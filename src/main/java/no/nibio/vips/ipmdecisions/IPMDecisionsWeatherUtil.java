@@ -44,7 +44,8 @@ public class IPMDecisionsWeatherUtil {
             4002, WeatherElements.WIND_SPEED_2M, // FM2/FF2
             4003, WeatherElements.WIND_SPEED_2M, // FM2/FF2
             5001, WeatherElements.GLOBAL_RADIATION, // Q0
-            3101, WeatherElements.LEAF_WETNESS_DURATION // BT
+            3101, WeatherElements.LEAF_WETNESS_DURATION, // BT
+            1901, WeatherElements.DEW_POINT_TEMPERATURE // DT 
     );
     
     public Integer getIPMParameterId(String VIPSParameterId)

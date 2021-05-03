@@ -63,13 +63,16 @@ public class DataTransformerTest extends TestCase {
         System.out.println("getVIPSWeatherData");
         WeatherData IPMWeatherData = this.getWeatherData("/IPMData_hourly.json");
         DataTransformer instance = new DataTransformer();
-        
-        List<WeatherObservation> result = instance.getVIPSWeatherData(IPMWeatherData);
-        
-        result.forEach(obs->System.out.println(obs));
-        
-        assertEquals(IPMWeatherData.getLocationWeatherData().get(0).getLength() * IPMWeatherData.getLocationWeatherData().get(0).getWidth(), result.size());
-       
+        try
+        {
+            List<WeatherObservation> result = instance.getVIPSWeatherData(IPMWeatherData);
+            result.forEach(obs->System.out.println(obs));
+            assertEquals(IPMWeatherData.getLocationWeatherData().get(0).getLength() * IPMWeatherData.getLocationWeatherData().get(0).getWidth(), result.size());
+        }catch(DataTransformerException ex)
+        {
+            fail(ex.getMessage());
+        }
+ 
     }
     
     private WeatherData getWeatherData(String fileName)

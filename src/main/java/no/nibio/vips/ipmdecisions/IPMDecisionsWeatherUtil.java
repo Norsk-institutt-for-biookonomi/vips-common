@@ -19,7 +19,9 @@
 
 package no.nibio.vips.ipmdecisions;
 
+import java.util.HashMap;
 import java.util.Map;
+import static java.util.Map.entry;
 import no.nibio.vips.util.WeatherElements;
 
 /**
@@ -35,19 +37,22 @@ public class IPMDecisionsWeatherUtil {
             WeatherElements.LEAF_WETNESS_DURATION, 3101 // BT
     );
     
-    private final Map<Integer, String> IPMToVIPS = Map.of(
-            1001,WeatherElements.TEMPERATURE_MEAN, // TM (Actually TT...)
-            1002,WeatherElements.TEMPERATURE_MEAN, // TM
-            2001, WeatherElements.PRECIPITATION, // RR
-            3001, WeatherElements.RELATIVE_HUMIDITY_MEAN, // UU/UM
-            3002, WeatherElements.RELATIVE_HUMIDITY_MEAN, // UM
-            4002, WeatherElements.WIND_SPEED_2M, // FM2/FF2
-            4003, WeatherElements.WIND_SPEED_2M, // FM2/FF2
-            5001, WeatherElements.GLOBAL_RADIATION, // Q0
-            3101, WeatherElements.LEAF_WETNESS_DURATION, // BT
-            1901, WeatherElements.DEW_POINT_TEMPERATURE // DT 
-    );
-    
+    // Has more than 10 entries, so must be initalized in the class constructor
+    private final Map<Integer, String> IPMToVIPS = Map.ofEntries(
+            entry(1001,WeatherElements.TEMPERATURE_MEAN), // TM (Actually TT...)
+            entry(1002,WeatherElements.TEMPERATURE_MEAN), // TM
+            entry(1901, WeatherElements.DEW_POINT_TEMPERATURE), // DT
+            entry(2001, WeatherElements.PRECIPITATION), // RR
+            entry(3001, WeatherElements.RELATIVE_HUMIDITY_MEAN), // UU/UM
+            entry(3002, WeatherElements.RELATIVE_HUMIDITY_MEAN), // UM
+            entry(3101, WeatherElements.LEAF_WETNESS_DURATION), // BT
+            entry(4002, WeatherElements.WIND_SPEED_2M), // FM2/FF2
+            entry(4003, WeatherElements.WIND_SPEED_2M), // FM2/FF2
+            entry(4012, WeatherElements.WIND_SPEED_10M), // FM10/FF10
+            entry(4013, WeatherElements.WIND_SPEED_10M), // FM10/FF10
+            entry(5001, WeatherElements.GLOBAL_RADIATION) // Q0       
+    ) ; 
+
     public Integer getIPMParameterId(String VIPSParameterId)
     {
         return this.VIPSToIPM.get(VIPSParameterId);

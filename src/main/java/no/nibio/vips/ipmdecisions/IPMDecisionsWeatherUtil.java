@@ -50,7 +50,9 @@ public class IPMDecisionsWeatherUtil {
             entry(4003, WeatherElements.WIND_SPEED_2M), // FM2/FF2
             entry(4012, WeatherElements.WIND_SPEED_10M), // FM10/FF10
             entry(4013, WeatherElements.WIND_SPEED_10M), // FM10/FF10
-            entry(5001, WeatherElements.GLOBAL_RADIATION) // Q0       
+            entry(5001, WeatherElements.GLOBAL_RADIATION),
+            entry(1111, WeatherElements.SOIL_TEMPERATURE_10CM_MEAN),// TJM10
+            entry(1112, WeatherElements.SOIL_TEMPERATURE_10CM_MEAN)// TJM10       
     ) ; 
 
     public Integer getIPMParameterId(String VIPSParameterId)

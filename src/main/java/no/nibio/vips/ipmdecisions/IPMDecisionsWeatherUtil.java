@@ -48,6 +48,7 @@ public class IPMDecisionsWeatherUtil {
             entry(3001, WeatherElements.RELATIVE_HUMIDITY_MEAN), // UU/UM
             entry(3002, WeatherElements.RELATIVE_HUMIDITY_MEAN), // UM
             entry(3101, WeatherElements.LEAF_WETNESS_DURATION), // BT
+            entry(3103, WeatherElements.LEAF_WETNESS_DURATION_GROUND_LEVEL), // BTg
             entry(4002, WeatherElements.WIND_SPEED_2M), // FM2/FF2
             entry(4003, WeatherElements.WIND_SPEED_2M), // FM2/FF2
             entry(4012, WeatherElements.WIND_SPEED_10M), // FM10/FF10

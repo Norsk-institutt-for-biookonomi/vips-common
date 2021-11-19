@@ -41,6 +41,8 @@ public class IPMDecisionsWeatherUtil {
     private final Map<Integer, String> IPMToVIPS = Map.ofEntries(
             entry(1001,WeatherElements.TEMPERATURE_MEAN), // TM (Actually TT...)
             entry(1002,WeatherElements.TEMPERATURE_MEAN), // TM
+            entry(1003,WeatherElements.TEMPERATURE_MINIMUM), // TN
+            entry(1004,WeatherElements.TEMPERATURE_MAXIMUM), // TX
             entry(1901, WeatherElements.DEW_POINT_TEMPERATURE), // DT
             entry(2001, WeatherElements.PRECIPITATION), // RR
             entry(3001, WeatherElements.RELATIVE_HUMIDITY_MEAN), // UU/UM
@@ -52,7 +54,7 @@ public class IPMDecisionsWeatherUtil {
             entry(4013, WeatherElements.WIND_SPEED_10M), // FM10/FF10
             entry(5001, WeatherElements.GLOBAL_RADIATION),
             entry(1111, WeatherElements.SOIL_TEMPERATURE_10CM_MEAN),// TJM10
-            entry(1112, WeatherElements.SOIL_TEMPERATURE_10CM_MEAN)// TJM10       
+            entry(1112, WeatherElements.SOIL_TEMPERATURE_10CM_MEAN)// TJM10     
     ) ; 
 
     public Integer getIPMParameterId(String VIPSParameterId)

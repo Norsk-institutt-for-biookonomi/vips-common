@@ -20,7 +20,10 @@ package no.nibio.vips.util;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import junit.framework.TestCase;
+import no.nibio.vips.model.ConfigValidationException;
 
 /**
  *
@@ -80,6 +83,6 @@ public class ModelUtilTest extends TestCase {
         
     }
 
-    
+        
     
 }

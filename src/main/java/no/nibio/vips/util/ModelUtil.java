@@ -24,11 +24,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import no.nibio.vips.entity.WeatherObservation;
+import no.nibio.vips.model.ConfigValidationException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
@@ -144,5 +147,55 @@ public class ModelUtil {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.convertValue(unknownClassList, new TypeReference<List<WeatherObservation>>(){});
         }
+    }
+    
+    public Double getDouble(Object possibleNumber) throws ConfigValidationException
+    {
+    	if(possibleNumber == null)
+    	{
+    		return null;
+    	}
+    	
+    	if(possibleNumber instanceof String)
+    	{
+    		try
+    		{
+    			return Double.valueOf((String) possibleNumber);
+    		}
+    		catch(NumberFormatException ex)
+    		{
+    			throw new ConfigValidationException(ex.getMessage());
+    		}
+    	}
+    	if(possibleNumber instanceof Integer)
+    	{
+    		return ((Integer) possibleNumber).doubleValue();
+    	}
+    	if(possibleNumber instanceof Float)
+    	{
+    		return ((Float) possibleNumber).doubleValue();
+    	}
+    	if(possibleNumber instanceof Double)
+    	{
+    		return (Double) possibleNumber;
+    	}
+    	// Clutching at straws
+    	if(possibleNumber instanceof BigInteger)
+    	{
+    		return ((BigInteger) possibleNumber).doubleValue();
+    	}
+    	if(possibleNumber instanceof BigDecimal)
+    	{
+    		return ((BigDecimal) possibleNumber).doubleValue();
+    	}
+    	// Out of options. Throw Exception
+    	try
+    	{
+    		return (Double) possibleNumber;
+    	}
+    	catch(ClassCastException ex)
+    	{
+    		throw new ConfigValidationException(ex.getMessage());
+    	}
     }
 }

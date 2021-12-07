@@ -87,7 +87,7 @@ public class NonLinearCurves {
      * <p>Based on Baskerville et al (1969): Rapid estimation of heat accumulation
      * from maximum and minimum temperatures. Ref Figure 1</p>
      * <p>Formulas from Zalom et al 1983: Degree-days: The calculation and use
-     * of heat units in pest managemeng. Division of Agriculture and Natural resources,
+     * of heat units in pest management. Division of Agriculture and Natural resources,
      * University of California. Leaflet 21373</p>
      * @param Tmin minimum value of sine wave
      * @param Tmax maximum value of sine wave
@@ -137,7 +137,7 @@ public class NonLinearCurves {
             return (1/Math.PI) * ( 
                     (m-Tl)*(theta_2 + Math.PI/2) 
                     + (Tu-Tl)*(Math.PI/2-theta_2) 
-                    - Math.acos(theta_2) 
+                    - (alpha * Math.cos(theta_2))
                     );
         }
         

@@ -132,7 +132,7 @@ public class NonLinearCurves {
         Double theta_2 = Math.asin((Tu - m) / alpha);
         
         // Case 5: Tmin above Tl and Tmax above Tu
-        if(Tmin >= Tl && Tu != null && Tmax >= Tu)
+        if(Tmin > Tl && Tu != null && Tmax > Tu)
         {
             return (1/Math.PI) * ( 
                     (m-Tl)*(theta_2 + Math.PI/2) 

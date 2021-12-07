@@ -190,6 +190,14 @@ public class NonLinearCurvesTest extends TestCase {
         result = instance.calculateSingleSineWaveWithCutoff(tMin, tMax, thresholdLower, thresholdUpper);
         assertEquals(expectedResult, result,0.1);
         
+        tMax = 32.0;
+        tMin = 20.0;
+        thresholdUpper = 31.1;
+        thresholdLower = 20.0;
+        expectedResult = 5.894588543400416;
+        result = instance.calculateSingleSineWaveWithCutoff(tMin, tMax, thresholdLower, thresholdUpper);
+        assertEquals(expectedResult, result,0.1);
+        
     }
     
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 NIBIO <http://www.nibio.no/>. 
+ * Copyright (c) 2021 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
  * VIPSCommon is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +37,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 /**
- * @copyright 2015 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2021 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class ModelUtil {
@@ -198,4 +199,29 @@ public class ModelUtil {
     		throw new ConfigValidationException(ex.getMessage());
     	}
     }
+    
+    public Double[] getDoubleArray(Object possibleArrayOfPossibleNumbers) throws ConfigValidationException
+    {
+        // Is it not an array?
+        if(!possibleArrayOfPossibleNumbers.getClass().isArray() && ! (possibleArrayOfPossibleNumbers instanceof List))
+        {
+            Double oneDouble = this.getDouble(possibleArrayOfPossibleNumbers);
+            Double[] retVal = {oneDouble};
+            return retVal;
+        }
+        
+        // Is it an array? Convert to list
+        List<Object> listOfPossibleNumbers = possibleArrayOfPossibleNumbers.getClass().isArray() ?
+                Arrays.asList((Object[])possibleArrayOfPossibleNumbers)
+                : (List) possibleArrayOfPossibleNumbers;
+        
+        Double[] retVal = new Double[listOfPossibleNumbers.size()];
+        int counter = 0;
+        for(Object possibleNumber: listOfPossibleNumbers)
+        {
+            retVal[counter++] = this.getDouble(possibleNumber);
+        }
+        return retVal;
+    }
+
 }

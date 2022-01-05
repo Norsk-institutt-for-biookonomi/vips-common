@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.time.Instant;
@@ -87,7 +88,8 @@ public class DataTransformerTest extends TestCase {
             WeatherData weatherData = new WeatherData();
             ObjectMapper mapper = new ObjectMapper();
             //mapper.convertValue(all, new TypeReference<WeatherData>(){});
-
+            JavaTimeModule javaTimeModule =  new JavaTimeModule();
+            mapper.registerModule(javaTimeModule);
             weatherData.setTimeStart(((Date)mapper.convertValue(all.get("timeStart"), new TypeReference<Date>(){})).toInstant());
             weatherData.setTimeEnd(((Date)mapper.convertValue(all.get("timeEnd"), new TypeReference<Date>(){})).toInstant());
             
@@ -116,6 +118,7 @@ public class DataTransformerTest extends TestCase {
         }
         catch(IOException ex)
         {
+            ex.printStackTrace();
             return null;
         }
     }

@@ -109,6 +109,14 @@ public class WeatherElements {
      */
     public static final String WIND_SPEED_10MIN_10M = "FF";
     /**
+     * Average wind direction for the last 10 minutes, measured at 2 meter height
+     */
+    public static final String WIND_DIR_10MIN_2M = "DD2";
+    /**
+     * Average wind direction for the last 10 minutes, measured at 10 meter height
+     */
+    public static final String WIND_DIR_10MIN_10M = "DD";
+    /**
      * Potential evapotranspiration by the Penman equation
      */
     public static final String POTENTIAL_EVAPORATION = "EPP";

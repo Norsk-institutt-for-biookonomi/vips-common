@@ -142,7 +142,7 @@ public class DataTransformer {
                 data[row.intValue()][i] = null;
                 if(VIPSResultParameters[i] != null)
                 {
-                    if(r.getAllValues().get(VIPSResultParameters[i]) != null)
+                    if(r.getAllValues().get(VIPSResultParameters[i]) != null && ! r.getAllValues().get(VIPSResultParameters[i]).toLowerCase().equals("null"))
                     {
                         data[row.intValue()][i] = Double.valueOf(r.getAllValues().get(VIPSResultParameters[i]));
                     }

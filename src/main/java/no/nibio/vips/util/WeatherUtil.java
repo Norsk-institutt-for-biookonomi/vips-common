@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 import no.nibio.vips.entity.WeatherObservation;
 import no.nibio.vips.model.ConfigValidationException;
 
@@ -42,6 +43,8 @@ import no.nibio.vips.model.ConfigValidationException;
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class WeatherUtil {
+    
+    private final Boolean DEBUG = false;
     
     public final static int AGGREGATION_TYPE_AVERAGE = 1;
     public final static int AGGREGATION_TYPE_SUM = 2;
@@ -144,7 +147,15 @@ public class WeatherUtil {
             leafWetness.setElementMeasurementTypeId(WeatherElements.LEAF_WETNESS_DURATION);
             leafWetness.setLogIntervalId(WeatherObservation.LOG_INTERVAL_ID_1H);
             leafWetness.setTimeMeasured(humObs.getTimeMeasured());
-            leafWetness.setValue(this.calculateLeafWetnessHourSimple(tempObs.getValue(), rainObs.getValue(), humObs.getValue()));
+            try
+            {
+                leafWetness.setValue(this.calculateLeafWetnessHourSimple(tempObs.getValue(), rainObs.getValue(), humObs.getValue()));
+            }
+            catch(NullPointerException ex)
+            {
+                System.out.println("Null value at " + leafWetness.getTimeMeasured());
+                throw(ex);
+            }
             retVal.add(leafWetness);
         }
         return retVal;
@@ -798,7 +809,7 @@ public class WeatherUtil {
      * @return 
      */
     public List<WeatherObservation> checkForAndFixHourlyTimeSeriesHoles(List<WeatherObservation> obsList, Integer maximumMissingValues) throws WeatherObservationListException {
-        boolean DEBUG = false;
+
         
         if(obsList == null || obsList.isEmpty())
         {
@@ -924,6 +935,9 @@ public class WeatherUtil {
         // Removing duplicates first 
         mixedParameterList = this.removeDuplicateWeatherObservations(mixedParameterList, null);
         
+        // Removing any NULL values
+        mixedParameterList = mixedParameterList.stream().filter(o->o.getValue() != null).collect((Collectors.toList()));
+        
         Map<String, List<WeatherObservation>> separatedParameters = new HashMap<>();
         
         Date estimatedLastTimestamp = lastTimestamp;
@@ -968,11 +982,17 @@ public class WeatherUtil {
             Calendar cal = Calendar.getInstance();
             for(String parameterName:separatedParameters.keySet())
             {
-                //System.out.println("Checking " + parameterName);
+                if(this.DEBUG)
+                {   
+                    System.out.println("Checking " + parameterName);
+                }
                 
                 List<WeatherObservation> list = separatedParameters.get(parameterName);
-                //System.out.println("First = " + list.get(0).getTimeMeasured());
-                //System.out.println("Last = " + list.get(list.size()-1).getTimeMeasured());
+                if(this.DEBUG)
+                {
+                    System.out.println("First = " + list.get(0).getTimeMeasured());
+                    System.out.println("Last = " + list.get(list.size()-1).getTimeMeasured());
+                }
                 Integer counter = 0;
                 while(list.get(0).getTimeMeasured().compareTo(firstTimestamp) != 0 && counter++ < maximumMissingValues)
                 {
@@ -985,7 +1005,10 @@ public class WeatherUtil {
                     {
                         newObs.setValue(0.0);
                     }
-                    //System.out.println("Prepending this: " + newObs);
+                    if(this.DEBUG)
+                    {
+                        System.out.println("Prepending this: " + newObs);
+                    }
                     list.add(0, newObs);
                 }
 
@@ -1001,7 +1024,7 @@ public class WeatherUtil {
                     {
                         newObs.setValue(0.0);
                     }
-                    //System.out.println("Appending this: " + newObs);
+                    System.out.println("Appending this: " + newObs);
                     list.add(newObs);
                 }
             }

@@ -19,12 +19,15 @@
 
 package no.nibio.vips.observation;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.util.Date;
 
 /**
- * @copyright 2015 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2015-2023 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
+@JsonDeserialize(as = ObservationImpl.class)
 public interface Observation extends Comparable {
     
     public final static Integer STATUS_TYPE_ID_PENDING = 1;

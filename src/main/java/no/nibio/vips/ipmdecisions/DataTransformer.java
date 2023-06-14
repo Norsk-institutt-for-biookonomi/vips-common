@@ -155,22 +155,113 @@ public class DataTransformer {
         return retVal;
     }
 
-    public List<Observation> getVIPSPestObservations(List<Map> fieldObservations, List<Map> fieldObservationQuantifications) {
+    /**
+     * Transform a field observation from IPM Decisions to VIPS entity
+     * 
+     * Example schema for an IPM Decisions DSS/model:
+     * 
+     * {
+          "type": "object",
+          "properties": {
+            "modelId": {
+              "type": "string",
+              "pattern": "^PSILAROBSE$",
+              "title": "Model Id",
+              "default": "PSILAROBSE",
+              "description": "Must be PSILAROBSE"
+            },
+            "configParameters": {
+              "title": "Configuration parameters",
+              "type": "object",
+              "properties": {
+                "timeZone": {
+                  "type": "string",
+                  "title": "Time zone (e.g. Europe/Oslo)",
+                  "default": "Europe/Oslo"
+                },
+                "startDateCalculation": {
+                  "type": "string",
+                  "format": "date",
+                  "default": "{CURRENT_YEAR}-03-01",
+                  "title": "Start date of calculation (YYYY-MM-DD)"
+                },
+                "endDateCalculation": {
+                  "type": "string",
+                  "format": "date",
+                  "default": "{CURRENT_YEAR}-09-01",
+                  "title": "End date of calculation (YYYY-MM-DD)"
+                },
+                "fieldObservations": {
+                  "title": "Field observations",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "title": "Field observation",
+                    "properties": {
+                      "fieldObservation": {
+                        "title": "Generic field observation information",
+                        "$ref": "https://platform.ipmdecisions.net/api/dss/rest/schema/fieldobservation"
+                      },
+                      "quantification": {
+                        "$ref": "#/definitions/fieldObs_PSILRO"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "timeZone",
+                "startDateCalculation",
+                "endDateCalculation"
+              ]
+            }
+          },
+          "required": [
+            "modelId",
+            "configParameters"
+          ],
+          "definitions": {
+            "fieldObs_PSILRO": {
+              "title": "Psila rosae quantification",
+              "properties": {
+                "trapCountCropEdge": {
+                  "title": "Insect trap count at the edge of the field",
+                  "type": "integer"
+                },
+                "trapCountCropInside": {
+                  "title": "Insect trap count inside the field",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "trapCountCropEdge",
+                "trapCountCropInside"
+              ]
+            }
+          }
+        }
+     * 
+     * @param fieldObservations
+     * @return 
+     */
+    public List<Observation> getVIPSPestObservations(List<Map> fieldObservations) {
         List<Observation> retVal = new ArrayList<>();
         ObjectMapper om = new ObjectMapper();
         for(int i=0;i<fieldObservations.size();i++)
         {
             Map fieldObservation = fieldObservations.get(i);
+            Map commonInfo = (Map) fieldObservation.get("fieldObservation");
+            Map quantification = (Map) fieldObservation.get("quantification");
             ObservationImpl VIPSObs = new ObservationImpl();
-            VIPSObs.setGeoinfo(fieldObservation.get("location").toString());
+            VIPSObs.setGeoinfo(commonInfo.get("location").toString());
             try
             {
-                VIPSObs.setObservationData(om.writeValueAsString(fieldObservationQuantifications.get(i)));
+                VIPSObs.setObservationData(om.writeValueAsString(quantification));
             }catch(JsonProcessingException ex)
             {
                 ex.printStackTrace();
             }
-            VIPSObs.setTimeOfObservation(om.convertValue(fieldObservation.get("time"), Date.class));
+            VIPSObs.setTimeOfObservation(om.convertValue(commonInfo.get("time"), Date.class));
             retVal.add(VIPSObs);
         }
         return retVal;

@@ -2,8 +2,8 @@ image: openjdk:11-jdk
 stages:
   - build
   - test
-  - verify
   - deploy
+  - verify
 
 variables:
   MAVEN_CLI_OPTS: "-s ci_settings.xml --batch-mode"
@@ -29,20 +29,20 @@ test:
   tags:
     - vips-java
 
-trigger_model:
-  stage: verify
+deploy-snapshot:
+  stage: deploy
   script:
-    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - "curl -X POST --fail -F token=${CI_JOB_TOKEN} -F ref=$MAIN_BRANCH -F 'variables[VERSION]=$PROJECT_VERSION' https://gitlab.nibio.no/api/v4/projects/31/trigger/pipeline"
+    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
   tags:
     - vips-java
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-deploy-snapshot:
-  stage: deploy
+verify_models:
+  stage: verify
   script:
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - "curl -X POST --fail -F token=${CI_JOB_TOKEN} -F ref=$MAIN_BRANCH -F 'variables[VERSION]=$PROJECT_VERSION' https://gitlab.nibio.no/api/v4/projects/31/trigger/pipeline"
   tags:
     - vips-java
   rules:

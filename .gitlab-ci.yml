@@ -1,4 +1,4 @@
-image: openjdk:11-jre
+image: openjdk:11-jdk
 stages:
   - build
   - test

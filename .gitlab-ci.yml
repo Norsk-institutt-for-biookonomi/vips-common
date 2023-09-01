@@ -10,7 +10,7 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository -Dmaven.artifact.threads=10"
   MAIN_BRANCH: "main"
   RELEASE_BRANCH: "release"
-
+  MAMESTRABR_PROJECT_ID: "31"
 cache:
   paths:
     - .m2/repository/
@@ -40,9 +40,11 @@ deploy-snapshot:
 
 verify_models:
   stage: verify
+  image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - "curl -X POST --fail -F token=${CI_JOB_TOKEN} -F ref=$MAIN_BRANCH -F 'variables[VERSION]=$PROJECT_VERSION' https://gitlab.nibio.no/api/v4/projects/31/trigger/pipeline"
+    - trigger -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    #- "curl -X POST --fail -F token=${CI_JOB_TOKEN} -F ref=$MAIN_BRANCH -F 'variables[VERSION]=$PROJECT_VERSION' https://gitlab.nibio.no/api/v4/projects/31/trigger/pipeline"
   tags:
     - vips-java
   rules:

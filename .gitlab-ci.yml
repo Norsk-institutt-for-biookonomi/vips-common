@@ -46,9 +46,9 @@ verify_models:
   stage: verify
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
-    - apk add --no-cache openjdk11 maven
+    - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
     #- "curl -X POST --fail -F token=${CI_JOB_TOKEN} -F ref=$MAIN_BRANCH -F 'variables[VERSION]=$PROJECT_VERSION' https://gitlab.nibio.no/api/v4/projects/31/trigger/pipeline"
   tags:
     - vips-java

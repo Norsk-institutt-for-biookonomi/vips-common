@@ -21,8 +21,6 @@ build:
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS package
   tags:
     - vips-java
-  rules:
-    - if: '"1" == "2"'
 
 test:
   stage: test
@@ -30,8 +28,6 @@ test:
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS test
   tags:
     - vips-java
-  rules:
-    - if: '"1" == "2"'
 
 deploy-snapshot:
   stage: deploy
@@ -40,8 +36,10 @@ deploy-snapshot:
   tags:
     - vips-java
   rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH && "1" == "2"'
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
+# Runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
+# which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 verify_models:
   stage: verify
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -49,7 +47,6 @@ verify_models:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
-    #- "curl -X POST --fail -F token=${CI_JOB_TOKEN} -F ref=$MAIN_BRANCH -F 'variables[VERSION]=$PROJECT_VERSION' https://gitlab.nibio.no/api/v4/projects/31/trigger/pipeline"
   tags:
     - vips-java
   rules:

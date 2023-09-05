@@ -12,6 +12,7 @@ variables:
   RELEASE_BRANCH: "release"
   MAMESTRABR_PROJECT_ID: "31"
   PSILARTEMP_PROJECT_ID: "37"
+  APPLESCABM_PROJECT_ID: "20"
 cache:
   paths:
     - .m2/repository/

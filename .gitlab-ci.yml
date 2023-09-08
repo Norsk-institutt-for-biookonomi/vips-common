@@ -19,6 +19,7 @@ variables:
   NAERSTADMO_PROJECT_ID: "32"
   MAMESTRABR_PROJECT_ID: "31"
   PSILARTEMP_PROJECT_ID: "37"
+  SEPTORIAHU_PROJECT_ID: "65"
   BARLEYNETB_PROJECT_ID: "21"
 cache:
   paths:
@@ -145,6 +146,18 @@ verify_model_PSILARTEMP:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_SEPTORIAHU:
+  stage: verify-3
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:

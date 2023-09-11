@@ -252,13 +252,13 @@ verify_model_NAERSTADMO:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_NEGPRODMOD:
+verify_model_NEGPROGMOD:
   stage: verify-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPRODMOD" -t $MAIN_BRANCH $NEGPRODMOD_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:

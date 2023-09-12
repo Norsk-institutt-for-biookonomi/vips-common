@@ -3,13 +3,43 @@ stages:
   - build
   - test
   - deploy
+  - models-1
+  - models-2
+  - models-3
+  - models-4
+  - models-5
+  - models-6
+  - models-7
+  - models-8
 
 variables:
   MAVEN_CLI_OPTS: "-s ci_settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository -Dmaven.artifact.threads=10"
   MAIN_BRANCH: "main"
   RELEASE_BRANCH: "release"
-
+  ALTERNARIA_PROJECT_ID: "173"
+  APPLESCABM_PROJECT_ID: "20"
+  BARLEYNETB_PROJECT_ID: "21"
+  BREMIALACT_PROJECT_ID: "22"
+  DELIARADIC_PROJECT_ID: "24"
+  DELIARFOBS_PROJECT_ID: "25"
+  DOWNCASTMO_PROJECT_ID: "26"
+  FAWMODEL01_PROJECT_ID: "90"
+  FINNCEREAL_PROJECT_ID: "66"
+  GRASSDRYMO_PROJECT_ID: "28"
+  LEAFBLOTCH_PROJECT_ID: "294"
+  LYGUSRUGUL_PROJECT_ID: "30"
+  MAIZEPHENO_PROJECT_ID: "336"
+  MAMESTRABR_PROJECT_ID: "31"
+  NAERSTADMO_PROJECT_ID: "32"
+  NEGPROGMOD_PROJECT_ID: "33"
+  OATFLOWERM_PROJECT_ID: "34"
+  PSILARTEMP_PROJECT_ID: "37"
+  PSILAROBSE_PROJECT_ID: "36"
+  ROUGHAGENU_PROJECT_ID: "38"
+  SEPAPIICOL_PROJECT_ID: "39"
+  SEPTORIAHU_PROJECT_ID: "65"
+  SEPTREFHUM_PROJECT_ID: "135"
 cache:
   paths:
     - .m2/repository/
@@ -31,7 +61,288 @@ test:
 deploy-snapshot:
   stage: deploy
   script:
+    - export VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - if ! [[ $VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+# Runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
+# which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
+
+verify_model_ALTERNARIA:
+  stage: models-1
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_APPLESCABM:
+  stage: models-1
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_BARLEYNETB:
+  stage: models-1
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_BREMIALACT:
+  stage: models-2
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_DELIARADIC:
+  stage: models-2
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_DELIARFOBS:
+  stage: models-2
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_DOWNCASTMO:
+  stage: models-3
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_FAWMODEL01:
+  stage: models-3
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_FINNCEREAL:
+  stage: models-3
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_GRASSDRYMO:
+  stage: models-4
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_LEAFBLOTCH:
+  stage: models-4
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_LYGUSRUGUL:
+  stage: models-4
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_MAIZEPHENO:
+  stage: models-5
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_MAMESTRABR:
+  stage: models-5
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_NAERSTADMO:
+  stage: models-5
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_NEGPROGMOD:
+  stage: models-6
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_OATFLOWERM:
+  stage: models-6
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_PSILAROBSE:
+  stage: models-6
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_PSILARTEMP:
+  stage: models-7
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_ROUGHAGENU:
+  stage: models-7
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_SEPAPIICOL:
+  stage: models-7
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_SEPTORIAHU:
+  stage: models-8
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$PROJECT_VERSION
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
+verify_model_SEPTREFHUM:
+  stage: models-8
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -58,6 +369,7 @@ deploy-release:
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS validate -DremoveSnapshot
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
     - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - if [[ $VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
     - export RELEASE_TAG="v${RELEASE_VERSION}"
     - git add pom.xml
     - git commit -m "[ci skip] Set release version ${RELEASE_VERSION}"
@@ -71,6 +383,21 @@ deploy-release:
     - git reset --hard origin/$MAIN_BRANCH
     - git merge -m "[ci skip] Merge ${RELEASE_BRANCH}" --no-ff $RELEASE_BRANCH
     - git push origin $MAIN_BRANCH
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
+
+# Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
+# which builds model with the new version of VIPSCommon, and release a new snapshot version of the model.
+
+update_model_ALTERNARIA:
+  stage: models-1
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$RELEASE_VERSION
   tags:
     - vips-java
   rules:

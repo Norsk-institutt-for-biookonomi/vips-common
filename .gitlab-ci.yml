@@ -397,7 +397,7 @@ update_model_ALTERNARIA:
   script:
     - apk add --no-cache openjdk11
     - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$RELEASE_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$RELEASE_VERSION -e PURPOSE="update"
   tags:
     - vips-java
   rules:

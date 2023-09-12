@@ -18,11 +18,22 @@
  */
 package no.nibio.vips.util;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MappingJsonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import junit.framework.TestCase;
+import no.nibio.vips.entity.ModelConfiguration;
+import no.nibio.vips.entity.WeatherObservation;
 import no.nibio.vips.model.ConfigValidationException;
 
 /**
@@ -81,6 +92,26 @@ public class ModelUtilTest extends TestCase {
         //System.out.println(result);
         assertEquals(expResult, result);
         
+    }
+    
+    public void testExtractWeatherObservationList()
+    {
+        String weatherDataFileName = "/weatherData_milliseconds.json";
+        try {
+
+            BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
+            //InputStream i = this.getClass().getResourceAsStream(weatherDataFileName);
+            JsonFactory f = new MappingJsonFactory();
+            JsonParser jp = f.createParser(inputStream);
+            JsonNode all = jp.readValueAsTree();
+            List<WeatherObservation> result = new ModelUtil().extractWeatherObservationList(all);
+            System.out.println(result.get(0));
+            assertNotNull(result);
+
+        } catch (IOException ex) {
+            //ex.printStackTrace();
+            fail(ex.getMessage());
+        } 
     }
 
         

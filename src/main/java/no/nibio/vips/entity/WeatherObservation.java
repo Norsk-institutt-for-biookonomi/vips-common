@@ -81,8 +81,8 @@ public class WeatherObservation implements Comparable{
         
     public final void setTimeMeasured(Date timeMeasured) { this.timeMeasured = timeMeasured; }
     
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssXXX", timezone="UTC") // Java >= 7
-    @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ssXXX", timezone="UTC") // Java >= 7
+    //@JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ssXXX")
     public Date getTimeMeasured() { return this.timeMeasured; }
     
     public final void setElementMeasurementTypeId(String elementMeasurementTypeId) { 

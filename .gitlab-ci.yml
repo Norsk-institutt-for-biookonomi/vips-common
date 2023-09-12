@@ -69,7 +69,7 @@ deploy-snapshot:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-# Runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
+# Runs after new SNAPSHOT is deployed to package registry. Triggers job on release branch in model repo,
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_ALTERNARIA:
@@ -78,7 +78,7 @@ verify_model_ALTERNARIA:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $RELEASE_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -90,7 +90,7 @@ verify_model_APPLESCABM:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $RELEASE_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -102,7 +102,7 @@ verify_model_BARLEYNETB:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $RELEASE_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -114,7 +114,7 @@ verify_model_BREMIALACT:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $RELEASE_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -126,7 +126,7 @@ verify_model_DELIARADIC:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $RELEASE_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -138,7 +138,7 @@ verify_model_DELIARFOBS:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $RELEASE_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -150,7 +150,7 @@ verify_model_DOWNCASTMO:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $RELEASE_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -162,7 +162,7 @@ verify_model_FAWMODEL01:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $RELEASE_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -174,7 +174,7 @@ verify_model_FINNCEREAL:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $RELEASE_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -186,7 +186,7 @@ verify_model_GRASSDRYMO:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $RELEASE_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -198,7 +198,7 @@ verify_model_LEAFBLOTCH:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $RELEASE_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -210,7 +210,7 @@ verify_model_LYGUSRUGUL:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $RELEASE_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -222,7 +222,7 @@ verify_model_MAIZEPHENO:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $RELEASE_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -234,7 +234,7 @@ verify_model_MAMESTRABR:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $RELEASE_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -246,7 +246,7 @@ verify_model_NAERSTADMO:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $RELEASE_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -258,7 +258,7 @@ verify_model_NEGPROGMOD:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $RELEASE_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -270,7 +270,7 @@ verify_model_OATFLOWERM:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $RELEASE_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -282,7 +282,7 @@ verify_model_PSILAROBSE:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $RELEASE_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -294,7 +294,7 @@ verify_model_PSILARTEMP:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $RELEASE_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -306,7 +306,7 @@ verify_model_ROUGHAGENU:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $RELEASE_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -318,7 +318,7 @@ verify_model_SEPAPIICOL:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $RELEASE_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -330,7 +330,7 @@ verify_model_SEPTORIAHU:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $RELEASE_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -342,7 +342,7 @@ verify_model_SEPTREFHUM:
   script:
     - apk add --no-cache openjdk11
     - export PROJECT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$PROJECT_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $RELEASE_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$PROJECT_VERSION
   tags:
     - vips-java
   rules:
@@ -397,7 +397,7 @@ update_model_ALTERNARIA:
   script:
     - apk add --no-cache openjdk11
     - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e RELEASE_VERSION=$RELEASE_VERSION
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$RELEASE_VERSION
   tags:
     - vips-java
   rules:

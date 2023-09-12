@@ -3,14 +3,14 @@ stages:
   - build
   - test
   - deploy
-  - verify-1
-  - verify-2
-  - verify-3
-  - verify-4
-  - verify-5
-  - verify-6
-  - verify-7
-  - verify-8
+  - models-1
+  - models-2
+  - models-3
+  - models-4
+  - models-5
+  - models-6
+  - models-7
+  - models-8
 
 variables:
   MAVEN_CLI_OPTS: "-s ci_settings.xml --batch-mode"
@@ -73,7 +73,7 @@ deploy-snapshot:
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_ALTERNARIA:
-  stage: verify-1
+  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -85,7 +85,7 @@ verify_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_APPLESCABM:
-  stage: verify-1
+  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -97,7 +97,7 @@ verify_model_APPLESCABM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BARLEYNETB:
-  stage: verify-1
+  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -109,7 +109,7 @@ verify_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BREMIALACT:
-  stage: verify-2
+  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -121,7 +121,7 @@ verify_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARADIC:
-  stage: verify-2
+  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -133,7 +133,7 @@ verify_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARFOBS:
-  stage: verify-2
+  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -145,7 +145,7 @@ verify_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DOWNCASTMO:
-  stage: verify-3
+  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -157,7 +157,7 @@ verify_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FAWMODEL01:
-  stage: verify-3
+  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -169,7 +169,7 @@ verify_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FINNCEREAL:
-  stage: verify-3
+  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -181,7 +181,7 @@ verify_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_GRASSDRYMO:
-  stage: verify-4
+  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -193,7 +193,7 @@ verify_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LEAFBLOTCH:
-  stage: verify-4
+  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -205,7 +205,7 @@ verify_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LYGUSRUGUL:
-  stage: verify-4
+  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -217,7 +217,7 @@ verify_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAIZEPHENO:
-  stage: verify-5
+  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -229,7 +229,7 @@ verify_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAMESTRABR:
-  stage: verify-5
+  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -241,7 +241,7 @@ verify_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NAERSTADMO:
-  stage: verify-5
+  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -253,7 +253,7 @@ verify_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NEGPROGMOD:
-  stage: verify-6
+  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -265,7 +265,7 @@ verify_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_OATFLOWERM:
-  stage: verify-6
+  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -277,7 +277,7 @@ verify_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILAROBSE:
-  stage: verify-6
+  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -289,7 +289,7 @@ verify_model_PSILAROBSE:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILARTEMP:
-  stage: verify-7
+  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -301,7 +301,7 @@ verify_model_PSILARTEMP:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ROUGHAGENU:
-  stage: verify-7
+  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -313,7 +313,7 @@ verify_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPAPIICOL:
-  stage: verify-7
+  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -325,7 +325,7 @@ verify_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTORIAHU:
-  stage: verify-8
+  stage: models-8
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -337,7 +337,7 @@ verify_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTREFHUM:
-  stage: verify-8
+  stage: models-8
   image: registry.gitlab.com/finestructure/pipeline-trigger
   script:
     - apk add --no-cache openjdk11
@@ -369,6 +369,7 @@ deploy-release:
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS validate -DremoveSnapshot
     - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
     - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - if [[ $VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
     - export RELEASE_TAG="v${RELEASE_VERSION}"
     - git add pom.xml
     - git commit -m "[ci skip] Set release version ${RELEASE_VERSION}"
@@ -382,6 +383,21 @@ deploy-release:
     - git reset --hard origin/$MAIN_BRANCH
     - git merge -m "[ci skip] Merge ${RELEASE_BRANCH}" --no-ff $RELEASE_BRANCH
     - git push origin $MAIN_BRANCH
+  tags:
+    - vips-java
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
+
+# Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
+# which builds model with the new version of VIPSCommon, and release a new snapshot version of the model.
+
+update_model_ALTERNARIA:
+  stage: models-1
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  script:
+    - apk add --no-cache openjdk11
+    - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$RELEASE_VERSION
   tags:
     - vips-java
   rules:

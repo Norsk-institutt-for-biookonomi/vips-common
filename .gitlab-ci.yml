@@ -1,4 +1,8 @@
-image: openjdk:11-jdk
+include:
+  - project: 'VIPS/vips-common-config'
+    file: '/gitlab-ci-vips-libraries.yml'
+    ref: main
+
 stages:
   - build
   - test
@@ -13,10 +17,6 @@ stages:
   - models-8
 
 variables:
-  MAVEN_CLI_OPTS: "-s ci_settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository -Dmaven.artifact.threads=10"
-  MAIN_BRANCH: "main"
-  RELEASE_BRANCH: "release"
   ALTERNARIA_PROJECT_ID: "173"
   APPLESCABM_PROJECT_ID: "20"
   BARLEYNETB_PROJECT_ID: "21"
@@ -40,45 +40,14 @@ variables:
   SEPAPIICOL_PROJECT_ID: "39"
   SEPTORIAHU_PROJECT_ID: "65"
   SEPTREFHUM_PROJECT_ID: "135"
-cache:
-  paths:
-    - .m2/repository/
-
-build:
-  stage: build
-  script:
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS package
-  tags:
-    - vips-java
-
-test:
-  stage: test
-  script:
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS test
-  tags:
-    - vips-java
-
-deploy-snapshot:
-  stage: deploy
-  script:
-    - export VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - if ! [[ $VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
-    - echo "VERSION=$VERSION" >> build.env
-  artifacts:
-    reports:
-      dotenv: build.env
-  tags:
-    - vips-java
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 # Runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_ALTERNARIA:
-  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -90,8 +59,9 @@ verify_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_APPLESCABM:
-  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -103,8 +73,9 @@ verify_model_APPLESCABM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BARLEYNETB:
-  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -116,8 +87,9 @@ verify_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BREMIALACT:
-  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-2
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -129,8 +101,9 @@ verify_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARADIC:
-  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-2
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -142,8 +115,9 @@ verify_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARFOBS:
-  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-2
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -155,8 +129,9 @@ verify_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DOWNCASTMO:
-  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-3
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -168,8 +143,9 @@ verify_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FAWMODEL01:
-  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-3
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -181,8 +157,9 @@ verify_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FINNCEREAL:
-  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-3
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -194,8 +171,9 @@ verify_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_GRASSDRYMO:
-  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-4
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -207,8 +185,9 @@ verify_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LEAFBLOTCH:
-  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-4
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -220,8 +199,9 @@ verify_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LYGUSRUGUL:
-  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-4
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -233,8 +213,9 @@ verify_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAIZEPHENO:
-  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-5
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -246,8 +227,9 @@ verify_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAMESTRABR:
-  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-5
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -259,8 +241,9 @@ verify_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NAERSTADMO:
-  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-5
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -272,8 +255,9 @@ verify_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NEGPROGMOD:
-  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-6
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -285,8 +269,9 @@ verify_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_OATFLOWERM:
-  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-6
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -298,8 +283,9 @@ verify_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILAROBSE:
-  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-6
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -311,8 +297,9 @@ verify_model_PSILAROBSE:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILARTEMP:
-  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-7
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -324,8 +311,9 @@ verify_model_PSILARTEMP:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ROUGHAGENU:
-  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-7
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -337,8 +325,9 @@ verify_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPAPIICOL:
-  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-7
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -350,8 +339,9 @@ verify_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTORIAHU:
-  stage: models-8
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-8
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -363,8 +353,9 @@ verify_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTREFHUM:
-  stage: models-8
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-8
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
@@ -375,60 +366,13 @@ verify_model_SEPTREFHUM:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-deploy-release:
-  stage: deploy
-  script:
-    # For debugging git interaction
-    #- export GIT_TRACING=2
-    #- export GIT_CURL_VERBOSE=1
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-
-    # Use access token given by CI/CD variable ACCESS_TOKEN to authenticate
-    - export NEW_REPO_URL=https://root:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-    - git remote set-url --push origin $NEW_REPO_URL
-    - git fetch origin --prune --prune-tags
-
-    # Checkout release branch, set release version and deploy. Commit, tag and push.
-    - git checkout $RELEASE_BRANCH
-    - git status
-    - git reset --hard origin/$RELEASE_BRANCH
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS validate -DremoveSnapshot
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
-    - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - if [[ $RELEASE_VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
-    - export RELEASE_TAG="v${RELEASE_VERSION}"
-    - git add pom.xml
-    - git commit -m "[ci skip] Set release version ${RELEASE_VERSION}"
-    - git tag -a $RELEASE_TAG -m "Tag release ${RELEASE_TAG}"
-    - git push origin $RELEASE_TAG
-    - git push origin $RELEASE_BRANCH
-
-    # Checkout main branch, merge release branch. Push commit.
-    - git fetch
-    - git checkout $MAIN_BRANCH
-    - git reset --hard origin/$MAIN_BRANCH
-    - git merge -m "[ci skip] Merge ${RELEASE_BRANCH}" --no-ff $RELEASE_BRANCH
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS validate -DbumpPatch
-    - export SNAPSHOT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - git add pom.xml
-    - git commit -m "[ci skip] Set snapshot version ${SNAPSHOT_VERSION}"
-    - git push origin $MAIN_BRANCH
-    - echo "VERSION=$RELEASE_VERSION" >> build.env
-  artifacts:
-    reports:
-      dotenv: build.env
-  tags:
-    - vips-java
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
-
 # Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.
 
 update_model_ALTERNARIA:
-  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -440,8 +384,9 @@ update_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_APPLESCABM:
-  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -453,8 +398,9 @@ update_model_APPLESCABM:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_BARLEYNETB:
-  stage: models-1
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -466,8 +412,9 @@ update_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_BREMIALACT:
-  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-2
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -479,8 +426,9 @@ update_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DELIARADIC:
-  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-2
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -492,8 +440,9 @@ update_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DELIARFOBS:
-  stage: models-2
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-2
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -505,8 +454,9 @@ update_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DOWNCASTMO:
-  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-3
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -518,8 +468,9 @@ update_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_FAWMODEL01:
-  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-3
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -531,8 +482,9 @@ update_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_FINNCEREAL:
-  stage: models-3
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-3
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -544,8 +496,9 @@ update_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_GRASSDRYMO:
-  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-4
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -557,8 +510,9 @@ update_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_LEAFBLOTCH:
-  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-4
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -570,8 +524,9 @@ update_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_LYGUSRUGUL:
-  stage: models-4
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-4
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -583,8 +538,9 @@ update_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_MAIZEPHENO:
-  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-5
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -596,8 +552,9 @@ update_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_MAMESTRABR:
-  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-5
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -609,8 +566,9 @@ update_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_NAERSTADMO:
-  stage: models-5
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-5
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -622,8 +580,9 @@ update_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_NEGPROGMOD:
-  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-6
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -635,8 +594,9 @@ update_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_OATFLOWERM:
-  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-6
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -648,8 +608,9 @@ update_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_PSILAROBSE:
-  stage: models-6
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-6
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -661,8 +622,9 @@ update_model_PSILAROBSE:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_PSILARTEMP:
-  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-7
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -674,8 +636,9 @@ update_model_PSILARTEMP:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_ROUGHAGENU:
-  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-7
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -687,8 +650,9 @@ update_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPAPIICOL:
-  stage: models-7
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-7
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -700,8 +664,9 @@ update_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPTORIAHU:
-  stage: models-8
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-8
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
@@ -713,8 +678,9 @@ update_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPTREFHUM:
-  stage: models-8
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-8
+  before_script: []
   script:
     - apk add --no-cache openjdk11
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"

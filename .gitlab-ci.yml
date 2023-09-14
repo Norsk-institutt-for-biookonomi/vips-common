@@ -4,6 +4,9 @@ include:
     ref: main
 
 stages:
+  - build
+  - test
+  - deploy
   - models-1
   - models-2
   - models-3

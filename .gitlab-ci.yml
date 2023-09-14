@@ -1,8 +1,9 @@
-image: openjdk:11-jdk
+include:
+  - project: 'VIPS/vips-common-config'
+    file: '/gitlab-ci-vips-libraries.yml'
+    ref: main
+
 stages:
-  - build
-  - test
-  - deploy
   - models-1
   - models-2
   - models-3
@@ -13,10 +14,6 @@ stages:
   - models-8
 
 variables:
-  MAVEN_CLI_OPTS: "-s ci_settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository -Dmaven.artifact.threads=10"
-  MAIN_BRANCH: "main"
-  RELEASE_BRANCH: "release"
   ALTERNARIA_PROJECT_ID: "173"
   APPLESCABM_PROJECT_ID: "20"
   BARLEYNETB_PROJECT_ID: "21"
@@ -40,38 +37,6 @@ variables:
   SEPAPIICOL_PROJECT_ID: "39"
   SEPTORIAHU_PROJECT_ID: "65"
   SEPTREFHUM_PROJECT_ID: "135"
-cache:
-  paths:
-    - .m2/repository/
-
-build:
-  stage: build
-  script:
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS package
-  tags:
-    - vips-java
-
-test:
-  stage: test
-  script:
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS test
-  tags:
-    - vips-java
-
-deploy-snapshot:
-  stage: deploy
-  script:
-    - export VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - if ! [[ $VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
-    - echo "VERSION=$VERSION" >> build.env
-  artifacts:
-    reports:
-      dotenv: build.env
-  tags:
-    - vips-java
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 # Runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
@@ -374,54 +339,6 @@ verify_model_SEPTREFHUM:
     - deploy-snapshot
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
-
-deploy-release:
-  stage: deploy
-  script:
-    # For debugging git interaction
-    #- export GIT_TRACING=2
-    #- export GIT_CURL_VERBOSE=1
-    - git config --global user.name "${GITLAB_USER_NAME}"
-    - git config --global user.email "${GITLAB_USER_EMAIL}"
-
-    # Use access token given by CI/CD variable ACCESS_TOKEN to authenticate
-    - export NEW_REPO_URL=https://root:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-    - git remote set-url --push origin $NEW_REPO_URL
-    - git fetch origin --prune --prune-tags
-
-    # Checkout release branch, set release version and deploy. Commit, tag and push.
-    - git checkout $RELEASE_BRANCH
-    - git status
-    - git reset --hard origin/$RELEASE_BRANCH
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS validate -DremoveSnapshot
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS deploy -DskipTests
-    - export RELEASE_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - if [[ $RELEASE_VERSION =~ .*SNAPSHOT ]]; then exit 1; fi
-    - export RELEASE_TAG="v${RELEASE_VERSION}"
-    - git add pom.xml
-    - git commit -m "[ci skip] Set release version ${RELEASE_VERSION}"
-    - git tag -a $RELEASE_TAG -m "Tag release ${RELEASE_TAG}"
-    - git push origin $RELEASE_TAG
-    - git push origin $RELEASE_BRANCH
-
-    # Checkout main branch, merge release branch. Push commit.
-    - git fetch
-    - git checkout $MAIN_BRANCH
-    - git reset --hard origin/$MAIN_BRANCH
-    - git merge -m "[ci skip] Merge ${RELEASE_BRANCH}" --no-ff $RELEASE_BRANCH
-    - ./mvnw $MAVEN_CLI_OPTS $MAVEN_OPTS validate -DbumpPatch
-    - export SNAPSHOT_VERSION=$(./mvnw --batch-mode --no-transfer-progress --non-recursive help:evaluate -Dexpression=project.version | grep -v "\[.*")
-    - git add pom.xml
-    - git commit -m "[ci skip] Set snapshot version ${SNAPSHOT_VERSION}"
-    - git push origin $MAIN_BRANCH
-    - echo "VERSION=$RELEASE_VERSION" >> build.env
-  artifacts:
-    reports:
-      dotenv: build.env
-  tags:
-    - vips-java
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 # Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.

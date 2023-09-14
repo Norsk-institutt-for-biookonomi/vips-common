@@ -4,7 +4,17 @@ include:
     ref: main
 
 stages:
+  - build
+  - test
   - deploy
+  - models-1
+  - models-2
+  - models-3
+  - models-4
+  - models-5
+  - models-6
+  - models-7
+  - models-8
 
 variables:
   ALTERNARIA_PROJECT_ID: "173"

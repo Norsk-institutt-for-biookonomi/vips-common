@@ -6,5 +6,3 @@ This is a jar file that contains the entities and util classes that are used thr
 * Java >= 14
 * 
 ## Development
-
-

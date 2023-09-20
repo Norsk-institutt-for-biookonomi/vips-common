@@ -42,7 +42,7 @@ import org.wololo.jts2geojson.GeoJSONWriter;
 
 /**
  * Handy tools for GIS operations
- * @copyright 2017 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2023 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class GISUtil {
@@ -142,7 +142,7 @@ public class GISUtil {
     }
     
     /**
-     * Convert one JTS Geometry object into a GeoJSON feature
+     * Convert one JTS Geometry object into a complete GeoJSON String
      * @param geometry
      * @param properties
      * @return 
@@ -154,12 +154,26 @@ public class GISUtil {
             return "";
         }
         List<Feature> features = new ArrayList<>();
+        features.add(this.getGeoJSONFeatureFromGeometry(geometry, properties));
         GeoJSONWriter writer = new GeoJSONWriter();
-       
-        features.add(new Feature(writer.write(geometry), properties));
-        
         FeatureCollection json = writer.write(features);
         return json.toString();
+    }
+    
+    /**
+     * Convert one JTS Geometry object into a GeoJSON Feature
+     * @param geometry
+     * @param properties
+     * @return 
+     */
+    public Feature getGeoJSONFeatureFromGeometry(Geometry geometry,Map<String, Object> properties)
+    {
+        if(geometry == null)
+        {
+            return null;
+        }
+        GeoJSONWriter writer = new GeoJSONWriter();
+        return new Feature(writer.write(geometry), properties);
     }
     
     /**
@@ -171,6 +185,12 @@ public class GISUtil {
     {
         GeometryFactory gf = new GeometryFactory(new PrecisionModel(), 4326);
         return gf.createPoint(coordinate);
+    }
+    
+    public Point createPointWGS84(Double longitude, Double latitude)
+    {
+        Coordinate coordinate = new Coordinate(longitude, latitude);
+        return this.createPointWGS84(coordinate);
     }
 
     /**

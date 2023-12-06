@@ -144,7 +144,14 @@ public class DataTransformer {
                 {
                     if(r.getAllValues().get(VIPSResultParameters[i]) != null && ! r.getAllValues().get(VIPSResultParameters[i]).toLowerCase().equals("null"))
                     {
-                        data[row.intValue()][i] = Double.valueOf(r.getAllValues().get(VIPSResultParameters[i]));
+                        try
+                        {
+                            data[row.intValue()][i] = Double.valueOf(r.getAllValues().get(VIPSResultParameters[i]));
+                        }
+                        catch(NumberFormatException ex)
+                        {
+                            // We leave it empty
+                        }
                     }
                 }
             }

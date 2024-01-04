@@ -369,7 +369,7 @@ public class WeatherUtilTest extends TestCase {
             // Test 1 // Result have same length as input data
             assertEquals(TM.size(), result.size());
             // Starts with same timestamp
-            result.stream().forEach(o->System.out.println(o));
+            //result.stream().forEach(o->System.out.println(o));
             assertEquals(TM.get(0).getTimeMeasured(), result.get(0).getTimeMeasured());
             // Ends with same timestamp
             assertEquals(TM.get(TM.size()-1).getTimeMeasured(), result.get(TM.size()-1).getTimeMeasured());

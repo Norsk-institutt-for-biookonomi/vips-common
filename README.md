@@ -3,7 +3,7 @@
 This is a jar file that contains the entities and util classes that are used throughout the VIPS system
 
 ## Requirements
-* Java >= 14
+* Java >= 17
 
 ## Development
 

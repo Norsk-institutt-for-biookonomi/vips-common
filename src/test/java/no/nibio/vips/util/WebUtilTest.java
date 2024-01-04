@@ -124,7 +124,7 @@ public class WebUtilTest extends TestCase {
         Map<String, String[]> arrP = new HashMap<>();
         arrP.put("wp", weatherParams);
         String result = WebUtil.getOutputFromPostRequest(URL, queryParams, arrP);
-        System.out.println(result);
+        //System.out.println(result);
         assertNotNull(expResult, result);
         
     }

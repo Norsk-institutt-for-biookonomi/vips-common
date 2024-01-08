@@ -67,7 +67,7 @@ public class DataTransformerTest extends TestCase {
         try
         {
             List<WeatherObservation> result = instance.getVIPSWeatherData(IPMWeatherData);
-            result.forEach(obs->System.out.println(obs));
+            //result.forEach(obs->System.out.println(obs));
             assertEquals(IPMWeatherData.getLocationWeatherData().get(0).getLength() * IPMWeatherData.getLocationWeatherData().get(0).getWidth(), result.size());
         }catch(DataTransformerException ex)
         {

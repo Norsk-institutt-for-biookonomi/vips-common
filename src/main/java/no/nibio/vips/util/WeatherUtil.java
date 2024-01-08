@@ -1024,7 +1024,7 @@ public class WeatherUtil {
                     {
                         newObs.setValue(0.0);
                     }
-                    System.out.println("Appending this: " + newObs);
+                    //System.out.println("Appending this: " + newObs);
                     list.add(newObs);
                 }
             }

@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,6 +43,22 @@ import org.apache.commons.io.IOUtils;
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class ModelUtil {
+
+
+    /**
+     * Util method to read the contents of a file in your model jar into a string
+     * @param clazz A class that is part of the jar file (the model package)
+     * @param fileName Path to the file. Start with "/"
+     * @return The file's contents
+     */
+    public String getTextFromFileInJar(Class clazz, String fileName)
+    {
+        BufferedInputStream inputStream = new BufferedInputStream(clazz.getResourceAsStream(fileName));
+        try(Scanner scanner = new Scanner(inputStream,StandardCharsets.UTF_8))
+        {
+            return scanner.useDelimiter("\\A").next();
+        }
+    }
     
     /**
      * Parsing text with reference to images. Image template tag format is:

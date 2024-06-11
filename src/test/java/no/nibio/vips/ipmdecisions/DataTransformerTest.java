@@ -112,7 +112,7 @@ public class DataTransformerTest extends TestCase {
             
             weatherData.addLocationWeatherData(lwd);
             
-            System.out.println(mapper.writeValueAsString(weatherData));
+            //System.out.println(mapper.writeValueAsString(weatherData));
             
             return weatherData;
         }

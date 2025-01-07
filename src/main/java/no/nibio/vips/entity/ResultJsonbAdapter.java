@@ -19,22 +19,18 @@
 
 package no.nibio.vips.entity;
 
-import com.bedatadriven.jackson.datatype.jts.JtsModule;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Date;
+import java.util.Map;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Map;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-import javax.json.bind.adapter.JsonbAdapter;
+import com.bedatadriven.jackson.datatype.jts.JtsModule;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.bind.adapter.JsonbAdapter;
 import no.nibio.vips.gis.GISUtil;
 
 /**

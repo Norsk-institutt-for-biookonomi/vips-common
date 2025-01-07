@@ -51,7 +51,7 @@ verify_model_ALTERNARIA:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -64,7 +64,7 @@ verify_model_APPLESCABM:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -77,7 +77,7 @@ verify_model_BARLEYNETB:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -90,7 +90,7 @@ verify_model_BREMIALACT:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -103,7 +103,7 @@ verify_model_DELIARADIC:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -116,7 +116,7 @@ verify_model_DELIARFOBS:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -129,7 +129,7 @@ verify_model_DOWNCASTMO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -142,7 +142,7 @@ verify_model_FAWMODEL01:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -155,7 +155,7 @@ verify_model_FINNCEREAL:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -168,7 +168,7 @@ verify_model_GRASSDRYMO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -181,7 +181,7 @@ verify_model_LEAFBLOTCH:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -194,7 +194,7 @@ verify_model_LYGUSRUGUL:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -207,7 +207,7 @@ verify_model_MAIZEPHENO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -220,7 +220,7 @@ verify_model_MAMESTRABR:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -233,7 +233,7 @@ verify_model_NAERSTADMO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -246,7 +246,7 @@ verify_model_NEGPROGMOD:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -259,7 +259,7 @@ verify_model_OATFLOWERM:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -272,7 +272,7 @@ verify_model_PSILAROBSE:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -285,7 +285,7 @@ verify_model_PSILARTEMP:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -298,7 +298,7 @@ verify_model_ROUGHAGENU:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -311,7 +311,7 @@ verify_model_SEPAPIICOL:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -324,7 +324,7 @@ verify_model_SEPTORIAHU:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -337,7 +337,7 @@ verify_model_SEPTREFHUM:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-snapshot
   rules:
@@ -353,7 +353,7 @@ update_model_ALTERNARIA:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -366,7 +366,7 @@ update_model_APPLESCABM:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -379,7 +379,7 @@ update_model_BARLEYNETB:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -392,7 +392,7 @@ update_model_BREMIALACT:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -405,7 +405,7 @@ update_model_DELIARADIC:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -418,7 +418,7 @@ update_model_DELIARFOBS:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -431,7 +431,7 @@ update_model_DOWNCASTMO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -444,7 +444,7 @@ update_model_FAWMODEL01:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -457,7 +457,7 @@ update_model_FINNCEREAL:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -470,7 +470,7 @@ update_model_GRASSDRYMO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -483,7 +483,7 @@ update_model_LEAFBLOTCH:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -496,7 +496,7 @@ update_model_LYGUSRUGUL:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -509,7 +509,7 @@ update_model_MAIZEPHENO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -522,7 +522,7 @@ update_model_MAMESTRABR:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -535,7 +535,7 @@ update_model_NAERSTADMO:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -548,7 +548,7 @@ update_model_NEGPROGMOD:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -561,7 +561,7 @@ update_model_OATFLOWERM:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -574,7 +574,7 @@ update_model_PSILAROBSE:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -587,7 +587,7 @@ update_model_PSILARTEMP:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -600,7 +600,7 @@ update_model_ROUGHAGENU:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -613,7 +613,7 @@ update_model_SEPAPIICOL:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -626,7 +626,7 @@ update_model_SEPTORIAHU:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:
@@ -639,7 +639,7 @@ update_model_SEPTREFHUM:
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
-    - vips-java
+    - java
   dependencies:
     - deploy-release
   rules:

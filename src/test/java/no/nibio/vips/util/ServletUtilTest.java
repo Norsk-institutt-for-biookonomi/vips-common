@@ -18,7 +18,6 @@
  */
 package no.nibio.vips.util;
 
-import javax.servlet.http.HttpServletRequest;
 import junit.framework.TestCase;
 
 /**

@@ -35,6 +35,9 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+
+import org.renjin.repackaged.guava.collect.Maps;
+
 import no.nibio.vips.entity.WeatherObservation;
 import no.nibio.vips.model.ConfigValidationException;
 
@@ -1722,5 +1725,31 @@ public class WeatherUtil {
     public Double getInchesFromMillimeters(Double millimeters)
     {
         return millimeters / 25.4;
+    }
+
+    /**
+     * Given two lists of weather data; attempts to fill holes in destination with values for same timestamp from source
+     * @param destination
+     * @param source
+     * @return list of weather observations with fewer holes (hopefully)
+     */
+    public List<WeatherObservation> replaceNULLs(List<WeatherObservation> destination, List<WeatherObservation> source) throws WeatherObservationListException
+    {
+
+        Map<Date, WeatherObservation> mappedSource = Maps.uniqueIndex(source, WeatherObservation::getTimeMeasured);
+        for(WeatherObservation obs:destination)
+        {
+            if(obs.getValue() == null)
+            {
+                // Check that source and dest are of the same parameter
+                if(!mappedSource.get(obs.getTimeMeasured()).getElementMeasurementTypeId().equals(obs.getElementMeasurementTypeId()))
+                {
+                    throw new WeatherObservationListException("ERROR: Trying to add value from obs of parameter " + obs.getElementMeasurementTypeId() + " into obs of parameter " + mappedSource.get(obs.getTimeMeasured()).getElementMeasurementTypeId());
+                }
+                obs.setValue(mappedSource.get(obs.getTimeMeasured()).getValue());
+            }
+        }
+        return destination;
+
     }
 }

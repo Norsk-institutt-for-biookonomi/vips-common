@@ -115,7 +115,7 @@ public class WeatherUtilTest extends TestCase {
     {
         System.out.println("testCutTrailingHourlyValues");
         WeatherUtil instance = new WeatherUtil();
-        List<WeatherObservation> TM = this.getObservations("/weatherDataTestCutTrailing.json");
+        List<WeatherObservation> TM = this.getObservations("/weatherDataTestCutTrailing.json", false);
         List<WeatherObservation> result = instance.cutTrailingHourlyValues(TM, TimeZone.getTimeZone("Europe/Oslo"));
         assertEquals(216, result.size());
     }
@@ -125,7 +125,7 @@ public class WeatherUtilTest extends TestCase {
         try {
             System.out.println("testCheckForAndFixHourlyTimeSeriesHoles");
             // Testing with TM values firrst
-            List<WeatherObservation> seriesWithHoles = this.getObservations("/weatherDataWithHoles.json");
+            List<WeatherObservation> seriesWithHoles = this.getObservations("/weatherDataWithHoles.json", false);
             WeatherUtil wUtil = new WeatherUtil();
             List<WeatherObservation> result = wUtil.checkForAndFixHourlyTimeSeriesHoles(seriesWithHoles);
             /*for(WeatherObservation o:result)
@@ -134,7 +134,7 @@ public class WeatherUtilTest extends TestCase {
             }*/
             assertEquals(48,result.size());
             // Testing with RR values - should be calculated to 0
-            seriesWithHoles = this.getObservations("/weatherDataWithHolesRR.json");
+            seriesWithHoles = this.getObservations("/weatherDataWithHolesRR.json", false);
             result = wUtil.checkForAndFixHourlyTimeSeriesHoles(seriesWithHoles);
             /*for(WeatherObservation o:result)
             {
@@ -151,7 +151,7 @@ public class WeatherUtilTest extends TestCase {
         try {
             System.out.println("testBosnianData");
             // Testing with TM values first
-            List<WeatherObservation> allData = this.getObservations("/bosniandata.json");
+            List<WeatherObservation> allData = this.getObservations("/bosniandata.json", false);
             List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
             for(WeatherObservation obs:allData)
             {
@@ -176,7 +176,7 @@ public class WeatherUtilTest extends TestCase {
         try {
             System.out.println("testSwedishData");
             // Testing with TM values first
-            List<WeatherObservation> allData = this.getObservations("/swedishData.json");
+            List<WeatherObservation> allData = this.getObservations("/swedishData.json", false);
             List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
             for(WeatherObservation obs:allData)
             {
@@ -201,7 +201,7 @@ public class WeatherUtilTest extends TestCase {
         try {
             System.out.println("testFixHourlyValuesForParameters");
             // Testing first with data with RR present in both ends
-            List<WeatherObservation> allData = this.getObservations("/swedishData.json");
+            List<WeatherObservation> allData = this.getObservations("/swedishData.json", false);
             WeatherUtil wUtil = new WeatherUtil();
             Set<String> paramNames = new HashSet(Arrays.asList("TM", "UM","RR"));
             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"));
@@ -215,12 +215,12 @@ public class WeatherUtilTest extends TestCase {
             assertEquals(271*3,result.size());
             
             // Testing with data where RR is missing at the end
-            allData = this.getObservations("/swedishData_1.json");
+            allData = this.getObservations("/swedishData_1.json", false);
             result = wUtil.fixHourlyValuesForParameters(allData, paramNames, cal.getTime(),null);
             assertEquals(270*3,result.size());
             
             // Testing with data where RR is "accidentally" added at the end
-            allData = this.getObservations("/swedishData_2.json");
+            allData = this.getObservations("/swedishData_2.json", false);
             result = wUtil.fixHourlyValuesForParameters(allData, paramNames, cal.getTime(),null);
             assertEquals(296*3,result.size());
             
@@ -240,7 +240,7 @@ public class WeatherUtilTest extends TestCase {
      */
     public void testGetAggregatedDailyValues() {
         System.out.println("getAggregatedDailyValues");
-        List<WeatherObservation> allObservations = this.getObservations("/weatherData.json");
+        List<WeatherObservation> allObservations = this.getObservations("/weatherData.json", false);
         List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
         for(WeatherObservation obs:allObservations)
         {
@@ -282,7 +282,7 @@ public class WeatherUtilTest extends TestCase {
         assertEquals(expMax, maxResults.get(0).getValue());
         
         // Testing with weather data that is in DST transition (from winter to summer time)
-        allObservations = this.getObservations("/alnarp_dst_transition.json");
+        allObservations = this.getObservations("/alnarp_dst_transition.json", false);
         TM = new ArrayList<WeatherObservation>();
         for(WeatherObservation obs:allObservations)
         {
@@ -307,7 +307,7 @@ public class WeatherUtilTest extends TestCase {
     public void testCalculateLeafWetnessHourSeriesBestEffort()
     {
         System.out.println("testCalculateLeafWetnessHourSeriesBestEffort");
-        List<WeatherObservation> allObservations = this.getObservations("/weatherDataLeafWetnessCalc.json");
+        List<WeatherObservation> allObservations = this.getObservations("/weatherDataLeafWetnessCalc.json", false);
         List<WeatherObservation> TM = new ArrayList<WeatherObservation>();
         List<WeatherObservation> UM = new ArrayList<WeatherObservation>();
         List<WeatherObservation> FM2 = new ArrayList<WeatherObservation>();
@@ -409,23 +409,23 @@ public class WeatherUtilTest extends TestCase {
     {
         TimeZone tz = TimeZone.getTimeZone("Europe/Oslo");
         System.out.println("testFindFirstHoleInObservationSeries");
-        List<WeatherObservation> TM = this.getObservations("/JSONWeatherDataTMDailyComplete.json");
+        List<WeatherObservation> TM = this.getObservations("/JSONWeatherDataTMDailyComplete.json", false);
         WeatherUtil instance = new WeatherUtil();
         assertNull(instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D,tz));
         
-        TM = this.getObservations("/JSONWeatherDataTMDailyFaulty.json");
+        TM = this.getObservations("/JSONWeatherDataTMDailyFaulty.json", false);
         Date result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1D,tz);
         System.out.println("Found hole here: " + result);
         assertNotNull(result);
         
         // TEST hourly data
-        TM = this.getObservations("/weatherDataWithoutHolesRR.json");
+        TM = this.getObservations("/weatherDataWithoutHolesRR.json", false);
         result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H,tz);
         if(result != null)
             System.out.println("Found hole here: " + result);
         assertNull(result);
         
-        TM = this.getObservations("/weatherDataWithHolesRR.json");
+        TM = this.getObservations("/weatherDataWithHolesRR.json", false);
         result = instance.findFirstHoleInObservationSeries(TM, WeatherObservation.LOG_INTERVAL_ID_1H,tz);
         System.out.println("Found hole here: " + result);
         assertNotNull(result);
@@ -442,7 +442,7 @@ public class WeatherUtilTest extends TestCase {
         List<WeatherObservation> UM = new ArrayList<WeatherObservation>();
 
 
-        List<WeatherObservation> faultySeries = this.getObservations("/weatherDataFaultyUnequalSize.json");
+        List<WeatherObservation> faultySeries = this.getObservations("/weatherDataFaultyUnequalSize.json", false);
         
         for(WeatherObservation o:faultySeries)
         {
@@ -486,7 +486,7 @@ public class WeatherUtilTest extends TestCase {
         UM.removeAll(UM);
         RR.removeAll(RR);
         
-        faultySeries = this.getObservations("/weatherDataFaultyUnequalStart.json");
+        faultySeries = this.getObservations("/weatherDataFaultyUnequalStart.json", false);
         
         for(WeatherObservation o:faultySeries)
         {
@@ -511,7 +511,7 @@ public class WeatherUtilTest extends TestCase {
             fail("Method should have thrown exception");
         }
         catch(WeatherObservationListException ex) {
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
             // This means that the method works as expected
         }
         
@@ -521,7 +521,7 @@ public class WeatherUtilTest extends TestCase {
         UM.removeAll(UM);
         RR.removeAll(RR);
         
-        faultySeries = this.getObservations("/weatherDataFaultyUnequalEnd.json");
+        faultySeries = this.getObservations("/weatherDataFaultyUnequalEnd.json", false);
         
         for(WeatherObservation o:faultySeries)
         {
@@ -546,7 +546,7 @@ public class WeatherUtilTest extends TestCase {
             fail("Method should have thrown exception");
         }
         catch(WeatherObservationListException ex) {
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
             // This means that the method works as expected
         }
         
@@ -556,7 +556,7 @@ public class WeatherUtilTest extends TestCase {
         UM.removeAll(UM);
         RR.removeAll(RR);
         
-        faultySeries = this.getObservations("/weatherDataNotFaulty.json");
+        faultySeries = this.getObservations("/weatherDataNotFaulty.json", false);
         
         for(WeatherObservation o:faultySeries)
         {
@@ -588,7 +588,7 @@ public class WeatherUtilTest extends TestCase {
     public void testRemoveDuplicateWeatherObservations()
     {
         System.out.println("testRemoveDuplicateWeatherObservations()");
-        List<WeatherObservation> faultySeries = this.getObservations("/weatherDataWithDuplicates.json");
+        List<WeatherObservation> faultySeries = this.getObservations("/weatherDataWithDuplicates.json", false);
         
         WeatherUtil instance = new WeatherUtil();
         
@@ -622,7 +622,7 @@ public class WeatherUtilTest extends TestCase {
 public void testGetLastObservations()
 {
     System.out.println("testGetLastObservations");
-    List<WeatherObservation> obs = this.getObservations("/weatherDataNotFaulty.json");
+    List<WeatherObservation> obs = this.getObservations("/weatherDataNotFaulty.json", false);
     WeatherUtil instance = new WeatherUtil();
     List<WeatherObservation> result = instance.getLastObservations(obs, "Q0", 5);
     assertEquals(5, result.size());
@@ -638,7 +638,7 @@ public void testGetLastObservations()
 public void testGetFirstObservations()
 {
     System.out.println("testGetLastObservations");
-    List<WeatherObservation> obs = this.getObservations("/weatherDataNotFaulty.json");
+    List<WeatherObservation> obs = this.getObservations("/weatherDataNotFaulty.json", false);
     WeatherUtil instance = new WeatherUtil();
     List<WeatherObservation> result = instance.getFirstObservations(obs, "Q0", 5);
     assertEquals(5, result.size());
@@ -663,6 +663,28 @@ public void testGetFahrenheitFromCelciusAndViceVersa()
     assertEquals(expResult, result);
 }
 
+public void testReplaceNULLs()
+{
+
+    System.out.println("testReplaceNULLs");
+    try {
+        List<WeatherObservation> sourceData = this.getObservations("/replaceNULLtestSource.json", false);
+        List<WeatherObservation> destinationData = this.getObservations("/replaceNULLtestDestination.json", false);
+        System.out.println(destinationData.get(0).toString());
+        WeatherUtil instance = new WeatherUtil();
+        List<WeatherObservation> result = instance.replaceNULLs(destinationData, sourceData);
+        Collections.sort(result);
+        //System.out.println(result.get(0).toString());
+        assertNull(result.get(0).getValue());
+        assertNotNull(result.get(1).getValue());
+    }
+    catch(WeatherObservationListException ex)
+    {
+        fail(ex.getMessage());
+    }
+    //fail();
+}
+
     /**
      * Test of normalizeToExactDate method, of class WeatherUtil.
      *
@@ -678,7 +700,7 @@ public void testGetFahrenheitFromCelciusAndViceVersa()
         fail("The test case is a prototype.");
     }*/
     
-    private List<WeatherObservation> getObservations(String fileName)
+    private List<WeatherObservation> getObservations(String fileName, Boolean DEBUG)
     {
         try
         {
@@ -708,8 +730,15 @@ public void testGetFahrenheitFromCelciusAndViceVersa()
                     observation.setTimeMeasured(timeMeasured);
                     observation.setLogIntervalId(node.get("logIntervalId").asInt());
                     observation.setElementMeasurementTypeId(node.get("elementMeasurementTypeId").asText());
-                    observation.setValue(node.get("value").asDouble());
+                    observation.setValue(node.get("value").isNumber() ? node.get("value").asDouble() : null);
                     observations.add(observation);
+                    if(DEBUG)
+                    {
+                        if(observation.getElementMeasurementTypeId().equals("TM"))
+                        {
+                            System.out.println(node.get("value").asText() + " is DOUBLE? " + node.get("value").isDouble());
+                        }
+                    }
                 }
 
             }

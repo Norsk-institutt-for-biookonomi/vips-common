@@ -19,6 +19,7 @@
 
 package no.nibio.vips.util;
 
+import static java.util.stream.Collectors.toList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,9 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static java.util.stream.Collectors.toList;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -38,6 +36,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 
 /**
  * Static convenience methods for common web-related tasks.

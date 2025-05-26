@@ -1,19 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "Triggering ALTERNARIA verification pipeline via API..."
-
-curl --fail --silent --show-error --request POST \
-  --header "JOB-TOKEN: $CI_JOB_TOKEN" \
-  --form ref="${MAIN_BRANCH}" \
-  --form "variables[VERSION]=${VERSION}" \
-  --form "variables[PURPOSE]=verify" \
-  "https://gitlab.juba.no/api/v4/projects/${ALTERNARIA_PROJECT_ID}/trigger/pipeline"
-
-
-#!/bin/bash
-set -euo pipefail
-
 # Usage:
 # ./trigger_model_verification.sh <project_id> <ref> <version> <purpose>
 

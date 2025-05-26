@@ -19,7 +19,7 @@ PIPELINE_JSON=$(curl --fail --silent --show-error --request POST \
   --form ref="$REF" \
   --form "variables[VERSION]=$VERSION" \
   --form "variables[PURPOSE]=$PURPOSE" \
-  "$API_URL/projects/${PROJECT_ID}/trigger/pipeline")
+  "$API_URL/projects/${PROJECT_ID}/pipeline")
 
 # Extract pipeline ID
 PIPELINE_ID=$(echo "$PIPELINE_JSON" | jq -r '.id')

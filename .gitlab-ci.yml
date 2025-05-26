@@ -141,16 +141,15 @@ deploy-release:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
-# Runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
+# Jobs below runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_ALTERNARIA:
-  image: eclipse-temurin:17.0.9_9-jdk-jammy
+  image: registry.gitlab.com/finestructure/pipeline-trigger
   stage: models-1
-  before_script:
-    - apt-get update && apt-get install -y jq curl
+  before_script: []
   script:
-    - ./trigger_model_verification.sh  "$ALTERNARIA_PROJECT_ID" "$MAIN_BRANCH" "$VERSION" "verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -163,7 +162,7 @@ verify_model_APPLESCABM:
   stage: models-1
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -176,7 +175,7 @@ verify_model_BARLEYNETB:
   stage: models-1
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -189,7 +188,7 @@ verify_model_BREMIALACT:
   stage: models-2
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -202,7 +201,7 @@ verify_model_DELIARADIC:
   stage: models-2
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -215,7 +214,7 @@ verify_model_DELIARFOBS:
   stage: models-2
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -228,7 +227,7 @@ verify_model_DOWNCASTMO:
   stage: models-3
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -241,7 +240,7 @@ verify_model_FAWMODEL01:
   stage: models-3
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -254,7 +253,7 @@ verify_model_FINNCEREAL:
   stage: models-3
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -267,7 +266,7 @@ verify_model_GRASSDRYMO:
   stage: models-4
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -280,7 +279,7 @@ verify_model_LEAFBLOTCH:
   stage: models-4
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -293,7 +292,7 @@ verify_model_LYGUSRUGUL:
   stage: models-4
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -306,7 +305,7 @@ verify_model_MAIZEPHENO:
   stage: models-5
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -319,7 +318,7 @@ verify_model_MAMESTRABR:
   stage: models-5
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -332,7 +331,7 @@ verify_model_NAERSTADMO:
   stage: models-5
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -345,7 +344,7 @@ verify_model_NEGPROGMOD:
   stage: models-6
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -358,7 +357,7 @@ verify_model_OATFLOWERM:
   stage: models-6
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -371,7 +370,7 @@ verify_model_PSILAROBSE:
   stage: models-6
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -384,7 +383,7 @@ verify_model_PSILARTEMP:
   stage: models-7
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -397,7 +396,7 @@ verify_model_ROUGHAGENU:
   stage: models-7
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -410,7 +409,7 @@ verify_model_SEPAPIICOL:
   stage: models-7
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -423,7 +422,7 @@ verify_model_SEPTORIAHU:
   stage: models-8
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -436,7 +435,7 @@ verify_model_SEPTREFHUM:
   stage: models-8
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:
@@ -452,7 +451,7 @@ update_model_ALTERNARIA:
   stage: models-1
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -465,7 +464,7 @@ update_model_APPLESCABM:
   stage: models-1
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -478,7 +477,7 @@ update_model_BARLEYNETB:
   stage: models-1
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -491,7 +490,7 @@ update_model_BREMIALACT:
   stage: models-2
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -504,7 +503,7 @@ update_model_DELIARADIC:
   stage: models-2
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -517,7 +516,7 @@ update_model_DELIARFOBS:
   stage: models-2
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -530,7 +529,7 @@ update_model_DOWNCASTMO:
   stage: models-3
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -543,7 +542,7 @@ update_model_FAWMODEL01:
   stage: models-3
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -556,7 +555,7 @@ update_model_FINNCEREAL:
   stage: models-3
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -569,7 +568,7 @@ update_model_GRASSDRYMO:
   stage: models-4
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -582,7 +581,7 @@ update_model_LEAFBLOTCH:
   stage: models-4
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -595,7 +594,7 @@ update_model_LYGUSRUGUL:
   stage: models-4
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -608,7 +607,7 @@ update_model_MAIZEPHENO:
   stage: models-5
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -621,7 +620,7 @@ update_model_MAMESTRABR:
   stage: models-5
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -634,7 +633,7 @@ update_model_NAERSTADMO:
   stage: models-5
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -647,7 +646,7 @@ update_model_NEGPROGMOD:
   stage: models-6
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -660,7 +659,7 @@ update_model_OATFLOWERM:
   stage: models-6
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -673,7 +672,7 @@ update_model_PSILAROBSE:
   stage: models-6
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -686,7 +685,7 @@ update_model_PSILARTEMP:
   stage: models-7
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -699,7 +698,7 @@ update_model_ROUGHAGENU:
   stage: models-7
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -712,7 +711,7 @@ update_model_SEPAPIICOL:
   stage: models-7
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -725,7 +724,7 @@ update_model_SEPTORIAHU:
   stage: models-8
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:
@@ -738,7 +737,7 @@ update_model_SEPTREFHUM:
   stage: models-8
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:

@@ -149,7 +149,8 @@ verify_model_ALTERNARIA:
   stage: models-1
   before_script: []
   script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$CICD_ACCESS_TOKEN" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - echo "trigger -h gitlab.nibio.no -a [MASKED] -p [MASKED] -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE=\"verify\""
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:

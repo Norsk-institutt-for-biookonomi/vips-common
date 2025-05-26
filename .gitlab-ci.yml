@@ -145,12 +145,12 @@ deploy-release:
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_ALTERNARIA:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: eclipse-temurin:17.0.9_9-jdk-jammy
   stage: models-1
-  before_script: []
+  before_script:
+    - apt-get update && apt-get install -y jq curl
   script:
-    - echo "trigger -h gitlab.nibio.no -a [MASKED] -p [MASKED] -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE=\"verify\""
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - ./trigger_model_verification.sh  "$ALTERNARIA_PROJECT_ID" "$MAIN_BRANCH" "$VERSION" "verify"
   tags:
     - java
   dependencies:

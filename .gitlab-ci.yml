@@ -25,6 +25,7 @@ variables:
   APPLESCABM_PROJECT_ID: "20"
   BARLEYNETB_PROJECT_ID: "21"
   BREMIALACT_PROJECT_ID: "22"
+  DAYDEGREES_PROJECT_ID: "563"
   DELIARADIC_PROJECT_ID: "24"
   DELIARFOBS_PROJECT_ID: "25"
   DOWNCASTMO_PROJECT_ID: "26"
@@ -441,6 +442,19 @@ verify_model_SEPTREFHUM:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
+verify_model_DAYDEGREES:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-8
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+
 # Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.
 
@@ -736,6 +750,19 @@ update_model_SEPTREFHUM:
   before_script: []
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+  tags:
+    - java
+  dependencies:
+    - deploy-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
+
+update_model_DAYDEGREES:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-8
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
   tags:
     - java
   dependencies:

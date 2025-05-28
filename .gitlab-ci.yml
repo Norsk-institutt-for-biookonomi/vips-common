@@ -54,9 +54,7 @@ before_script:
   - git config --global user.email "${GITLAB_USER_EMAIL}"
   - echo "Get common settings"
   - git clone --depth=1 "$COMMON_CONFIG_REMOTE" "$COMMON_CONFIG_LOCAL"
-  - cd $COMMON_CONFIG_LOCAL
-  - cp $SETTINGS_XML ../$SETTINGS_XML
-  - cd ..
+  - cp $COMMON_CONFIG_LOCAL/$SETTINGS_XML ./$SETTINGS_XML
   - rm -rf $COMMON_CONFIG_LOCAL
 
 build:

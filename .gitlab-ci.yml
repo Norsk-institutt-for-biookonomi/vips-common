@@ -252,18 +252,18 @@ verify_model_FAWMODEL01:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_FINNCEREAL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-3
-  before_script: []
-  script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+#verify_model_FINNCEREAL:
+#  image: registry.gitlab.com/finestructure/pipeline-trigger
+#  stage: models-3
+#  before_script: []
+#  script:
+#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+#  tags:
+#    - java
+#  dependencies:
+#    - deploy-snapshot
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_GRASSDRYMO:
   image: registry.gitlab.com/finestructure/pipeline-trigger

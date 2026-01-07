@@ -355,18 +355,18 @@ verify_model_NEGPROGMOD:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_OATFLOWERM:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-9
-  before_script: []
-  script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+#verify_model_OATFLOWERM:
+#  image: registry.gitlab.com/finestructure/pipeline-trigger
+#  stage: models-9
+#  before_script: []
+#  script:
+#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+#  tags:
+#    - java
+#  dependencies:
+#    - deploy-snapshot
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILAROBSE:
   image: registry.gitlab.com/finestructure/pipeline-trigger

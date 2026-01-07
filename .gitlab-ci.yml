@@ -446,18 +446,18 @@ verify_model_SEPTREFHUM:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_DAYDEGREES:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-12
-  before_script: []
-  script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+#verify_model_DAYDEGREES:
+#  image: registry.gitlab.com/finestructure/pipeline-trigger
+#  stage: models-12
+#  before_script: []
+#  script:
+#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+#  tags:
+#    - java
+#  dependencies:
+#    - deploy-snapshot
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 # Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.

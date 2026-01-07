@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - deploy
+  - models-0
   - models-1
   - models-2
   - models-3
@@ -173,18 +174,18 @@ verify_model_APPLESCABM:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_BARLEYNETB:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-2
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_BARLEYNETB:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BREMIALACT:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -212,18 +213,18 @@ verify_model_DELIARADIC:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_DELIARFOBS:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-3
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_DELIARFOBS:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DOWNCASTMO:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -251,18 +252,18 @@ verify_model_FAWMODEL01:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_FINNCEREAL:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-5
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_FINNCEREAL:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_GRASSDRYMO:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -290,18 +291,18 @@ verify_model_LEAFBLOTCH:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_LYGUSRUGUL:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-6
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_LYGUSRUGUL:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAIZEPHENO:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -316,18 +317,18 @@ verify_model_MAIZEPHENO:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_MAMESTRABR:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-7
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_MAMESTRABR:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NAERSTADMO:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -355,18 +356,18 @@ verify_model_NEGPROGMOD:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_OATFLOWERM:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-9
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_OATFLOWERM:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILAROBSE:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -381,18 +382,18 @@ verify_model_PSILAROBSE:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_PSILARTEMP:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-10
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_PSILARTEMP:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ROUGHAGENU:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -407,18 +408,18 @@ verify_model_ROUGHAGENU:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_SEPAPIICOL:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-11
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_SEPAPIICOL:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTORIAHU:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -446,18 +447,18 @@ verify_model_SEPTREFHUM:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-#verify_model_DAYDEGREES:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-12
-#  before_script: []
-#  script:
-#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_DAYDEGREES:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-0
+  before_script: []
+  script:
+    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 # Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.

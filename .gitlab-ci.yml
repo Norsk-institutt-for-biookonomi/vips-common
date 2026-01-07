@@ -316,18 +316,18 @@ verify_model_MAIZEPHENO:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_MAMESTRABR:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-7
-  before_script: []
-  script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+#verify_model_MAMESTRABR:
+#  image: registry.gitlab.com/finestructure/pipeline-trigger
+#  stage: models-7
+#  before_script: []
+#  script:
+#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+#  tags:
+#    - java
+#  dependencies:
+#    - deploy-snapshot
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NAERSTADMO:
   image: registry.gitlab.com/finestructure/pipeline-trigger

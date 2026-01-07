@@ -179,7 +179,7 @@ verify_model_BARLEYNETB:
   stage: models-0
   before_script: []
   script:
-    - echo $CICD_API_TOKEN $ACCESS_TOKEN_BARLEYNETB $MAIN_BRANCH $BARLEYNETB_PROJECT_ID $VERSION
+    - echo "$CICD_API_TOKEN $ACCESS_TOKEN_BARLEYNETB $MAIN_BRANCH $BARLEYNETB_PROJECT_ID $VERSION"
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
@@ -190,10 +190,10 @@ verify_model_BARLEYNETB:
 
 verify_model_BREMIALACT:
   image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-0
+  stage: models-2
   before_script: []
   script:
-    - echo $CICD_API_TOKEN $ACCESS_TOKEN_BREMIALACT $MAIN_BRANCH $BREMIALACT_PROJECT_ID $VERSION
+    - echo "$CICD_API_TOKEN $ACCESS_TOKEN_BREMIALACT $MAIN_BRANCH $BREMIALACT_PROJECT_ID $VERSION"
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java

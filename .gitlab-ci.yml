@@ -381,18 +381,18 @@ verify_model_PSILAROBSE:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_PSILARTEMP:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-10
-  before_script: []
-  script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+#verify_model_PSILARTEMP:
+#  image: registry.gitlab.com/finestructure/pipeline-trigger
+#  stage: models-10
+#  before_script: []
+#  script:
+#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+#  tags:
+#    - java
+#  dependencies:
+#    - deploy-snapshot
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ROUGHAGENU:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -407,18 +407,18 @@ verify_model_ROUGHAGENU:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_SEPAPIICOL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-10
-  before_script: []
-  script:
-    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+#verify_model_SEPAPIICOL:
+#  image: registry.gitlab.com/finestructure/pipeline-trigger
+#  stage: models-11
+#  before_script: []
+#  script:
+#    - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+#  tags:
+#    - java
+#  dependencies:
+#    - deploy-snapshot
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTORIAHU:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -435,7 +435,7 @@ verify_model_SEPTORIAHU:
 
 verify_model_SEPTREFHUM:
   image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-11
+  stage: models-12
   before_script: []
   script:
     - trigger -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"

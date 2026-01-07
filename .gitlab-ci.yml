@@ -180,7 +180,7 @@ verify_model_BARLEYNETB:
   before_script: []
   script:
     - echo "$CICD_API_TOKEN $ACCESS_TOKEN_BARLEYNETB $MAIN_BRANCH $BARLEYNETB_PROJECT_ID $VERSION"
-    - trigger -v -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:

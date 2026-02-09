@@ -20,6 +20,7 @@
 package no.nibio.vips.util.test;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,19 +43,9 @@ import no.nibio.vips.model.ConfigValidationException;
  */
 public class WeatherDataFileReader {
 
-    /**
-     * 
-     * @param weatherDataFileName filename and path on classpath
-     * @param modelId 10 chars ID of model
-     * @return A Model Configuration with weather data. Can be filled with other configuration data
-     * @throws ConfigValidationException 
-     */
-    public ModelConfiguration getModelConfigurationWithWeatherData(String weatherDataFileName, String modelId) throws ConfigValidationException
-    {
-        try {
-            ModelConfiguration config = new ModelConfiguration();
-            config.setModelId(modelId);
-            BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
+
+    public List<WeatherObservation> getWeatherObservationsFromFile(String weatherDataFileName) throws ConfigValidationException, JsonParseException, IOException {
+        BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
             //InputStream i = this.getClass().getResourceAsStream(weatherDataFileName);
             JsonFactory f = new MappingJsonFactory();
             JsonParser jp = f.createParser(inputStream);
@@ -90,9 +81,23 @@ public class WeatherDataFileReader {
             {
                 throw new ConfigValidationException("Data input from file is not a JSON array");
             }
-            config.setConfigParameter("observations", observations);
+            return observations;
+    }
 
-            
+    /**
+     * 
+     * @param weatherDataFileName filename and path on classpath
+     * @param modelId 10 chars ID of model
+     * @return A Model Configuration with weather data. Can be filled with other configuration data
+     * @throws ConfigValidationException 
+     */
+    public ModelConfiguration getModelConfigurationWithWeatherData(String weatherDataFileName, String modelId) throws ConfigValidationException
+    {
+        try {
+            ModelConfiguration config = new ModelConfiguration();
+            config.setModelId(modelId); 
+            config.setConfigParameter("observations", this.getWeatherObservationsFromFile(weatherDataFileName));
+
             return config;
         } catch (IOException ex) {
             ex.printStackTrace();

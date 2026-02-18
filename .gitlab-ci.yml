@@ -26,7 +26,6 @@ variables:
   MAIN_BRANCH: "main"
   RELEASE_BRANCH: "release"
   ALTERNARIA_PROJECT_ID: "173"
-  APPLESCABM_PROJECT_ID: "20"
   BARLEYNETB_PROJECT_ID: "21"
   BREMIALACT_PROJECT_ID: "22"
   DAYDEGREES_PROJECT_ID: "563"
@@ -153,19 +152,6 @@ verify_model_ALTERNARIA:
   before_script: []
   script:
     - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-  tags:
-    - java
-  dependencies:
-    - deploy-snapshot
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
-
-verify_model_APPLESCABM:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
-  stage: models-1
-  before_script: []
-  script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_APPLESCABM" -t $MAIN_BRANCH $APPLESCABM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
   tags:
     - java
   dependencies:

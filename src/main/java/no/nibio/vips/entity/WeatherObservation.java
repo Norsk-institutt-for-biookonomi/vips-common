@@ -1,19 +1,18 @@
 /*
  * Copyright (c) 2014 NIBIO <http://www.nibio.no/>. 
  * 
- * This file is part of VIPSCommon.
- * VIPSCommon is free software: you can redistribute it and/or modify
- * it under the terms of the NIBIO Open Source License as published by 
- * NIBIO, either version 1 of the License, or (at your option) any
- * later version.
- * 
- * VIPSCommon is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * NIBIO Open Source License for more details.
- * 
- * You should have received a copy of the NIBIO Open Source License
- * along with VIPSCommon.  If not, see <http://www.nibio.no/licenses/>.
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  */
 
@@ -27,10 +26,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Data object that represents a weather observation. Could be measured (historical
  * and forecasted (future).
- * @copyright 2020 <a href="http://www.nibio.no/">NIBIO</a>
+ * @copyright 2020-2026 <a href="http://www.nibio.no/">NIBIO</a>
  * @author  Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
-public class WeatherObservation implements Comparable{
+public class WeatherObservation implements Comparable <WeatherObservation>{
     
     public final static Integer LOG_INTERVAL_ID_1M = 8;
     public final static Integer LOG_INTERVAL_ID_5M = 9;
@@ -93,15 +92,6 @@ public class WeatherObservation implements Comparable{
     public final void setLogIntervalId(Integer id) { this.logIntervalId = id.intValue(); }
     public Integer getLogIntervalId() { return this.logIntervalId; }
     
-    /**
-     * Compares by time measured in ascending order
-     */
-    @Override
-    public int compareTo(Object o) {
-        WeatherObservation other = (WeatherObservation) o;
-        return this.compareTo(other);
-        
-    }
     
     /**
      * Compares by time measured in ascending order

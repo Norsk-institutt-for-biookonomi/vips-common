@@ -2,18 +2,18 @@
  * Copyright (c) 2015 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
- * VIPSCommon is free software: you can redistribute it and/or modify
- * it under the terms of the NIBIO Open Source License as published by 
- * NIBIO, either version 1 of the License, or (at your option) any
- * later version.
- * 
- * VIPSCommon is distributed in the hope that it will be useful,
+* This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * NIBIO Open Source License for more details.
- * 
- * You should have received a copy of the NIBIO Open Source License
- * along with VIPSCommon.  If not, see <http://www.nibio.no/licenses/>.
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  */
 
@@ -248,6 +248,29 @@ public class WeatherUtil {
             InvalidAggregationTypeException
     {
         return this.getAggregatedDailyValues(observations, timeZone, minimumObservationsPerDay, typeOfAggregation, maxDuplicates, false);
+    }
+
+    /**
+     * Groups hourly observations per day
+     * @param observations
+     * @param timeZone Defines the day boundaries
+     * @return
+     */
+    public Map<Date, List<WeatherObservation>> getHourlyValuesPerDay(List<WeatherObservation> observations, TimeZone timeZone)
+    {
+        Map<Date, List<WeatherObservation>> retVal = new HashMap<>();
+        for(WeatherObservation observation:observations)
+        {
+            Date theDate = this.normalizeToExactDate(observation.getTimeMeasured(), timeZone);
+            List<WeatherObservation> hourlyValuesForDate = retVal.get(theDate);
+            if(hourlyValuesForDate == null)
+            {
+                hourlyValuesForDate = new ArrayList<>();
+                retVal.put(theDate, hourlyValuesForDate);
+            }
+            hourlyValuesForDate.add(observation);
+        }
+        return retVal;
     }
     
     /**

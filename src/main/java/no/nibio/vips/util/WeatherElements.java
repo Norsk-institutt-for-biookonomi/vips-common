@@ -2,26 +2,28 @@
  * Copyright (c) 2014 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
- * VIPSCommon is free software: you can redistribute it and/or modify
- * it under the terms of the NIBIO Open Source License as published by 
- * NIBIO, either version 1 of the License, or (at your option) any
- * later version.
- * 
- * VIPSCommon is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * NIBIO Open Source License for more details.
- * 
- * You should have received a copy of the NIBIO Open Source License
- * along with VIPSCommon.  If not, see <http://www.nibio.no/licenses/>.
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  */
 
 package no.nibio.vips.util;
 
+import java.util.List;
+
 /**
- * (Probably) temporary definitions of weather elements
- * @copyright 2017 <a href="http://www.nibio.no/">NIBIO</a>
+ * Definitions of weather elements
+ * @copyright 2017-2026 <a href="http://www.nibio.no/">NIBIO</a>
  * @author Tor-Einar Skog <tor-einar.skog@nibio.no>
  */
 public class WeatherElements {
@@ -77,10 +79,27 @@ public class WeatherElements {
      * Leaf wetness (Minutes per hour)
      */
     public static final String LEAF_WETNESS_DURATION = "BT";
+
+    /**
+     * Leaf wetness with sensor in fruit tree (Minutes per hour)
+     */
+    public static final String LEAF_WETNESS_DURATION_FRUIT_TREE = "BTf";
+
+    /**
+     * Leaf wetness measured from two combined sensors: On on the weather station and one in a fruit tree (Minutes per hour)
+     */
+    public static final String LEAF_WETNESS_DURATION_COMBINED_STATION_FRUIT_TREE = "BTfF";
+
     /**
      * Leaf wetness at ground level (Minutes per hour)
      */
     public static final String LEAF_WETNESS_DURATION_GROUND_LEVEL = "BTg";
+
+     /**
+     * All variants of leaf wetness duration (Minutes per hour) for convenience when checking for leaf wetness in a dataset
+     */
+    public static final List<String> LEAF_WETNESS_ALL_VARIANTS = List.of(LEAF_WETNESS_DURATION, LEAF_WETNESS_DURATION_GROUND_LEVEL, LEAF_WETNESS_DURATION_FRUIT_TREE, LEAF_WETNESS_DURATION_COMBINED_STATION_FRUIT_TREE);
+
     /**
      * Soil water content at various depths
      */

@@ -2,24 +2,25 @@
  * Copyright (c) 2017 NIBIO <http://www.nibio.no/>. 
  * 
  * This file is part of VIPSCommon.
- * VIPSCommon is free software: you can redistribute it and/or modify
- * it under the terms of the NIBIO Open Source License as published by 
- * NIBIO, either version 1 of the License, or (at your option) any
- * later version.
- * 
- * VIPSCommon is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * NIBIO Open Source License for more details.
- * 
- * You should have received a copy of the NIBIO Open Source License
- * along with VIPSCommon.  If not, see <http://www.nibio.no/licenses/>.
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * 
  */
 
 package no.nibio.vips.util.test;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,19 +43,9 @@ import no.nibio.vips.model.ConfigValidationException;
  */
 public class WeatherDataFileReader {
 
-    /**
-     * 
-     * @param weatherDataFileName filename and path on classpath
-     * @param modelId 10 chars ID of model
-     * @return A Model Configuration with weather data. Can be filled with other configuration data
-     * @throws ConfigValidationException 
-     */
-    public ModelConfiguration getModelConfigurationWithWeatherData(String weatherDataFileName, String modelId) throws ConfigValidationException
-    {
-        try {
-            ModelConfiguration config = new ModelConfiguration();
-            config.setModelId(modelId);
-            BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
+
+    public List<WeatherObservation> getWeatherObservationsFromFile(String weatherDataFileName) throws ConfigValidationException, JsonParseException, IOException {
+        BufferedInputStream inputStream = new BufferedInputStream(this.getClass().getResourceAsStream(weatherDataFileName));
             //InputStream i = this.getClass().getResourceAsStream(weatherDataFileName);
             JsonFactory f = new MappingJsonFactory();
             JsonParser jp = f.createParser(inputStream);
@@ -90,9 +81,23 @@ public class WeatherDataFileReader {
             {
                 throw new ConfigValidationException("Data input from file is not a JSON array");
             }
-            config.setConfigParameter("observations", observations);
+            return observations;
+    }
 
-            
+    /**
+     * 
+     * @param weatherDataFileName filename and path on classpath
+     * @param modelId 10 chars ID of model
+     * @return A Model Configuration with weather data. Can be filled with other configuration data
+     * @throws ConfigValidationException 
+     */
+    public ModelConfiguration getModelConfigurationWithWeatherData(String weatherDataFileName, String modelId) throws ConfigValidationException
+    {
+        try {
+            ModelConfiguration config = new ModelConfiguration();
+            config.setModelId(modelId); 
+            config.setConfigParameter("observations", this.getWeatherObservationsFromFile(weatherDataFileName));
+
             return config;
         } catch (IOException ex) {
             ex.printStackTrace();

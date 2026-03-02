@@ -147,18 +147,18 @@ deploy-release:
 # Jobs below runs after new SNAPSHOT is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
-#verify_model_MYCOSRIBIS:
-#  image: registry.gitlab.com/finestructure/pipeline-trigger
-#  stage: models-1
-#  before_script: []
-#  script:
-#    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MYCOSRIBIS" -t $MAIN_BRANCH $MYCOSRIBIS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
-#  tags:
-#    - java
-#  dependencies:
-#    - deploy-snapshot
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
+verify_model_MYCOSRIBIS:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
+  script:
+    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MYCOSRIBIS" -t $MAIN_BRANCH $MYCOSRIBIS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+  tags:
+    - java
+  dependencies:
+    - deploy-snapshot
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ALTERNARIA:
   image: registry.gitlab.com/finestructure/pipeline-trigger
@@ -463,6 +463,19 @@ verify_model_DAYDEGREES:
 
 # Runs after new release is deployed to package registry. Triggers job on main branch in model repo,
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.
+
+update_model_MYCOSRIBIS:
+  image: registry.gitlab.com/finestructure/pipeline-trigger
+  stage: models-1
+  before_script: []
+  script:
+    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MYCOSRIBIS" -t $MAIN_BRANCH $MYCOSRIBIS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+  tags:
+    - java
+  dependencies:
+    - deploy-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_ALTERNARIA:
   image: registry.gitlab.com/finestructure/pipeline-trigger

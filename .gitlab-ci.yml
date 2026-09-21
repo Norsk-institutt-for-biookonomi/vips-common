@@ -383,8 +383,8 @@ verify_model_PSILAROBSE:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
+verify_model_PSILARTEMP:
   image: curlimages/curl:latest   
-  image: registry.gitlab.com/finestructure/pipeline-trigger
   stage: models-7
   before_script: []
   script:

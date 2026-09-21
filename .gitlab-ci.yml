@@ -149,6 +149,7 @@ deploy-release:
 
 verify_model_MYCOSRIBIS:
   image: registry.gitlab.com/finestructure/pipeline-trigger
+  pull-policy: if-not-present
   stage: models-1
   before_script: []
   script:

@@ -1,8 +1,5 @@
 image: eclipse-temurin:17.0.9_9-jdk-jammy
 
-variables:
-  TRIGGER_IMAGE: "curlimages/curl:latest"
-
 stages:
   - build
   - test
@@ -151,7 +148,7 @@ deploy-release:
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_MYCOSRIBIS:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-1
   before_script: []
   script:
@@ -164,7 +161,7 @@ verify_model_MYCOSRIBIS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ALTERNARIA:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-1
   before_script: []
   script:
@@ -177,7 +174,7 @@ verify_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BARLEYNETB:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-1
   before_script: []
   script:
@@ -191,7 +188,7 @@ verify_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BREMIALACT:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-2
   before_script: []
   script:
@@ -205,7 +202,7 @@ verify_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARADIC:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-2
   before_script: []
   script:
@@ -218,7 +215,7 @@ verify_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARFOBS:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-2
   before_script: []
   script:
@@ -231,7 +228,7 @@ verify_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DOWNCASTMO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-3
   before_script: []
   script:
@@ -244,7 +241,7 @@ verify_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FAWMODEL01:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-3
   before_script: []
   script:
@@ -257,7 +254,7 @@ verify_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FINNCEREAL:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-3
   before_script: []
   script:
@@ -270,7 +267,7 @@ verify_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_GRASSDRYMO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-4
   before_script: []
   script:
@@ -283,7 +280,7 @@ verify_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LEAFBLOTCH:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-4
   before_script: []
   script:
@@ -296,7 +293,7 @@ verify_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LYGUSRUGUL:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-4
   before_script: []
   script:
@@ -309,7 +306,7 @@ verify_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAIZEPHENO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-5
   before_script: []
   script:
@@ -322,7 +319,7 @@ verify_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAMESTRABR:
-  image: $TRIGGER_IMAGE 
+  image: curlimages/curl:latest 
   stage: models-5
   before_script: []
   script:
@@ -335,7 +332,7 @@ verify_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NAERSTADMO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-5
   before_script: []
   script:
@@ -348,7 +345,7 @@ verify_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NEGPROGMOD:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-6
   before_script: []
   script:
@@ -361,7 +358,7 @@ verify_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_OATFLOWERM:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-6
   before_script: []
   script:
@@ -374,7 +371,7 @@ verify_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILAROBSE:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-6
   before_script: []
   script:
@@ -386,7 +383,7 @@ verify_model_PSILAROBSE:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-  image: $TRIGGER_IMAGE   
+  image: curlimages/curl:latest   
   image: registry.gitlab.com/finestructure/pipeline-trigger
   stage: models-7
   before_script: []
@@ -400,7 +397,7 @@ verify_model_PSILAROBSE:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ROUGHAGENU:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-7
   before_script: []
   script:
@@ -413,7 +410,7 @@ verify_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPAPIICOL:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-7
   before_script: []
   script:
@@ -426,7 +423,7 @@ verify_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTORIAHU:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-8
   before_script: []
   script:
@@ -439,7 +436,7 @@ verify_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTREFHUM:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-8
   before_script: []
   script:
@@ -452,7 +449,7 @@ verify_model_SEPTREFHUM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DAYDEGREES:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-8
   before_script: []
   script:
@@ -468,7 +465,7 @@ verify_model_DAYDEGREES:
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.
 
 update_model_MYCOSRIBIS:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-1
   before_script: []
   script:
@@ -481,7 +478,7 @@ update_model_MYCOSRIBIS:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_ALTERNARIA:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-1
   before_script: []
   script:
@@ -494,7 +491,7 @@ update_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_BARLEYNETB:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-1
   before_script: []
   script:
@@ -507,7 +504,7 @@ update_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_BREMIALACT:
-  image: $TRIGGER_IMAGE 
+  image: curlimages/curl:latest 
   stage: models-2
   before_script: []
   script:
@@ -520,7 +517,7 @@ update_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DELIARADIC:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-2
   before_script: []
   script:
@@ -533,7 +530,7 @@ update_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DELIARFOBS:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-2
   before_script: []
   script:
@@ -546,7 +543,7 @@ update_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DOWNCASTMO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-3
   before_script: []
   script:
@@ -559,7 +556,7 @@ update_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_FAWMODEL01:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-3
   before_script: []
   script:
@@ -572,7 +569,7 @@ update_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_FINNCEREAL:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-3
   before_script: []
   script:
@@ -585,7 +582,7 @@ update_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_GRASSDRYMO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-4
   before_script: []
   script:
@@ -598,7 +595,7 @@ update_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_LEAFBLOTCH:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-4
   before_script: []
   script:
@@ -611,7 +608,7 @@ update_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_LYGUSRUGUL:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-4
   before_script: []
   script:
@@ -624,7 +621,7 @@ update_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_MAIZEPHENO:
-  image: $TRIGGER_IMAGE 
+  image: curlimages/curl:latest 
   stage: models-5
   before_script: []
   script:
@@ -637,7 +634,7 @@ update_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_MAMESTRABR:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-5
   before_script: []
   script:
@@ -650,7 +647,7 @@ update_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_NAERSTADMO:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-5
   before_script: []
   script:
@@ -663,7 +660,7 @@ update_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_NEGPROGMOD:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-6
   before_script: []
   script:
@@ -676,7 +673,7 @@ update_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_OATFLOWERM:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-6
   before_script: []
   script:
@@ -689,7 +686,7 @@ update_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_PSILAROBSE:
-  image: $TRIGGER_IMAGE 
+  image: curlimages/curl:latest 
   stage: models-6
   before_script: []
   script:
@@ -702,7 +699,7 @@ update_model_PSILAROBSE:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_PSILARTEMP:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-7
   before_script: []
   script:
@@ -715,7 +712,7 @@ update_model_PSILARTEMP:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_ROUGHAGENU:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-7
   before_script: []
   script:
@@ -728,7 +725,7 @@ update_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPAPIICOL:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-7
   before_script: []
   script:
@@ -741,7 +738,7 @@ update_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPTORIAHU:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-8
   before_script: []
   script:
@@ -754,7 +751,7 @@ update_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPTREFHUM:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-8
   before_script: []
   script:
@@ -767,7 +764,7 @@ update_model_SEPTREFHUM:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DAYDEGREES:
-  image: $TRIGGER_IMAGE
+  image: curlimages/curl:latest
   stage: models-8
   before_script: []
   script:

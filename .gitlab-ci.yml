@@ -1,5 +1,8 @@
 image: eclipse-temurin:17.0.9_9-jdk-jammy
 
+variables:
+  TRIGGER_IMAGE: "curlimages/curl:latest"
+
 stages:
   - build
   - test
@@ -148,12 +151,10 @@ deploy-release:
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_MYCOSRIBIS:
-  #image: registry.gitlab.com/finestructure/pipeline-trigger
-  image: curlimages/curl:latest
+  image: $TRIGGER_IMAGE
   stage: models-1
   before_script: []
   script:
-    #- trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MYCOSRIBIS" -t $MAIN_BRANCH $MYCOSRIBIS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
     - curl --fail --request POST --form token="$ACCESS_TOKEN_MYCOSRIBIS" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${MYCOSRIBIS_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
@@ -163,11 +164,11 @@ verify_model_MYCOSRIBIS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ALTERNARIA:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-1
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_ALTERNARIA" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${ALTERNARIA_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -176,12 +177,12 @@ verify_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BARLEYNETB:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-1
   before_script: []
   script:
     - echo "$CICD_API_TOKEN $ACCESS_TOKEN_BARLEYNETB $MAIN_BRANCH $BARLEYNETB_PROJECT_ID $VERSION"
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_BARLEYNETB" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${BARLEYNETB_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -190,12 +191,12 @@ verify_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_BREMIALACT:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-2
   before_script: []
   script:
     - echo "$CICD_API_TOKEN $ACCESS_TOKEN_BREMIALACT $MAIN_BRANCH $BREMIALACT_PROJECT_ID $VERSION"
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_BREMIALACT" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${BREMIALACT_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -204,11 +205,11 @@ verify_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARADIC:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-2
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DELIARADIC" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${DELIARADIC_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -217,11 +218,11 @@ verify_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DELIARFOBS:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-2
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DELIARFOBS" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${DELIARFOBS_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -230,11 +231,11 @@ verify_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DOWNCASTMO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-3
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DOWNCASTMO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${DOWNCASTMO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -243,11 +244,11 @@ verify_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FAWMODEL01:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-3
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_FAWMODEL01" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${FAWMODEL01_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -256,11 +257,11 @@ verify_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_FINNCEREAL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-3
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_FINNCEREAL" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${FINNCEREAL_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -269,11 +270,11 @@ verify_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_GRASSDRYMO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-4
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_GRASSDRYMO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${GRASSDRYMO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -282,11 +283,11 @@ verify_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LEAFBLOTCH:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-4
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_LEAFBLOTCH" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${LEAFBLOTCH_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -295,11 +296,11 @@ verify_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_LYGUSRUGUL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-4
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_LYGUSRUGUL" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${LYGUSRUGUL_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -308,11 +309,11 @@ verify_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAIZEPHENO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-5
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_MAIZEPHENO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${MAIZEPHENO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -321,11 +322,11 @@ verify_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_MAMESTRABR:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE 
   stage: models-5
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_MAMESTRABR" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${MAMESTRABR_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -334,11 +335,11 @@ verify_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NAERSTADMO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-5
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_NAERSTADMO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${NAERSTADMO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -347,11 +348,11 @@ verify_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_NEGPROGMOD:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-6
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_NEGPROGMOD" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${NEGPROGMOD_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -360,11 +361,11 @@ verify_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_OATFLOWERM:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-6
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_OATFLOWERM" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${OATFLOWERM_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -373,11 +374,11 @@ verify_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_PSILAROBSE:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-6
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_PSILAROBSE" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${PSILAROBSE_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -385,12 +386,12 @@ verify_model_PSILAROBSE:
   rules:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
-verify_model_PSILARTEMP:
+  image: $TRIGGER_IMAGE   
   image: registry.gitlab.com/finestructure/pipeline-trigger
   stage: models-7
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_PSILARTEMP" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${PSILARTEMP_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -399,11 +400,11 @@ verify_model_PSILARTEMP:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ROUGHAGENU:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-7
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_ROUGHAGENU" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${ROUGHAGENU_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -412,11 +413,11 @@ verify_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPAPIICOL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-7
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_SEPAPIICOL" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${SEPAPIICOL_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -425,11 +426,11 @@ verify_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTORIAHU:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-8
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_SEPTORIAHU" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${SEPTORIAHU_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -438,11 +439,11 @@ verify_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_SEPTREFHUM:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-8
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_SEPTREFHUM" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${SEPTREFHUM_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -451,11 +452,11 @@ verify_model_SEPTREFHUM:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_DAYDEGREES:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-8
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="verify"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DAYDEGREES" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=verify" "https://gitlab.nibio.no/api/v4/projects/${DAYDEGREES_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -467,11 +468,11 @@ verify_model_DAYDEGREES:
 # which builds model with the new version of VIPSCommon, and releases a new snapshot version of the model.
 
 update_model_MYCOSRIBIS:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-1
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MYCOSRIBIS" -t $MAIN_BRANCH $MYCOSRIBIS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_MYCOSRIBIS" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${MYCOSRIBIS_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -480,11 +481,11 @@ update_model_MYCOSRIBIS:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_ALTERNARIA:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-1
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ALTERNARIA" -t $MAIN_BRANCH $ALTERNARIA_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_ALTERNARIA" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${ALTERNARIA_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -493,11 +494,11 @@ update_model_ALTERNARIA:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_BARLEYNETB:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-1
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BARLEYNETB" -t $MAIN_BRANCH $BARLEYNETB_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_BARLEYNETB" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${BARLEYNETB_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -506,11 +507,11 @@ update_model_BARLEYNETB:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_BREMIALACT:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE 
   stage: models-2
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_BREMIALACT" -t $MAIN_BRANCH $BREMIALACT_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_BREMIALACT" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${BREMIALACT_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -519,11 +520,11 @@ update_model_BREMIALACT:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DELIARADIC:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-2
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARADIC" -t $MAIN_BRANCH $DELIARADIC_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DELIARADIC" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${DELIARADIC_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -532,11 +533,11 @@ update_model_DELIARADIC:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DELIARFOBS:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-2
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DELIARFOBS" -t $MAIN_BRANCH $DELIARFOBS_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DELIARFOBS" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${DELIARFOBS_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -545,11 +546,11 @@ update_model_DELIARFOBS:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DOWNCASTMO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-3
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DOWNCASTMO" -t $MAIN_BRANCH $DOWNCASTMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DOWNCASTMO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${DOWNCASTMO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -558,11 +559,11 @@ update_model_DOWNCASTMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_FAWMODEL01:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-3
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FAWMODEL01" -t $MAIN_BRANCH $FAWMODEL01_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_FAWMODEL01" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${FAWMODEL01_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -571,11 +572,11 @@ update_model_FAWMODEL01:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_FINNCEREAL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-3
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_FINNCEREAL" -t $MAIN_BRANCH $FINNCEREAL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_FINNCEREAL" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${FINNCEREAL_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -584,11 +585,11 @@ update_model_FINNCEREAL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_GRASSDRYMO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-4
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_GRASSDRYMO" -t $MAIN_BRANCH $GRASSDRYMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_GRASSDRYMO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${GRASSDRYMO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -597,11 +598,11 @@ update_model_GRASSDRYMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_LEAFBLOTCH:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-4
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LEAFBLOTCH" -t $MAIN_BRANCH $LEAFBLOTCH_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_LEAFBLOTCH" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${LEAFBLOTCH_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -610,11 +611,11 @@ update_model_LEAFBLOTCH:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_LYGUSRUGUL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-4
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_LYGUSRUGUL" -t $MAIN_BRANCH $LYGUSRUGUL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_LYGUSRUGUL" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${LYGUSRUGUL_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -623,11 +624,11 @@ update_model_LYGUSRUGUL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_MAIZEPHENO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE 
   stage: models-5
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAIZEPHENO" -t $MAIN_BRANCH $MAIZEPHENO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_MAIZEPHENO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${MAIZEPHENO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -636,11 +637,11 @@ update_model_MAIZEPHENO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_MAMESTRABR:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-5
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_MAMESTRABR" -t $MAIN_BRANCH $MAMESTRABR_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_MAMESTRABR" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${MAMESTRABR_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -649,11 +650,11 @@ update_model_MAMESTRABR:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_NAERSTADMO:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-5
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NAERSTADMO" -t $MAIN_BRANCH $NAERSTADMO_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_NAERSTADMO" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${NAERSTADMO_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -662,11 +663,11 @@ update_model_NAERSTADMO:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_NEGPROGMOD:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-6
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_NEGPROGMOD" -t $MAIN_BRANCH $NEGPROGMOD_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_NEGPROGMOD" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${NEGPROGMOD_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -675,11 +676,11 @@ update_model_NEGPROGMOD:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_OATFLOWERM:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-6
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_OATFLOWERM" -t $MAIN_BRANCH $OATFLOWERM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_OATFLOWERM" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${OATFLOWERM_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -688,11 +689,11 @@ update_model_OATFLOWERM:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_PSILAROBSE:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE 
   stage: models-6
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILAROBSE" -t $MAIN_BRANCH $PSILAROBSE_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_PSILAROBSE" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${PSILAROBSE_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -701,11 +702,11 @@ update_model_PSILAROBSE:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_PSILARTEMP:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-7
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_PSILARTEMP" -t $MAIN_BRANCH $PSILARTEMP_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_PSILARTEMP" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${PSILARTEMP_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -714,11 +715,11 @@ update_model_PSILARTEMP:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_ROUGHAGENU:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-7
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_ROUGHAGENU" -t $MAIN_BRANCH $ROUGHAGENU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_ROUGHAGENU" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${ROUGHAGENU_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -727,11 +728,11 @@ update_model_ROUGHAGENU:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPAPIICOL:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-7
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPAPIICOL" -t $MAIN_BRANCH $SEPAPIICOL_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_SEPAPIICOL" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${SEPAPIICOL_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -740,11 +741,11 @@ update_model_SEPAPIICOL:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPTORIAHU:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-8
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTORIAHU" -t $MAIN_BRANCH $SEPTORIAHU_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_SEPTORIAHU" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${SEPTORIAHU_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -753,11 +754,11 @@ update_model_SEPTORIAHU:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_SEPTREFHUM:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-8
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_SEPTREFHUM" -t $MAIN_BRANCH $SEPTREFHUM_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_SEPTREFHUM" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${SEPTREFHUM_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:
@@ -766,11 +767,11 @@ update_model_SEPTREFHUM:
     - if: '$CI_COMMIT_REF_NAME == $RELEASE_BRANCH'
 
 update_model_DAYDEGREES:
-  image: registry.gitlab.com/finestructure/pipeline-trigger
+  image: $TRIGGER_IMAGE
   stage: models-8
   before_script: []
   script:
-    - trigger --verbose -h gitlab.nibio.no -a "$CICD_API_TOKEN" -p "$ACCESS_TOKEN_DAYDEGREES" -t $MAIN_BRANCH $DAYDEGREES_PROJECT_ID -e VERSION=$VERSION -e PURPOSE="update"
+    - curl --fail --request POST --form token="$ACCESS_TOKEN_DAYDEGREES" --form ref="$MAIN_BRANCH" --form "variables[VERSION]=$VERSION" --form "variables[PURPOSE]=update" "https://gitlab.nibio.no/api/v4/projects/${DAYDEGREES_PROJECT_ID}/trigger/pipeline"
   tags:
     - java
   dependencies:

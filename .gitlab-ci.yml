@@ -148,9 +148,7 @@ deploy-release:
 # which builds model with the new version of VIPSCommon. This pipeline fails if model build fails.
 
 verify_model_MYCOSRIBIS:
-  image: 
-    name: registry.gitlab.com/finestructure/pipeline-trigger
-    pull-policy: if-not-present
+  image: registry.gitlab.com/finestructure/pipeline-trigger
   stage: models-1
   before_script: []
   script:
@@ -163,9 +161,7 @@ verify_model_MYCOSRIBIS:
     - if: '$CI_COMMIT_REF_NAME == $MAIN_BRANCH'
 
 verify_model_ALTERNARIA:
-  image: 
-    name: registry.gitlab.com/finestructure/pipeline-trigger
-    pull-policy: if-not-present
+  image: registry.gitlab.com/finestructure/pipeline-trigger
   stage: models-1
   before_script: []
   script:
